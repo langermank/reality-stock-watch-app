@@ -1,1 +1,0 @@
-# reality-stock-watch-app
