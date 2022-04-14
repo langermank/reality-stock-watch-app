@@ -1,0 +1,16 @@
+{
+    "shows": [
+        {
+            "id": "1",
+            "name": "Survivor"
+        },
+        {
+            "id": "2",
+            "name": "Big Brother US"
+        },
+        {
+            "id": "3",
+            "name": "Big Brother CA"
+        }
+    ]
+}
