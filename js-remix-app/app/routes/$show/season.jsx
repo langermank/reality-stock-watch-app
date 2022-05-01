@@ -12,7 +12,7 @@ export const loader = async () => {
 export default () => {
   const { seasons } = useLoaderData();
   //   const location = useLocation();
-  console.log(seasons);
+
   return (
     <div>
       {seasons.map((season) => (
@@ -23,6 +23,7 @@ export default () => {
           </Link>
         </p>
       ))}
+      <p>seaons</p>
       <Outlet />
 
       {/* <div className="flex-1 p-8 flex flex-col">

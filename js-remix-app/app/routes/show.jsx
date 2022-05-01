@@ -17,13 +17,11 @@ export default () => {
     <div>
       {shows.map((show) => (
         <p key={show.id}>
-          <Link to={`/show/${show.short_name}`}>
-            <span className="text-gray-400 mr-1">#</span>
-            {show.name}
-          </Link>
+          <Link to={`/show/${show.short_name}`}>{show.name}</Link>
         </p>
       ))}
-      <Outlet />
+      <p>shows</p>
+      {/* <Outlet /> */}
 
       {/* <div className="flex-1 p-8 flex flex-col">
         {location.pathname === "/channels" ||

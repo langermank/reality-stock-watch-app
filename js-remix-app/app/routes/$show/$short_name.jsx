@@ -16,12 +16,10 @@ export default () => {
       <pre>{JSON.stringify(season, null, 2)}</pre>
       {seasons.map((season, show) => (
         <p key={season.id}>
-          <Link to={`${show.short_name}/${season.short_name}`}>
-            <span className="text-gray-400 mr-1">#</span>
-            {season.name}
-          </Link>
+          <Link to={`${season.short_name}`}>{season.name}</Link>
         </p>
       ))}
+      <p>hello</p>
     </div>
   );
 };

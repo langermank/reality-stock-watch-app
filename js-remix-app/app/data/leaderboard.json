@@ -1,0 +1,38 @@
+[
+  {
+    "season_id": "4",
+    "id": "10",
+    "created_at": "2016-08-01T00:00:00.000Z",
+    "updated_at": "2016-08-01T00:00:00.000Z",
+    "week": "1",
+    "user_id": "1",
+    "rank": "1",
+    "rank_percentage": "0.0",
+    "networth": "100",
+    "stocks": "0"
+  },
+  {
+    "season_id": "5",
+    "id": "11",
+    "created_at": "2016-08-01T00:00:00.000Z",
+    "updated_at": "2016-08-01T00:00:00.000Z",
+    "week": "1",
+    "user_id": "1",
+    "rank": "1",
+    "rank_percentage": "0.0",
+    "networth": "100",
+    "stocks": "0"
+  },
+  {
+    "season_id": "6",
+    "id": "12",
+    "created_at": "2016-08-01T00:00:00.000Z",
+    "updated_at": "2016-08-01T00:00:00.000Z",
+    "week": "1",
+    "user_id": "1",
+    "rank": "1",
+    "rank_percentage": "0.0",
+    "networth": "100",
+    "stocks": "0"
+  }
+]
