@@ -8,7 +8,20 @@
     "status": "active",
     "current_week": "1",
     "closed_at": "2020-04-01T00:00:00.000Z",
-    "show_id": "2"
+    "show_id": "2",
+    "show_short_name": "BBUS"
+  },
+  {
+    "id": "7",
+    "name": "Season 24",
+    "short_name": "S24",
+    "created_at": "2020-04-01T00:00:00.000Z",
+    "updated_at": "2020-04-01T00:00:00.000Z",
+    "status": "active",
+    "current_week": "2",
+    "closed_at": "2020-04-01T00:00:00.000Z",
+    "show_id": "2",
+    "show_short_name": "BBUS"
   },
   {
     "id": "5",
@@ -17,9 +30,10 @@
     "created_at": "2020-04-01T00:00:00.000Z",
     "updated_at": "2020-04-01T00:00:00.000Z",
     "status": "active",
-    "current_week": "1",
+    "current_week": "2",
     "closed_at": "2020-04-01T00:00:00.000Z",
-    "show_id": "1"
+    "show_id": "1",
+    "show_short_name": "BBCAN"
   },
   {
     "id": "6",
@@ -28,8 +42,9 @@
     "created_at": "2020-04-01T00:00:00.000Z",
     "updated_at": "2020-04-01T00:00:00.000Z",
     "status": "active",
-    "current_week": "1",
+    "current_week": "3",
     "closed_at": "2020-04-01T00:00:00.000Z",
-    "show_id": "3"
+    "show_id": "3",
+    "show_short_name": "SUR30"
   }
 ]

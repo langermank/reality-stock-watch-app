@@ -3,7 +3,7 @@ import seasons from "~/data/season.json";
 import { json } from "@remix-run/node";
 import { useLoaderData, Link, Outlet } from "@remix-run/react";
 import leaderboards from "~/data/leaderboard.json";
-import season from "../season";
+// import season from "../season";
 
 // export const loader = ({ params: { short_name } }) => {
 //   const season = seasons.find((c) => c.short_name === short_name);
@@ -36,6 +36,7 @@ export default () => {
   console.log(currentSeason);
   return (
     <>
+      <p>Leaderboard</p>
       {/* {!posts || posts.length === 0 ? (
         <div className="w-full pt-12 text-center text-gray-300 dark:text-gray-500">
           No posts
@@ -43,15 +44,15 @@ export default () => {
       ) : (
         posts?.map((post) => <Post key={post.id} post={post} />)
       )} */}
-      {/* <pre>{JSON.stringify(leaderboard, null, 2)}</pre> */}
+      <pre>{JSON.stringify(leaderboard, null, 2)}</pre>
 
       <div>
-        {/* {leaderboards.map((leaderboard, season) => (
+        {leaderboards.map((leaderboard, season) => (
           <>
             <p>{season.id}</p>
             <p key={leaderboard.id}>{leaderboard.id}</p>
           </>
-        ))} */}
+        ))}
       </div>
     </>
   );

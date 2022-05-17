@@ -48,8 +48,17 @@ export default function Sidebar() {
         </li>
         {seasons.map((season) => (
           <li key={season.id}>
-            <Link to={`${season.show_id}/${season.short_name}`}>
+            <Link to={`${season.show_short_name}/${season.short_name}`}>
               {season.name}
+            </Link>
+          </li>
+        ))}
+        {seasons.map((season) => (
+          <li key={season.id}>
+            <Link
+              to={`${season.show_short_name}/${season.short_name}/leaderboard`}
+            >
+              {season.name} leaderboard
             </Link>
           </li>
         ))}

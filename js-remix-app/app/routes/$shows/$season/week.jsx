@@ -1,26 +1,27 @@
 import { useLoaderData, Link, Outlet, useLocation } from "@remix-run/react";
-import shows from "~/data/show.json";
+import weeks from "~/data/season.json";
 // import withAuthRequired from "~/utils/withAuthRequired";
-
+// use this file to show data based on route
 // this component wraps around any component in sister folder components (folder with same name)
 export const loader = async () => {
   return {
-    shows,
+    weeks,
   };
 };
 
 export default () => {
-  const { shows } = useLoaderData();
+  const { weeks } = useLoaderData();
   //   const location = useLocation();
-
+  console.log(weeks);
   return (
     <div>
-      {shows.map((show) => (
-        <p key={show.id}>
-          <Link to={`/show/${show.short_name}`}>{show.name}</Link>
-        </p>
+      <p>Season weeks</p>
+      {weeks.map((season) => (
+        <li key={season.id}>
+          <Link to={`${season.current_week}`}>{season.name} current week</Link>
+        </li>
       ))}
-      <p>shows</p>
+
       {/* <Outlet /> */}
 
       {/* <div className="flex-1 p-8 flex flex-col">
