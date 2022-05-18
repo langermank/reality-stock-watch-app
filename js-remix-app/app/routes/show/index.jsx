@@ -11,7 +11,7 @@ export default function Index() {
   const { shows } = useLoaderData();
   return (
     <div>
-      <h1>List all shows here</h1>
+      <h1>List all shows</h1>
       {shows.map((show) => (
         <p key={show.id}>
           <Link to={`${show.short_name}`}>{show.name}</Link>

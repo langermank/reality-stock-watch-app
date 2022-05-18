@@ -9,7 +9,9 @@
     "rank": "1",
     "rank_percentage": "0.0",
     "networth": "100",
-    "stocks": "0"
+    "stocks": "0",
+    "show_short_name": "BBUS",
+    "short_name": "S23"
   },
   {
     "season_id": "5",
@@ -21,7 +23,9 @@
     "rank": "1",
     "rank_percentage": "0.0",
     "networth": "100",
-    "stocks": "0"
+    "stocks": "0",
+    "show_short_name": "BBCAN",
+    "short_name": "S31"
   },
   {
     "season_id": "6",
@@ -33,6 +37,8 @@
     "rank": "1",
     "rank_percentage": "0.0",
     "networth": "100",
-    "stocks": "0"
+    "stocks": "0",
+    "show_short_name": "SUR30",
+    "short_name": "S11"
   }
 ]
