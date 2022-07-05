@@ -1,4 +1,5 @@
 import seasons from "~/data/season.json";
+import contestants from "~/data/contestant.json";
 import { useLoaderData, Link, Outlet, useLocation } from "@remix-run/react";
 
 // short_name matches file path, change this if actual data changes
@@ -14,6 +15,7 @@ export default () => {
   return (
     <div>
       <p>Season specific data</p>
+      <p>List out all contestants (index)</p>
       {/* map through season data based on page param */}
       {Object.entries(season).map(([key, value]) => (
         <ul>
