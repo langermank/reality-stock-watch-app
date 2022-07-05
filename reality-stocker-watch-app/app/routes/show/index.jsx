@@ -1,4 +1,4 @@
-import { useLoaderData, Link, Outlet, useLocation } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
 import shows from "~/data/show.json";
 
 export const loader = async () => {
@@ -9,6 +9,7 @@ export const loader = async () => {
 
 export default function Index() {
   const { shows } = useLoaderData();
+
   return (
     <div>
       <h1>List all shows</h1>
@@ -16,8 +17,7 @@ export default function Index() {
         <p key={show.id}>
           <Link to={`${show.short_name}`}>{show.name}</Link>
         </p>
-      ))}
-      {/* <Outlet /> */}
+      ))}     
     </div>
   );
 }
