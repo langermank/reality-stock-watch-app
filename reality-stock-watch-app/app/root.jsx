@@ -5,13 +5,14 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
-import globalStylesUrl from '~/styles/global.css';
+import globalStylesUrl from "~/styles/global.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 
 //#region [ Context functions ]
-// functions to provide specific pages with configuration over 
+// functions to provide specific pages with configuration over
 // the whole document, if necessary
 export const meta = () => ({
   charset: "utf-8",
@@ -20,17 +21,24 @@ export const meta = () => ({
   keywords: "remix, javascript, react, server-side, reality show, learning",
 });
 
-export const links = () => [
-  {rel: 'stylesheet', href: globalStylesUrl}
-]
+export const links = () => [{ rel: "stylesheet", href: globalStylesUrl }];
 export const title = (() => {
-  let titleText = '';
+  let titleText = "";
   return (value) => {
     if (!value) return value;
     titleText = value;
-  }
-})()
+  };
+})();
 //#endregion
+
+export const loader = () => {
+  return {
+    env: {
+      SUPABASE_URL: process.env.SUPABASE_URL,
+      SUPABASE_KEY: process.env.SUPABASE_KEY,
+    },
+  };
+};
 
 //#region [ App Components]
 export default function App() {
@@ -39,33 +47,36 @@ export default function App() {
       <Layout>
         <Outlet />
       </Layout>
-    </Document>   
+    </Document>
   );
 }
 
 export function Document({ children, titleText }) {
+  const { env } = useLoaderData();
   return (
     <html lang="en">
-        <head>
-          <Links />
+      <head>
+        <Links />
 
-          <title>{titleText ? titleText : title()}</title>
+        <title>{titleText ? titleText : title()}</title>
 
-          <Meta />
-        </head>
+        <Meta />
+      </head>
 
-        <body>
-          {children}
+      <body>
+        {children}
 
-          <ScrollRestoration />
-          <Scripts />
-
-          {process.env.NODE_ENV === 'development' 
-          ? <LiveReload />
-          : null}
-        </body>
-      </html>
-  )
+        <ScrollRestoration />
+        <Scripts />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.env = ${JSON.stringify(env)}`,
+          }}
+        />
+        {process.env.NODE_ENV === "development" ? <LiveReload /> : null}
+      </body>
+    </html>
+  );
 }
 
 export function Layout({ children }) {
@@ -79,18 +90,20 @@ export function Layout({ children }) {
 
       <Footer />
     </>
-  )
+  );
 }
 
 export function ErrorBoundary({ error }) {
   console.error(error);
 
-  return <>
-    <Document title="Error">
-      <h1>Error</h1>
+  return (
+    <>
+      <Document title="Error">
+        <h1>Error</h1>
 
-      <p>{error.message}</p>
-    </Document>
-  </>
+        <p>{error.message}</p>
+      </Document>
+    </>
+  );
 }
 //#endregion

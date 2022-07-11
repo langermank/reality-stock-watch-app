@@ -1,9 +1,15 @@
 import { useLoaderData, Link, Outlet, useLocation } from "@remix-run/react";
-import shows from "~/data/show.json";
+// import shows from "~/data/show.json";
+import supabase from "~/utils/supabase";
 // import withAuthRequired from "~/utils/withAuthRequired";
 
 // this component wraps around any component in sister folder components (folder with same name)
 export const loader = async () => {
+  const { data: shows, error } = await supabase.from("shows").select("*");
+
+  if (error) {
+    console.log("error,", error.message);
+  }
   return {
     shows,
   };
@@ -12,7 +18,7 @@ export const loader = async () => {
 export default () => {
   const { shows } = useLoaderData();
   //   const location = useLocation();
-
+  console.log(shows);
   return (
     <div>
       {shows.map((show) => (
