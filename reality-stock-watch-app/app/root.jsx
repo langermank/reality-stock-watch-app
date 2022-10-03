@@ -7,7 +7,7 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import globalStylesUrl from "~/styles/global.css";
+import globalStylesUrl from "./styles/global.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 
@@ -16,7 +16,7 @@ import Header from "./components/Header";
 // the whole document, if necessary
 export const meta = () => ({
   charset: "utf-8",
-  title: "Reality Stocker Watch App",
+  title: "Reality Stock Watch App",
   viewport: "width=device-width,initial-scale=1",
   keywords: "remix, javascript, react, server-side, reality show, learning",
 });
@@ -43,7 +43,7 @@ export const loader = () => {
 //#region [ App Components]
 export default function App() {
   return (
-    <Document titleText="Reality Stocker Watch App">
+    <Document titleText="Reality Stock Watch App">
       <Layout>
         <Outlet />
       </Layout>

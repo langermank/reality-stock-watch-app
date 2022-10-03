@@ -1,23 +1,80 @@
-@import "modern-css-reset/dist/reset.css";
-@import "@radix-ui/colors/blackA.css";
-@import "@radix-ui/colors/slate.css";
-@import "@radix-ui/colors/slateDark.css";
-@import "@radix-ui/colors/indigo.css";
-@import "@radix-ui/colors/indigoDark.css";
-@import "@radix-ui/colors/pink.css";
-@import "@radix-ui/colors/pinkDark.css";
-@import "@radix-ui/colors/tomato.css";
-@import "@radix-ui/colors/tomatoDark.css";
-@import "@radix-ui/colors/green.css";
-@import "@radix-ui/colors/greenDark.css";
-@import "@radix-ui/colors/amber.css";
-@import "@radix-ui/colors/amberDark.css";
-@import "@radix-ui/colors/gold.css";
-@import "@radix-ui/colors/goldDark.css";
-@import "@radix-ui/colors/silver.css";
-@import "@radix-ui/colors/silverDark.css";
-@import "@radix-ui/colors/bronze.css";
-@import "@radix-ui/colors/bronzeDark.css";
+@import "./reset.css";
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* base */
+    --bg-1: var(--slate1);
+    --bg-2: var(--slate2);
+    --border-default: var(--slate8);
+    --text-default: var(--slate12);
+    --text-secondary: var(--slate11);
+    --text-link: var(--indigo11);
+    --text-link-hover: var(--indigo11A);
+
+    /* controls */
+    --bg-control-default: var(--slate3);
+    --bg-control-default-hover: var(--slate4);
+    --bg-control-default-active: var(--slate5);
+    --bg-control-default-hover: var(--slateA3);
+    --bg-control-primary: var(--pink8);
+    --bg-control-primary-hover: var(--pink8A);
+    --bg-control-primary-active: var(--pink8A);
+    --bg-control-primary-disabled: var(--pink8A);
+    --border-control-default-strong: var(--slate8);
+    --border-control-primary: var(--pink8);
+    --border-control-primary-ghost: var(--pink10);
+    --text-control-default: #ffffff;
+    --text-control-default-disabled: var(--slate12);
+    --text-control-primary: #ffffff;
+    --text-control-primary-disabled: var(--slate12);
+    --text-control-primary-ghost: var(--pink10);
+    --text-control-primary-ghost-disabled: var(--pink8);
+
+    /* semantic */
+    --bg-positive: var(--green3);
+    --bg-negative: var(--tomato3);
+    --bg-warning: var(--amber3);
+    --bg-neutral: var(--indigo3);
+    --bg-gold: var(--gold5);
+    --bg-silver: var(--silver5);
+    --bg-bronze: var(--bronze5);
+    --border-positive: var(--green8);
+    --border-negative: var(--tomato8);
+    --border-warning: var(--amber8);
+    --border-neutral: var(--indigo8);
+    --border-gold: var(--gold9);
+    --border-silver: var(--silver9);
+    --border-bronze: var(--bronze9);
+    --text-positive: var(--green11);
+    --text-negative: var(--tomato11);
+    --text-warning: var(--amber11);
+    --text-neutral: var(--indigo11);
+    --text-gold: var(--gold11);
+    --text-silver: var(--silver11);
+    --text-bronze: var(--bronze11);
+  }
+}
+
+:root {
+  /* size */
+  --size-4: 0.25rem;
+  --size-8: 0.5rem;
+  --size-12: 0.75rem;
+  --size-16: 1rem;
+  --size-20: 1.25rem;
+  --size-24: 1.5rem;
+  --size-28: 1.75rem;
+  --size-32: 2rem;
+  --size-36: 2.25rem;
+  --size-40: 2.5rem;
+  --size-44: 2.75rem;
+  --size-48: 3rem;
+  --size-64: 4rem;
+  --size-80: 5rem;
+  --size-96: 6rem;
+  --size-112: 7rem;
+  --size-128: 8rem;
+}
 
 :root {
   --grid-size: 4px;
