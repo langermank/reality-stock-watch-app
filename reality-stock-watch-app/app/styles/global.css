@@ -1,5 +1,3 @@
-@import "./reset.css";
-
 @media (prefers-color-scheme: dark) {
   :root {
     /* base */
@@ -36,21 +34,21 @@
     --bg-warning: var(--amber3);
     --bg-neutral: var(--indigo3);
     --bg-gold: var(--gold5);
-    --bg-silver: var(--silver5);
+    --bg-silver: var(--slate5);
     --bg-bronze: var(--bronze5);
     --border-positive: var(--green8);
     --border-negative: var(--tomato8);
     --border-warning: var(--amber8);
     --border-neutral: var(--indigo8);
     --border-gold: var(--gold9);
-    --border-silver: var(--silver9);
+    --border-silver: var(--slate9);
     --border-bronze: var(--bronze9);
     --text-positive: var(--green11);
     --text-negative: var(--tomato11);
     --text-warning: var(--amber11);
     --text-neutral: var(--indigo11);
     --text-gold: var(--gold11);
-    --text-silver: var(--silver11);
+    --text-silver: var(--slate11);
     --text-bronze: var(--bronze11);
   }
 }

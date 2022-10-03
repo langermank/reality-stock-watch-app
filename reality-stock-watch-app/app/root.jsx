@@ -8,6 +8,9 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import globalStylesUrl from "./styles/global.css";
+import reset from "./styles/reset.css";
+import radixDark from "./styles/radix-dark.css";
+import radixLight from "./styles/radix-light.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 
@@ -21,7 +24,12 @@ export const meta = () => ({
   keywords: "remix, javascript, react, server-side, reality show, learning",
 });
 
-export const links = () => [{ rel: "stylesheet", href: globalStylesUrl }];
+export const links = () => [
+  { rel: "stylesheet", href: globalStylesUrl },
+  { rel: "stylesheet", href: reset },
+  { rel: "stylesheet", href: radixDark },
+  { rel: "stylesheet", href: radixLight },
+];
 export const title = (() => {
   let titleText = "";
   return (value) => {
