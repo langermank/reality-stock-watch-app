@@ -1,3 +1,5 @@
+@layer reset, base;
+
 @media (prefers-color-scheme: dark) {
   :root {
     /* base */
@@ -99,16 +101,13 @@
   /* #endregion */
 }
 
-* {
-  box-sizing: border-box;
-}
-html,
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  color: var(--c-text-default);
-  background: var(--c-bg-default);
+@layer base {
+  html,
+  body {
+    font-family: sans-serif;
+    color: var(--c-text-default);
+    background: var(--c-bg-default);
+  }
 }
 
 /* #region [ Layout ] */

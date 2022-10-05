@@ -1,5 +1,5 @@
-/* slate */
 :root {
+  /* slate */
   --slate1: hsl(206, 30%, 98.8%);
   --slate2: hsl(210, 16.7%, 97.6%);
   --slate3: hsl(209, 13.3%, 95.3%);
@@ -12,9 +12,8 @@
   --slate10: hsl(206, 5.8%, 52.3%);
   --slate11: hsl(206, 6%, 43.5%);
   --slate12: hsl(206, 24%, 9%);
-}
-/* indigo */
-:root {
+
+  /* indigo */
   --indigo1: hsl(225, 60%, 99.4%);
   --indigo2: hsl(223, 100%, 98.6%);
   --indigo3: hsl(223, 98.4%, 97.1%);
@@ -27,9 +26,8 @@
   --indigo10: hsl(226, 58.6%, 51.3%);
   --indigo11: hsl(226, 55%, 45%);
   --indigo12: hsl(226, 62%, 17%);
-}
-/* pink */
-:root {
+
+  /* pink */
   --pink1: hsl(322, 100%, 99.4%);
   --pink2: hsl(323, 100%, 98.4%);
   --pink3: hsl(323, 86.3%, 96.5%);
@@ -42,9 +40,8 @@
   --pink10: hsl(322, 63.9%, 50.7%);
   --pink11: hsl(322, 75%, 46%);
   --pink12: hsl(320, 70%, 13.5%);
-}
-/* tomato */
-:root {
+
+  /* tomato */
   --tomato1: hsl(10, 100%, 99.4%);
   --tomato2: hsl(8, 100%, 98.4%);
   --tomato3: hsl(8, 100%, 96.6%);
@@ -57,9 +54,8 @@
   --tomato10: hsl(10, 71.5%, 50%);
   --tomato11: hsl(10, 82%, 43.5%);
   --tomato12: hsl(10, 50%, 13.5%);
-}
-/* green */
-:root {
+
+  /* green */
   --green1: hsl(136, 50%, 98.9%);
   --green2: hsl(138, 62.5%, 96.9%);
   --green3: hsl(139, 55.2%, 94.5%);
@@ -72,10 +68,8 @@
   --green10: hsl(152, 57.5%, 37.6%);
   --green11: hsl(153, 67%, 28.5%);
   --green12: hsl(155, 40%, 14%);
-}
-/* amber */
 
-:root {
+  /* amber */
   --amber1: hsl(39, 70%, 99%);
   --amber2: hsl(40, 100%, 96.5%);
   --amber3: hsl(44, 100%, 91.7%);
@@ -88,9 +82,8 @@
   --amber10: hsl(35, 100%, 55.5%);
   --amber11: hsl(30, 100%, 34%);
   --amber12: hsl(20, 80%, 17%);
-}
-/* gold */
-:root {
+
+  /* gold */
   --gold1: hsl(50, 20%, 99.1%);
   --gold2: hsl(47, 52.9%, 96.7%);
   --gold3: hsl(46, 38.2%, 93.7%);
@@ -103,9 +96,8 @@
   --gold10: hsl(36, 19.8%, 45.7%);
   --gold11: hsl(36, 20%, 39%);
   --gold12: hsl(36, 16%, 20%);
-}
-/* bronze */
-:root {
+
+  /* bronze */
   --bronze1: hsl(15, 30%, 99.1%);
   --bronze2: hsl(17, 63.6%, 97.8%);
   --bronze3: hsl(17, 42.1%, 95.2%);
@@ -118,9 +110,8 @@
   --bronze10: hsl(17, 18.1%, 50.1%);
   --bronze11: hsl(15, 20%, 43.1%);
   --bronze12: hsl(12, 22%, 21.5%);
-}
-/* black alpha */
-:root {
+
+  /* black alpha */
   --blackA1: hsla(0, 0%, 0%, 0.012);
   --blackA2: hsla(0, 0%, 0%, 0.027);
   --blackA3: hsla(0, 0%, 0%, 0.047);
@@ -133,9 +124,8 @@
   --blackA10: hsla(0, 0%, 0%, 0.478);
   --blackA11: hsla(0, 0%, 0%, 0.565);
   --blackA12: hsla(0, 0%, 0%, 0.91);
-}
-/* white alpha */
-:root {
+
+  /* white alpha */
   --whiteA1: hsla(0, 0%, 100%, 0);
   --whiteA2: hsla(0, 0%, 100%, 0.013);
   --whiteA3: hsla(0, 0%, 100%, 0.034);
