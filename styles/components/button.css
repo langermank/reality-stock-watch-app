@@ -1,5 +1,5 @@
 @layer components {
-  .btnBase {
+  .Button {
     border: 1px solid transparent;
     border-radius: var(--border-radius);
     height: var(--btn-height);
@@ -28,6 +28,12 @@
     &.iconOnly {
         width: var(--btn-height);
     } */
+
+    &[data-variant="primary"] {
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: var(--white);
+    }
   }
 
   .btnIcon {

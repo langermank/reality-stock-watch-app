@@ -26,8 +26,7 @@ const Button = React.forwardRef(
       <button
         ref={ref}
         onClick={onClick}
-        // className={clsx(styles.btnBase, className, iconOnly && styles.iconOnly)}
-        className="btnBase"
+        className={iconOnly ? "Button, Button-iconOnly" : "Button"}
         disabled={disabled}
         aria-labelledby={ariaLabelledById}
         data-variant={variant}
@@ -37,8 +36,8 @@ const Button = React.forwardRef(
         id={id}
         {...other}
       >
-        {/* {icon && <div className={styles.btnIcon}>{icon}</div>}
-        {!iconOnly && <div className={styles.btnChildren}>{children}</div>} */}
+        {icon && <div className="Button--icon">{icon}</div>}
+        {!iconOnly && <div className="Button--label">{children}</div>}
         {iconOnly && (
           <div hidden id={ariaLabelledById}>
             {children}
@@ -62,11 +61,8 @@ Button.propTypes = {
   variant: PropTypes.oneOf([
     "primary",
     "secondary",
-    "secondaryHint",
     "danger",
     "primaryGhost",
-    "secondaryGhost",
-    "outline",
     "unstyled",
   ]),
   icon: PropTypes.node,

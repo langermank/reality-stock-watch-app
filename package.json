@@ -6,16 +6,13 @@
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
-    "dev:remix": "node -r dotenv/config node_modules/.bin/remix dev",
-    "dev:css": "postcss styles --base styles --dir app/styles -w",
-    "dev:postcss": "postcss styles/base.css --use postcss-import --output app/styles/new.css",
-    "dev:postcss2": "postcss styles/base.css --config postcss.config.js --dir app/styles/",
-    "postcss:watch": "postcss styles/global.css --dir app/styles/ --watch",
     "build:css": "postcss styles --base styles --dir app/styles --env production",
-    "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
+    "build-storybook": "build-storybook",
     "storybook": "start-storybook -p 6006",
+    "dev:remix": "node -r dotenv/config node_modules/.bin/remix dev",
+    "dev:css": "postcss styles/global.css --dir app/styles/ --watch",
     "dev:storybook": "concurrently \"npm run storybook\" \"npm run dev:css\"",
-    "build-storybook": "build-storybook"
+    "dev": "concurrently \"npm run dev:css\" \"remix dev\""
   },
   "dependencies": {
     "@radix-ui/colors": "^0.1.8",
