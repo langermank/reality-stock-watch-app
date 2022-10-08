@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import seasons from "~/data/season.json";
+import Button from "./core/button/Button";
 
 export const loader = ({ params: { short_name } }) => {
   const season = seasons.find((c) => c.short_name === short_name);
@@ -12,7 +13,8 @@ export default function Sidebar() {
     <aside>
       <nav>
         <h1>Sidebar</h1>
-
+        <Button>Hey</Button>
+        <Button>Hey</Button>
         <ul>
           {seasons.map((season) => (
             <li key={season.id}>

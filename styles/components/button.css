@@ -1,0 +1,201 @@
+@layer components {
+  .btnBase {
+    border: 1px solid transparent;
+    border-radius: var(--border-radius);
+    height: var(--btn-height);
+    transition: var(--transition);
+    display: inline-block;
+    position: relative;
+    white-space: nowrap;
+    font-size: 1rem;
+    padding: 0 1rem;
+    text-align: center;
+    cursor: pointer;
+    color: pink;
+
+    /* &:disabled {
+        background: var(--slate12);
+        border: 1px solid var(--slate12);
+        color: var(--slate9);
+        cursor: not-allowed;
+    }
+
+    svg {
+        height: 1.25rem;
+        width: 1.25rem;
+    }
+
+    &.iconOnly {
+        width: var(--btn-height);
+    } */
+  }
+
+  .btnIcon {
+    display: flex;
+  }
+
+  .prepend {
+    padding: 0 1rem 0 0;
+    display: inline-flex;
+
+    /* svg {
+        // .px-em(padding, 8);
+        // .px-em(margin-right, 16);
+        padding: 0.5rem;
+        margin-right: 1rem;
+        display: inline-flex;
+        height: var(--btn-height);
+        width: var(--btn-height);
+        align-items: center;
+        justify-content: center;
+        color: $white;
+    }
+
+    span {
+        text-align: center;
+    } */
+  }
+
+  /* .btnBase[data-variant='primary']:not([disabled]) {
+    background-color: var(--indigo8);
+    color: var(--white);
+
+    &:hover,
+    &:active {
+        background-color: var(--indigo6);
+    }
+}
+
+.btnBase[data-variant='primaryGhost']:not([disabled]) {
+    background-color: transparent;
+    border: 1px solid var(--indigo11);
+    color: var(--indigo11);
+
+    &:hover,
+    &:active {
+        background-color: var(--indigo5);
+    }
+}
+
+.btnBase[data-variant='secondary']:not([disabled]) {
+    background-color: var(--pink8);
+    color: var(--white);
+
+    &:hover,
+    &:active {
+        background-color: var(--pink5);
+    }
+}
+
+.btnBase[data-variant='secondaryHint']:not([disabled]) {
+    background-color: var(--pink4);
+    border: solid 1px var(--pink4);
+    color: var(--pink11);
+
+    &:hover,
+    &:active {
+        background-color: var(--pink5);
+    }
+}
+
+.btnBase[data-variant='secondaryGhost']:not([disabled]) {
+    background-color: transparent;
+    border: 1px solid var(--pink11);
+    color: var(--pink11);
+
+    &:hover,
+    &:active {
+        background-color: var(--pink5);
+    }
+}
+
+.btnBase[data-variant='outline']:not([disabled]) {
+    background-color: transparent;
+    border: 1px solid var(--slate12);
+    color: var(--slate12);
+
+    &:hover,
+    &:active {
+        background-color: var(--pink5);
+    }
+}
+
+.btnBase[data-size='small'] {
+    height: 2rem;
+    padding: 0 0.5rem;
+
+    &.iconOnly {
+        width: 2rem;
+    }
+}
+
+.btnBase[data-size='large'] {
+    height: 3.5rem;
+
+    &.iconOnly {
+        width: 3.5rem;
+    }
+}
+
+.btnBase[data-width='fullWidth'] {
+    // display: flex;
+    width: 100%;
+}
+
+.btnBase[data-icon-position] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnBase[data-icon-position='left'] {
+    .btnChildren {
+        flex: 1 0 auto;
+    }
+
+    .btnIcon {
+        margin-right: 0.5rem;
+        flex: 0 1 auto;
+    }
+}
+
+.btnBase[data-icon-position='leftCentered'] {
+    .btnIcon {
+        margin-right: 0.5rem;
+    }
+}
+
+.btnBase[data-icon-position='right'] {
+    .btnChildren {
+        flex: 1 0 auto;
+    }
+
+    .btnIcon {
+        order: 2;
+        margin-left: 0.5rem;
+    }
+}
+
+.btnBase[data-icon-position='rightCentered'] {
+    .btnIcon {
+        order: 2;
+        margin-left: 0.5rem;
+    }
+}
+
+// collapsed sidebar logic
+
+body[data-panel-state='closed'] {
+    .btnBase[data-icon-position='right'] {
+        .btnIcon {
+            margin-left: 0;
+        }
+    }
+
+    .btnBase[data-icon-position='left'] {
+        .btnIcon {
+            margin-right: 0;
+        }
+    }
+} */
+}

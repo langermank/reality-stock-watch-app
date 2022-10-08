@@ -8,8 +8,14 @@
     "build": "remix build",
     "dev:remix": "node -r dotenv/config node_modules/.bin/remix dev",
     "dev:css": "postcss styles --base styles --dir app/styles -w",
+    "dev:postcss": "postcss styles/base.css --use postcss-import --output app/styles/new.css",
+    "dev:postcss2": "postcss styles/base.css --config postcss.config.js --dir app/styles/",
+    "postcss:watch": "postcss styles/global.css --dir app/styles/ --watch",
     "build:css": "postcss styles --base styles --dir app/styles --env production",
-    "dev": "concurrently \"npm run dev:css\" \"remix dev\""
+    "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
+    "storybook": "start-storybook -p 6006",
+    "dev:storybook": "concurrently \"npm run storybook\" \"npm run dev:css\"",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@radix-ui/colors": "^0.1.8",
@@ -20,19 +26,32 @@
     "@vercel/node": "^1.14.0",
     "dotenv": "^16.0.1",
     "modern-css-reset": "^1.4.0",
+    "phosphor-react": "^1.4.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix": "^1.5.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.19.3",
     "@remix-run/dev": "^1.4.0",
     "@remix-run/eslint-config": "^1.3.5",
     "@remix-run/serve": "^1.3.5",
+    "@storybook/addon-actions": "^6.5.12",
+    "@storybook/addon-essentials": "^6.5.12",
+    "@storybook/addon-interactions": "^6.5.12",
+    "@storybook/addon-links": "^6.5.12",
+    "@storybook/builder-webpack4": "^6.5.12",
+    "@storybook/manager-webpack4": "^6.5.12",
+    "@storybook/react": "^6.5.12",
+    "@storybook/testing-library": "^0.0.13",
     "autoprefixer": "^10.4.12",
+    "babel-loader": "^8.2.5",
     "concurrently": "^7.4.0",
     "eslint": "^8.11.0",
     "postcss": "^8.4.17",
     "postcss-cli": "^10.0.0",
+    "postcss-import": "^15.0.0",
+    "postcss-import-ext-glob": "^2.0.1",
     "prettier": "2.6.2"
   },
   "engines": {

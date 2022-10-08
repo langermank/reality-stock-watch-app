@@ -1,5 +1,7 @@
+const atImport = require("postcss-import");
+const atImportGlob = require("postcss-import-ext-glob");
+const autoprefixer = require("autoprefixer");
+
 module.exports = {
-  plugins: {
-    autoprefixer: {},
-  },
+  plugins: [atImportGlob(), atImport(), autoprefixer()],
 };
