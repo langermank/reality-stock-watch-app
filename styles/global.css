@@ -2,60 +2,63 @@
 
 @layer reset, base, components;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* base */
-    --bg-1: var(--slate1);
-    --bg-2: var(--slate2);
-    --border-default: var(--slate8);
-    --text-default: var(--slate12);
-    --text-secondary: var(--slate11);
-    --text-link: var(--indigo11);
-    --text-link-hover: var(--indigo11A);
+/* @media (prefers-color-scheme: dark) {
+  :root { */
+.dark-theme {
+  /* base */
+  --bg-1: var(--slate1);
+  --bg-2: var(--slate2);
+  --border-default: var(--slate8);
+  --text-default: var(--slate12);
+  --text-secondary: var(--slate11);
+  --text-link: var(--indigo11);
+  --text-link-hover: var(--indigoA11);
 
-    /* controls */
-    --bg-control-default: var(--slate3);
-    --bg-control-default-hover: var(--slate4);
-    --bg-control-default-active: var(--slate5);
-    --bg-control-default-hover: var(--slateA3);
-    --bg-control-primary: var(--pink8);
-    --bg-control-primary-hover: var(--pink8A);
-    --bg-control-primary-active: var(--pink8A);
-    --bg-control-primary-disabled: var(--pink8A);
-    --border-control-default-strong: var(--slate8);
-    --border-control-primary: var(--pink8);
-    --border-control-primary-ghost: var(--pink10);
-    --text-control-default: #ffffff;
-    --text-control-default-disabled: var(--slate12);
-    --text-control-primary: #ffffff;
-    --text-control-primary-disabled: var(--slate12);
-    --text-control-primary-ghost: var(--pink10);
-    --text-control-primary-ghost-disabled: var(--pink8);
+  /* controls */
+  --bg-control-secondary: #ffffff;
+  --bg-control-secondary-hover: var(--slate12);
+  --bg-control-secondary-active: var(--slate11);
+  --bg-control-muted: var(--slate3);
+  --bg-control-muted-hover: var(--slate4);
+  --bg-control-muted-active: var(--slate5);
+  --bg-control-primary: var(--pink8);
+  --bg-control-primary-hover: hsl(322, 74.9%, 45%);
+  --bg-control-primary-active: hsl(322, 74.9%, 49%);
+  --bg-control-primary-disabled: hsla(322, 74.9%, 45%, 60%);
+  --border-control-secondary-strong: var(--slate8);
+  --border-control-primary: var(--pink8);
+  --border-control-primary-ghost: var(--pink10);
+  --text-control-secondary: var(--slate1);
+  --text-control-secondary-disabled: var(--slate12);
+  --text-control-primary: #ffffff;
+  --text-control-primary-disabled: var(--slate12);
+  --text-control-primary-ghost: var(--pink10);
+  --text-control-primary-ghost-disabled: var(--pink8);
 
-    /* semantic */
-    --bg-positive: var(--green3);
-    --bg-negative: var(--tomato3);
-    --bg-warning: var(--amber3);
-    --bg-neutral: var(--indigo3);
-    --bg-gold: var(--gold5);
-    --bg-silver: var(--slate5);
-    --bg-bronze: var(--bronze5);
-    --border-positive: var(--green8);
-    --border-negative: var(--tomato8);
-    --border-warning: var(--amber8);
-    --border-neutral: var(--indigo8);
-    --border-gold: var(--gold9);
-    --border-silver: var(--slate9);
-    --border-bronze: var(--bronze9);
-    --text-positive: var(--green11);
-    --text-negative: var(--tomato11);
-    --text-warning: var(--amber11);
-    --text-neutral: var(--indigo11);
-    --text-gold: var(--gold11);
-    --text-silver: var(--slate11);
-    --text-bronze: var(--bronze11);
-  }
+  /* semantic */
+  --bg-positive: var(--green3);
+  --bg-negative: var(--tomato3);
+  --bg-warning: var(--amber3);
+  --bg-neutral: var(--indigo3);
+  --bg-gold: var(--gold5);
+  --bg-silver: var(--slate5);
+  --bg-bronze: var(--bronze5);
+  --border-positive: var(--green8);
+  --border-negative: var(--tomato8);
+  --border-warning: var(--amber8);
+  --border-neutral: var(--indigo8);
+  --border-gold: var(--gold9);
+  --border-silver: var(--slate9);
+  --border-bronze: var(--bronze9);
+  --text-positive: var(--green11);
+  --text-negative: var(--tomato11);
+  --text-warning: var(--amber11);
+  --text-neutral: var(--indigo11);
+  --text-gold: var(--gold11);
+  --text-silver: var(--slate11);
+  --text-bronze: var(--bronze11);
 }
+/* } */
 
 :root {
   /* size */
@@ -76,6 +79,14 @@
   --size-96: 6rem;
   --size-112: 7rem;
   --size-128: 8rem;
+  --border-radius-default: var(--size-4);
+  --border-radius-large: var(--size-12);
+  --control-medium-height: var(--size-44);
+  --control-medium-paddingInline-normal: var(--size-12);
+  --control-medium-paddingInline-condensed: var(--size-8);
+  --control-medium-gap: var(--size-8);
+  --control-borderRadius: var(--border-radius-default);
+  --control-medium-fontSize: var(--size-16);
 }
 
 :root {

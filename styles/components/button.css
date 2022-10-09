@@ -1,17 +1,16 @@
 @layer components {
   .Button {
     border: 1px solid transparent;
-    border-radius: var(--border-radius);
-    height: var(--btn-height);
+    border-radius: var(--control-borderRadius);
+    height: var(--control-medium-height);
     transition: var(--transition);
     display: inline-block;
     position: relative;
     white-space: nowrap;
-    font-size: 1rem;
-    padding: 0 1rem;
+    font-size: var(--control-medium-fontSize);
+    padding-inline: var(--control-medium-paddingInline-normal);
     text-align: center;
     cursor: pointer;
-    color: pink;
 
     /* &:disabled {
         background: var(--slate12);
@@ -30,9 +29,43 @@
     } */
 
     &[data-variant="primary"] {
-      background: var(--primary);
-      border: 1px solid var(--primary);
-      color: var(--white);
+      background: var(--bg-control-primary);
+      border: 1px solid var(--border-control-primary);
+      color: var(--text-control-primary);
+
+      &:hover {
+        background: var(--bg-control-primary-hover);
+      }
+
+      &:active {
+        background: var(--bg-control-primary-active);
+      }
+
+      &:disabled {
+        background: var(--bg-control-primary-disabled);
+        color: var(--text-control-primary-disabled);
+        cursor: not-allowed;
+      }
+    }
+
+    &[data-variant="secondary"] {
+      background: var(--bg-control-secondary);
+      border: 1px solid var(--border-control-secondary);
+      color: var(--text-control-secondary);
+
+      &:hover {
+        background: var(--bg-control-secondary-hover);
+      }
+
+      &:active {
+        background: var(--bg-control-secondary-active);
+      }
+
+      &:disabled {
+        background: var(--bg-control-secondary-disabled);
+        color: var(--text-control-secondary-disabled);
+        cursor: not-allowed;
+      }
     }
   }
 
