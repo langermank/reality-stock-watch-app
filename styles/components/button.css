@@ -148,6 +148,18 @@
       font-size: var(--control-small-fontSize);
       padding-inline: var(--control-paddingInline-condensed);
     }
+
+    &.Button-iconOnly {
+      width: var(--control-medium-height);
+      padding: unset;
+      place-content: center;
+      font-size: var(--size-20);
+
+      &[data-size="small"] {
+        width: var(--control-small-height);
+        font-size: var(--control-medium-fontSize);
+      }
+    }
   }
 
   .Button-content {

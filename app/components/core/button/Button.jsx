@@ -26,7 +26,7 @@ const Button = React.forwardRef(
       <button
         ref={ref}
         onClick={onClick}
-        className={iconOnly ? "Button, Button-iconOnly" : "Button"}
+        className={iconOnly ? "Button Button-iconOnly" : "Button"}
         disabled={disabled}
         aria-labelledby={ariaLabelledById}
         data-variant={variant}

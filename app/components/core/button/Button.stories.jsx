@@ -56,3 +56,9 @@ TrailingActionIcon.args = {
   trailingActionIcon: <CaretDown />,
   iconPosition: "right",
 };
+
+export const IconOnly = (args) => <Button {...args}>Default</Button>;
+IconOnly.args = {
+  icon: <FileX />,
+  iconOnly: true,
+};
