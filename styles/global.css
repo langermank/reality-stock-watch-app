@@ -15,25 +15,53 @@
   --text-link-hover: var(--indigoA11);
 
   /* controls */
+  /* bg */
   --bg-control-secondary: #ffffff;
   --bg-control-secondary-hover: var(--slate12);
-  --bg-control-secondary-active: var(--slate11);
+  --bg-control-secondary-active: hsl(210, 6%, 83%);
+  --bg-control-secondary-disabled: var(--slate10);
+  --bg-control-secondaryGhost-hover: var(--slateA4);
+  --bg-control-secondaryGhost-active: var(--slateA5);
+  --bg-control-secondaryGhost-disabled: var(--slateA7);
   --bg-control-muted: var(--slate3);
   --bg-control-muted-hover: var(--slate4);
   --bg-control-muted-active: var(--slate5);
+  --bg-control-muted-disabled: hsla(182, 86.7%, 91.4%, 0.057);
+  --bg-control-primary-disabled: hsla(322, 74.9%, 45%, 60%);
   --bg-control-primary: var(--pink8);
   --bg-control-primary-hover: hsl(322, 74.9%, 45%);
   --bg-control-primary-active: hsl(322, 74.9%, 49%);
   --bg-control-primary-disabled: hsla(322, 74.9%, 45%, 60%);
+  --bg-control-primaryGhost-hover: var(--pinkA4);
+  --bg-control-primaryGhost-active: var(--pinkA5);
+  --bg-control-primaryGhost-disabled: var(--pinkA7);
+  --bg-control-danger: var(--bg-negative);
+  --bg-control-danger-hover: var(--text-negative);
+  --bg-control-danger-active: var(--tomato4);
+  --bg-control-danger-disabled: var(--tomato5);
+  /* border */
+  --border-control-secondaryGhost: #ffffff;
+  --border-control-secondaryGhost-disabled: var(--slate11);
   --border-control-secondary-strong: var(--slate8);
-  --border-control-primary: var(--pink8);
-  --border-control-primary-ghost: var(--pink10);
+  --border-control-primaryGhost: var(--pink10);
+  --border-control-primaryGhost-disabled: var(--pink9);
+  --border-control-danger: var(--text-negative);
+  --border-control-danger-disabled: var(--tomato8);
+  /* text */
   --text-control-secondary: var(--slate1);
   --text-control-secondary-disabled: var(--slate12);
+  --text-control-secondaryGhost: #ffffff;
+  --text-control-secondaryGhost-disabled: var(--slate11);
+  --text-control-secondary-disabled: var(--slate11);
   --text-control-primary: #ffffff;
-  --text-control-primary-disabled: var(--slate12);
-  --text-control-primary-ghost: var(--pink10);
-  --text-control-primary-ghost-disabled: var(--pink8);
+  --text-control-primary-disabled: var(--pink11);
+  --text-control-primaryGhost: var(--pink10);
+  --text-control-primaryGhost-disabled: var(--pink9);
+  --text-control-muted: #ffffff;
+  --text-control-muted-disabled: var(--slate11);
+  --text-control-danger: var(--text-negative);
+  --text-control-danger-hover: var(--slate1);
+  --text-control-danger-disabled: var(--tomato8);
 
   /* semantic */
   --bg-positive: var(--green3);
@@ -65,6 +93,7 @@
   --size-4: 0.25rem;
   --size-8: 0.5rem;
   --size-12: 0.75rem;
+  --size-14: 0.875rem;
   --size-16: 1rem;
   --size-20: 1.25rem;
   --size-24: 1.5rem;
@@ -81,12 +110,17 @@
   --size-128: 8rem;
   --border-radius-default: var(--size-4);
   --border-radius-large: var(--size-12);
-  --control-medium-height: var(--size-44);
-  --control-medium-paddingInline-normal: var(--size-12);
-  --control-medium-paddingInline-condensed: var(--size-8);
-  --control-medium-gap: var(--size-8);
+
+  /* controls */
   --control-borderRadius: var(--border-radius-default);
+  --control-paddingInline-normal: var(--size-16);
+  --control-paddingInline-condensed: var(--size-12);
+  --control-gap-normal: var(--size-8);
+  --control-gap-spacious: var(--size-16);
   --control-medium-fontSize: var(--size-16);
+  --control-medium-height: var(--size-44);
+  --control-small-fontSize: var(--size-14);
+  --control-small-height: var(--size-32);
 }
 
 :root {

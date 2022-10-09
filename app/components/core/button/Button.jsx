@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
 import React from "react";
 import PropTypes from "prop-types";
-import { Star } from "phosphor-react";
 
 const Button = React.forwardRef(
   (
@@ -15,6 +13,8 @@ const Button = React.forwardRef(
       icon,
       iconOnly,
       iconPosition,
+      trailingActionIcon,
+      alignContent,
       ariaLabelledById,
       className,
       id,
@@ -31,17 +31,30 @@ const Button = React.forwardRef(
         aria-labelledby={ariaLabelledById}
         data-variant={variant}
         data-size={size}
-        data-icon-position={!iconOnly && iconPosition}
         data-width={!iconOnly && width}
         id={id}
         {...other}
       >
-        {icon && <div className="Button--icon">{icon}</div>}
-        {!iconOnly && <div className="Button--label">{children}</div>}
+        {!iconOnly && (
+          <>
+            <span
+              class="Button-content"
+              data-icon-position={!iconOnly && iconPosition}
+              data-align-content={alignContent}
+            >
+              {icon && <span className="Button-icon">{icon}</span>}
+              <span className="Button-label">{children}</span>
+            </span>
+            {trailingActionIcon}
+          </>
+        )}
         {iconOnly && (
-          <div hidden id={ariaLabelledById}>
-            {children}
-          </div>
+          <>
+            <span className="Button-icon">{icon}</span>
+            <span hidden id={ariaLabelledById}>
+              {children}
+            </span>
+          </>
         )}
       </button>
     );
@@ -56,7 +69,7 @@ Button.propTypes = {
     PropTypes.node,
   ]).isRequired,
   disabled: PropTypes.bool,
-  size: PropTypes.oneOf(["default", "small", "large"]),
+  size: PropTypes.oneOf(["default", "small"]),
   width: PropTypes.oneOf(["default", "fullWidth"]),
   variant: PropTypes.oneOf([
     "secondary",
@@ -69,13 +82,10 @@ Button.propTypes = {
   ]),
   icon: PropTypes.node,
   iconOnly: PropTypes.bool,
-  iconPosition: PropTypes.oneOf([
-    "left",
-    "right",
-    "leftCentered",
-    "rightCentered",
-  ]),
+  iconPosition: PropTypes.oneOf(["left", "right"]),
+  alignContent: PropTypes.oneOf(["center", "start"]),
   ariaLabelledById: PropTypes.string,
+  trailingActionIcon: PropTypes.node,
   // ref: PropTypes.string,
 };
 
@@ -85,12 +95,14 @@ Button.defaultProps = {
   disabled: false,
   size: "default",
   width: "default",
-  variant: "primary",
+  variant: "secondary",
   icon: null,
   iconOnly: false,
   iconPosition: "left",
+  alignContent: "center",
   ariaLabelledById: "",
   id: "",
+  trailingActionIcon: null,
   // ref: null,
 };
 
