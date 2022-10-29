@@ -37,6 +37,10 @@
         background: var(--bg-control-primary-disabled);
         color: var(--text-control-primary-disabled);
       }
+
+      &:focus-visible {
+        @mixin focusOutline -2px, currentColor;
+      }
     }
 
     &[data-variant="primaryGhost"] {
@@ -57,6 +61,10 @@
         color: var(--text-control-primaryGhost-disabled);
         border-color: var(--border-control-primaryGhost-disabled);
       }
+
+      &:focus-visible {
+        @mixin focusOutline -2px, var(--text-control-primary);
+      }
     }
 
     &[data-variant="secondary"] {
@@ -75,6 +83,10 @@
       &:disabled {
         background: var(--bg-control-secondary-disabled);
         color: var(--text-control-secondary-disabled);
+      }
+
+      &:focus-visible {
+        @mixin focusOutline -4px, currentColor;
       }
     }
 
@@ -96,6 +108,10 @@
         color: var(--text-control-secondaryGhost-disabled);
         border-color: var(--border-control-secondaryGhost-disabled);
       }
+
+      &:focus-visible {
+        @mixin focusOutline -2px, var(--text-link);
+      }
     }
 
     &[data-variant="muted"] {
@@ -115,6 +131,10 @@
         background: var(--bg-control-muted-disabled);
         color: var(--text-control-muted-disabled);
         cursor: not-allowed;
+      }
+
+      &:focus-visible {
+        @mixin focusOutline -2px, currentColor;
       }
     }
 
@@ -136,6 +156,10 @@
         background: var(--bg-control-danger-disabled);
         color: var(--text-control-danger-disabled);
         border-color: var(--border-control-danger-disabled);
+      }
+
+      &:focus-visible {
+        @mixin focusOutline -2px, var(--text-control-primary);
       }
     }
 

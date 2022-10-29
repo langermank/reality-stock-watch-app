@@ -13,6 +13,7 @@
   --text-secondary: var(--slate11);
   --text-link: var(--indigo11);
   --text-link-hover: var(--indigoA11);
+  --bg-link: var(--text-link);
 
   /* controls */
   /* bg */
@@ -62,6 +63,7 @@
   --text-control-danger: var(--text-negative);
   --text-control-danger-hover: var(--slate1);
   --text-control-danger-disabled: var(--tomato8);
+  --text-control-placeholder: var(--slate10);
 
   /* semantic */
   --bg-positive: var(--green3);
@@ -89,6 +91,34 @@
 /* } */
 
 :root {
+  /* black alpha */
+  --blackA1: hsla(0, 0%, 0%, 0.012);
+  --blackA2: hsla(0, 0%, 0%, 0.027);
+  --blackA3: hsla(0, 0%, 0%, 0.047);
+  --blackA4: hsla(0, 0%, 0%, 0.071);
+  --blackA5: hsla(0, 0%, 0%, 0.09);
+  --blackA6: hsla(0, 0%, 0%, 0.114);
+  --blackA7: hsla(0, 0%, 0%, 0.141);
+  --blackA8: hsla(0, 0%, 0%, 0.22);
+  --blackA9: hsla(0, 0%, 0%, 0.439);
+  --blackA10: hsla(0, 0%, 0%, 0.478);
+  --blackA11: hsla(0, 0%, 0%, 0.565);
+  --blackA12: hsla(0, 0%, 0%, 0.91);
+
+  /* white alpha */
+  --whiteA1: hsla(0, 0%, 100%, 0);
+  --whiteA2: hsla(0, 0%, 100%, 0.013);
+  --whiteA3: hsla(0, 0%, 100%, 0.034);
+  --whiteA4: hsla(0, 0%, 100%, 0.056);
+  --whiteA5: hsla(0, 0%, 100%, 0.086);
+  --whiteA6: hsla(0, 0%, 100%, 0.124);
+  --whiteA7: hsla(0, 0%, 100%, 0.176);
+  --whiteA8: hsla(0, 0%, 100%, 0.249);
+  --whiteA9: hsla(0, 0%, 100%, 0.386);
+  --whiteA10: hsla(0, 0%, 100%, 0.446);
+  --whiteA11: hsla(0, 0%, 100%, 0.592);
+  --whiteA12: hsla(0, 0%, 100%, 0.923);
+
   /* size */
   --size-4: 0.25rem;
   --size-8: 0.5rem;

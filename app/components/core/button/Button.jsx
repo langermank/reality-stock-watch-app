@@ -38,7 +38,7 @@ const Button = React.forwardRef(
         {!iconOnly && (
           <>
             <span
-              class="Button-content"
+              className="Button-content"
               data-icon-position={!iconOnly && iconPosition}
               data-align-content={alignContent}
             >

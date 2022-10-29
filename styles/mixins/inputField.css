@@ -1,0 +1,32 @@
+@define-mixin Field {
+  color: var(--text-control-muted);
+  background-color: var(--bg-control-muted);
+  border: solid 1px var(--border-default);
+
+  &:disabled {
+    color: var(--text-control-muted-disabled);
+    cursor: not-allowed;
+    background-color: var(--bg-control-muted-disabled);
+    border-color: var(--bg-control-muted-disabled);
+    opacity: 1;
+    -webkit-text-fill-color: var(--text-control-muted-disabled);
+  }
+
+  &:not(:focus-visible) {
+    &[invalid] {
+      border-color: var(--border-negative);
+    }
+
+    &[data-state="warning"] {
+      border-color: var(--border-warning);
+    }
+
+    &[data-state="success"] {
+      border-color: var(--border-positive);
+    }
+  }
+
+  &:focus-visible {
+    @mixin focusOutline;
+  }
+}
