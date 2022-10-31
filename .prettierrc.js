@@ -4,6 +4,14 @@ module.exports = {
     useTabs: false,
     overrides: [
         {
+            files: '*.ts',
+            options: {
+                semi: true,
+                singleQuote: true,
+                quoteProps: 'as-needed',
+                trailingComma: 'all',
+            },
+        }, {
             files: '*.js',
             options: {
                 semi: true,
