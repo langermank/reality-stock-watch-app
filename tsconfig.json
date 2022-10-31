@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  
+  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules/*"],
+
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "watch": true,
+
+    "target": "ES2019",
+    "module": "CommonJS",
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+
+    "rootDir": ".",
+    "allowJs": true,
+
+    "lib": ["DOM", "DOM.Iterable", "ES2019"],
+    "jsx": "react-jsx",
+    "paths": {
+      "~/*": ["./app/*"]
+    },
+    
+    // Remix takes care of building everything in `remix build`.
+    "noEmit": true
+  }
+}
