@@ -1,6 +1,14 @@
 namespace Core {
   export type Uuid = string;
 
+  export interface DbMigration {
+    id: Uuid?;
+    executedAt: Date?;
+    name: string;
+    hash: string;
+    queryContent: string?;
+  }
+
   export interface EntityRecord {
     id: Uuid?;
     createdAt: Date?;
@@ -20,6 +28,6 @@ namespace Core {
     displayName: string?;
     avatarUrl: string?;
     ownerId: Uuid?;
-    userId: Uuid?;
+    rUserId: Uuid?;
   }
 }

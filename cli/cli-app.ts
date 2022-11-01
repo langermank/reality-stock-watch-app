@@ -1,18 +1,12 @@
 const CLI_NAV_TREE: Readonly<any> = {
-  
+  root: {},
 };
 
 export class CliApp {
-  async boot() {
+  async boot() {}
 
-  }
-
-  async run() {
-
-  }
+  async run() {}
 
   //#region [ Rendering ]
   //#endregion
-
-
 }
