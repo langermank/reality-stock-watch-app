@@ -13,3 +13,8 @@ export default {
 };
 
 export const Playground = (args) => <Input {...args} />;
+
+export const WithIcon = (args) => <Input {...args} />;
+WithIcon.args = {
+  icon: <FileX />,
+};

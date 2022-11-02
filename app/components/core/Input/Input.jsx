@@ -23,7 +23,7 @@ const Input = ({
       <div class="InputWrap">
         {icon && <span class="IconWrap">{icon}</span>}
         <input
-          className="Input"
+          className={icon ? "Input--icon Input" : "Input"}
           disabled={disabled}
           id={id}
           data-width={width}

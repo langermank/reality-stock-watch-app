@@ -138,6 +138,8 @@
   --size-96: 6rem;
   --size-112: 7rem;
   --size-128: 8rem;
+
+  /* border radius */
   --border-radius-default: var(--size-4);
   --border-radius-large: var(--size-12);
 
@@ -151,6 +153,19 @@
   --control-medium-height: var(--size-44);
   --control-small-fontSize: var(--size-14);
   --control-small-height: var(--size-32);
+
+  /* typography */
+  --text-size-display: var(--size-40);
+  --text-size-title-large: var(--size-28);
+  --text-size-title-medium: var(--size-24);
+  --text-size-title-small: var(--size-20);
+  --text-size-body-large: var(--size-18);
+  --text-size-body-medium: var(--size-16);
+  --text-size-body-small: var(--size-14);
+  --text-weight-regular: 400;
+  --text-weight-semibold: 500;
+  --text-lineHeight-display: 1.4;
+  --text-lineHeight-default: 1.5;
 }
 
 :root {
