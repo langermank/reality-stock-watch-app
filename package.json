@@ -13,7 +13,8 @@
     "dev:css": "postcss styles/global.css --dir app/styles/ --watch",
     "dev:storybook": "concurrently \"npm run storybook\" \"npm run dev:css\"",
     "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
-    "cli": "npm run cli/main.ts"
+    "build:cli": "tsc --project ./tsconfig-cli.json",
+    "cli": "tsc --project ./tsconfig-cli.json && node ./_clidist/cli/main.js"
   },
   "dependencies": {
     "@radix-ui/colors": "^0.1.8",
@@ -46,6 +47,7 @@
     "@storybook/manager-webpack4": "^6.5.12",
     "@storybook/react": "^6.5.12",
     "@storybook/testing-library": "^0.0.13",
+    "@types/pg": "^8.6.5",
     "autoprefixer": "^10.4.12",
     "babel-loader": "^8.2.5",
     "concurrently": "^7.4.0",
