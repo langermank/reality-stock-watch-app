@@ -1,4 +1,4 @@
-import { FileX, CaretDown } from "phosphor-react";
+import { MagnifyingGlass } from "phosphor-react";
 import React from "react";
 
 import Input from "./Input.jsx";
@@ -9,6 +9,7 @@ export default {
   args: {
     label: "Label",
     placeholder: "Placeholder",
+    fullWidth: false,
   },
 };
 
@@ -16,5 +17,5 @@ export const Playground = (args) => <Input {...args} />;
 
 export const WithIcon = (args) => <Input {...args} />;
 WithIcon.args = {
-  icon: <FileX />,
+  icon: <MagnifyingGlass />,
 };
