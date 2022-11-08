@@ -183,6 +183,12 @@
         width: var(--control-small-height);
         font-size: var(--control-medium-fontSize);
       }
+
+      &[data-trailing-action] {
+        padding-inline: var(--control-paddingInline-condensed);
+        gap: var(--control-gap-normal);
+        width: inherit;
+      }
     }
   }
 

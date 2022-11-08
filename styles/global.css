@@ -8,12 +8,20 @@
   /* base */
   --bg-1: var(--slate1);
   --bg-2: var(--slate2);
+  --bg-link: var(--text-link);
+  --bg-overlay: var(--bg-2);
   --border-default: var(--slate8);
   --text-default: var(--slate12);
   --text-secondary: var(--slate11);
   --text-link: var(--indigo11);
   --text-link-hover: var(--indigoA11);
-  --bg-link: var(--text-link);
+
+  /* shadows */
+  --shadow-strength: 25%;
+  --shadow-color: 220 40% 2%;
+
+  /* overlay */
+
 
   /* controls */
   /* bg */
@@ -153,6 +161,14 @@
   --control-medium-height: var(--size-44);
   --control-small-fontSize: var(--size-14);
   --control-small-height: var(--size-32);
+
+  /* overlays */
+  --overlay-border-radius: var(--border-radius-large);
+  --overlay-padding: var(--size-16);
+  --overlay-min-width: calc(var(--size-64) * 3); /* 192px */
+  --overlay-height: calc(var(--size-64) * 6.75); /* 432px */
+  --overlay-width: calc(var(--size-64) * 5); /* 320px */
+  --overlay-shadow: 0 -2px 5px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)), 0 1px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 2px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)), 0 9px 9px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)), 0 16px 16px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%));
 
   /* typography */
   --text-size-display: var(--size-40);

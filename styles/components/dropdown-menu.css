@@ -1,0 +1,21 @@
+@layer components {
+  .DropdownMenu-trigger[aria-expanded='true'],
+  .DropdownMenu-trigger[data-state='open'] {
+    & .DropdownMenu-trigger-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .DropdownMenu-overlay {
+    background: var(--bg-overlay);
+    border-radius: var(--overlay-border-radius);
+    padding: var(--overlay-padding);
+    display: flex;
+    flex-direction: column;
+    width: min(var(--overlay-width),100vw - 2rem);
+    min-width: var(--overlay-min-width);
+    max-height: min(100vh - 2rem, var(--overlay-height));
+    box-shadow: 0 -2px 5px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)), 0 1px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 2px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)), 0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)), 0 9px 9px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)), 0 16px 16px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%));
+    opacity: 1;
+  }
+}
