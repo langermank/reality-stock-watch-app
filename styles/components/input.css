@@ -118,7 +118,7 @@
   &::after {
     width: var(--size-16);
     height: var(--size-16);
-    padding-right: var(--size-4);
+    padding-inline-end: var(--size-20);
     pointer-events: none;
     content: "";
     background-color: var(--text-default);
@@ -130,10 +130,10 @@
     place-self: center end;
   }
 
-  .Select {
+  & .Select {
     grid-column: 1/-1;
     grid-row: 1;
     appearance: none;
-    padding-right: var(--size-20);
+    padding-inline-end: var(--size-24);
   }
 }
