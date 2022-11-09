@@ -1,18 +1,46 @@
 import type { ClientConfig, QueryArrayConfig, QueryArrayResult } from 'pg';
 import { Client } from 'pg';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+
+const migrationFolder = './app-domain/data-layer/migrations';
+const initialMigrationFile = '000-initial-db-structure.sql';
+const checkInitialMigrationQuery = `SELECT schema_name
+FROM information_schema.schemata
+WHERE schema_name = 'core';`;
 
 export class Database {
   _connectionConfig: ClientConfig;
   _client: Client | undefined;
+  _isConnected = false;
 
-  constructor(config: any) {
+  get isConnected() {
+    return this._isConnected;
+  }
+
+  constructor(config: ClientConfig) {
     this._connectionConfig = config;
   }
 
   async connect() {
     this._client = new Client(this._connectionConfig);
-
     await this._client.connect();
+    this._isConnected = true;
+  }
+
+  async applyMissingMigrations(): Promise<any> {
+    const migrationsPath = path.join(process.cwd(), migrationFolder);
+    const migrationFiles = (await fs.readdir(migrationsPath)).filter(
+      (fileName) => fileName !== initialMigrationFile,
+    );
+
+    return migrationFiles;
+  }
+
+  async checkInitialMigration(): Promise<boolean> {
+    const result = await this.query(checkInitialMigrationQuery);
+
+    return !!result?.rows.length;
   }
 
   async migrate(migrationName: string) {}
@@ -36,7 +64,7 @@ export class Database {
   }
 
   async query(
-    query: QueryArrayConfig<any>,
+    query: QueryArrayConfig<any> | string,
     ...params: any
   ): Promise<QueryArrayResult<any[]> | null> {
     if (!this._client) return null;

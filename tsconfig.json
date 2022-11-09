@@ -23,7 +23,7 @@
     "lib": ["DOM", "DOM.Iterable", "ES2019"],
     "jsx": "react-jsx",
     "paths": {
-      "~/*": ["./app/*", "./cli/*", "./data-layer/*"]
+      "~/*": ["./app/*", "app-domain/cli/*", "app-domain/data-layer/*"]
     },
     
     // Remix takes care of building everything in `remix build`.

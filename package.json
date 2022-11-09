@@ -14,7 +14,7 @@
     "dev:storybook": "concurrently \"npm run storybook\" \"npm run dev:css\"",
     "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
     "build:cli": "tsc --project ./tsconfig-cli.json",
-    "cli": "tsc --project ./tsconfig-cli.json && node ./_clidist/cli/main.js"
+    "cli": "tsc --project ./tsconfig-cli.json && node ./_clidist/app-domain/cli/main.js"
   },
   "dependencies": {
     "@radix-ui/colors": "^0.1.8",

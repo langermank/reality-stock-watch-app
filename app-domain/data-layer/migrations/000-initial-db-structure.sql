@@ -1,4 +1,47 @@
-begin;
+--supabase tables for local tests--
+create schema if not exists "auth"
+  authorization postgres;
+comment on schema "auth"
+  is 'supabase auth schema replica';
+
+create table if not exists "auth"."users" (
+  instance_id uuid,
+  id uuid NOT NULL,
+  aud character varying(255) COLLATE pg_catalog."default",
+  role character varying(255) COLLATE pg_catalog."default",
+  email character varying(255) COLLATE pg_catalog."default",
+  encrypted_password character varying(255) COLLATE pg_catalog."default",
+  email_confirmed_at timestamp with time zone,
+  invited_at timestamp with time zone,
+  confirmation_token character varying(255) COLLATE pg_catalog."default",
+  confirmation_sent_at timestamp with time zone,
+  recovery_token character varying(255) COLLATE pg_catalog."default",
+  recovery_sent_at timestamp with time zone,
+  email_change_token_new character varying(255) COLLATE pg_catalog."default",
+  email_change character varying(255) COLLATE pg_catalog."default",
+  email_change_sent_at timestamp with time zone,
+  last_sign_in_at timestamp with time zone,
+  raw_app_meta_data jsonb,
+  raw_user_meta_data jsonb,
+  is_super_admin boolean,
+  created_at timestamp with time zone,
+  updated_at timestamp with time zone,
+  phone character varying(15) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+  phone_confirmed_at timestamp with time zone,
+  phone_change character varying(15) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+  phone_change_token character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+  phone_change_sent_at timestamp with time zone,
+  confirmed_at timestamp with time zone GENERATED ALWAYS AS (LEAST(email_confirmed_at, phone_confirmed_at)) STORED,
+  email_change_token_current character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+  email_change_confirm_status smallint DEFAULT 0,
+  banned_until timestamp with time zone,
+  reauthentication_token character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+  reauthentication_sent_at timestamp with time zone,
+  CONSTRAINT users_pkey PRIMARY KEY (id),
+  CONSTRAINT users_email_key UNIQUE (email),
+  CONSTRAINT users_phone_key UNIQUE (phone),
+  CONSTRAINT users_email_change_confirm_status_check CHECK (email_change_confirm_status >= 0 AND email_change_confirm_status <= 2)
+);
 
 -- core schema --
 create schema if not exists "core"
@@ -22,8 +65,8 @@ create table if not exists "core"."_migration" (
 create table if not exists "core"."person" (
   "id" uuid NOT NULL default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "firstName" varchar(1024) not null,
   "lastName" varchar(2056) default null,
   "nickname" varchar(256) default null,
@@ -31,14 +74,18 @@ create table if not exists "core"."person" (
   "userId" uuid default null,
   PRIMARY KEY("id")
 );
-create index idx_person_firstName_search ON "core"."person"("firstName" text_pattern_ops);
-create index idx_person_lastName_search ON "core"."person"("lastName" text_pattern_ops);
+create index if not exists 
+  idx_cp_firstName_search ON "core"."person"("firstName" text_pattern_ops);
+create index if not exists
+  idx_cp_lastName_search ON "core"."person"("lastName" text_pattern_ops);
+create index if not exists
+  idx_cp_userId ON "core"."person"("userId");
 
 create table if not exists "core"."publicProfile" (
   "id" uuid NOT NULL default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "displayName" varchar(256) not null,
   "avatarUrl" varchar(2056) default null,
   "ownerId" uuid default null,
@@ -60,8 +107,8 @@ grant all on schema "show" to postgres;
 create table if not exists "show"."realityShow" (
   "id" uuid NOT NULL default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "name" varchar(1024) not null,
   "description" text default null,
   "genre" varchar(256) default null,
@@ -69,13 +116,14 @@ create table if not exists "show"."realityShow" (
   "createdBy" text default null,
   PRIMARY KEY ("id")
 );
-create index idx_show_name_search on "show"."realityShow"("name" text_pattern_ops);
+create index if not exists
+  idx_show_name_search on "show"."realityShow"("name" text_pattern_ops);
 
 create table if not exists "show"."realityShowSeries" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "name" varchar(1024) not null,
   "description" text default null,
   "streamingNetworks" text default null,
@@ -84,13 +132,14 @@ create table if not exists "show"."realityShowSeries" (
     FOREIGN KEY ("realityShowId") REFERENCES "show"."realityShow"("id"),
   PRIMARY KEY ("id")
 );
-create index idx_realityShowSeries_name_search on "show"."realityShowSeries"("name" text_pattern_ops);
+create index if not exists
+  idx_realityShowSeries_name_search on "show"."realityShowSeries"("name" text_pattern_ops);
 
 create table if not exists "show"."realityShowSeason" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "name" varchar(1024) not null,
   "seasonNumber" varchar(256) default null,
   "startDate" date default null,
@@ -105,8 +154,8 @@ create table if not exists "show"."realityShowSeason" (
 create table if not exists "show"."participant" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "ingressDate" timestamptz default null,
   "exitDate" timestamptz default null,
   "realityShowSeasonId" uuid not null,
@@ -121,8 +170,8 @@ create table if not exists "show"."participant" (
 create table if not exists "show"."realityShowSeasonEvent" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "occurredAt" timestamptz default now(),
   "type" varchar(256) not null,
   "description" text default null,
@@ -136,8 +185,8 @@ create table if not exists "show"."realityShowSeasonEvent" (
 create table if not exists "show"."realityShowSeasonEventParticipant" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "role" varchar(256) default null,
   "description" text default null,
   "metadata" jsonb default null,
@@ -161,8 +210,8 @@ grant all on schema "game" to postgres;
 create table if not exists "game"."game" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "title" varchar(256) default null,
   "realityShowSeriesId" uuid not null,
   CONSTRAINT fk_gg_srss_realityShowSeriesId 
@@ -173,8 +222,8 @@ create table if not exists "game"."game" (
 create table if not exists "game"."gameSeason" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "startDate" timestamptz default null,
   "endDate" timestamptz default null,
   "gameId" uuid not null,
@@ -189,8 +238,8 @@ create table if not exists "game"."gameSeason" (
 create table if not exists "game"."gameSeasonCycle" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "startDate" timestamptz default null,
   "endDate" timestamptz default null,
   "gameSeasonId" uuid not null,
@@ -202,8 +251,8 @@ create table if not exists "game"."gameSeasonCycle" (
 create table if not exists "game"."gameSeasonPlayer" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "gameSeasonId" uuid not null,
   "personId" uuid not null,
   CONSTRAINT fk_ggsp_ggs_gameSeasonId
@@ -216,8 +265,8 @@ create table if not exists "game"."gameSeasonPlayer" (
 create table if not exists "game"."gameSeasonCyclePlayerRating" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "completedAt" timestamptz default null,
   "answers" jsonb default null,
   "playerId" uuid not null,
@@ -232,8 +281,8 @@ create table if not exists "game"."gameSeasonCyclePlayerRating" (
 create table if not exists "game"."playerRating" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "rating" decimal not null,
   "participantId" uuid not null,
   "gameSeasonCyclePlayerRatingId" uuid not null,
@@ -250,8 +299,8 @@ create table if not exists "game"."playerRating" (
 create table if not exists "game"."participantRating" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "rating" decimal not null,
   "participantId" uuid not null,
   "gameSeasonCycleId" uuid default null,
@@ -266,8 +315,8 @@ create table if not exists "game"."participantRating" (
 create table if not exists "game"."panelMember" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "isPermanent" boolean default false,
   "personId" uuid not null,
   "gameSeasonCycleId" uuid not null,
@@ -281,8 +330,8 @@ create table if not exists "game"."panelMember" (
 create table if not exists "game"."panelMemberRating" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "rating" decimal not null,
   "observation" text default null,
   "panelMemberId" uuid not null,
@@ -301,8 +350,8 @@ grant all on schema "gameMarket" to postgres;
 create table if not exists "gameMarket"."gameSeasonMarket" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "startDate" timestamptz default null,
   "endDate" timestamptz default null,
   "gameSeasonId" uuid not null,
@@ -314,8 +363,8 @@ create table if not exists "gameMarket"."gameSeasonMarket" (
 create table if not exists "gameMarket"."gameSeasonMarketCycle" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "startDate" timestamptz default null,
   "endDate" timestamptz default null,
   "gameSeasonMarketId" uuid not null,
@@ -330,8 +379,8 @@ create table if not exists "gameMarket"."gameSeasonMarketCycle" (
 create table if not exists "gameMarket"."playerBankAccount" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "availableFunds" decimal default(0),
   "playerId" uuid not null,
   "gameSeasonMarketId" uuid not null,
@@ -345,8 +394,8 @@ create table if not exists "gameMarket"."playerBankAccount" (
 create table if not exists "gameMarket"."stock" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "price" decimal not null,
   "participantId" uuid not null,
   "gameSeasonMarketId" uuid not null,
@@ -360,8 +409,8 @@ create table if not exists "gameMarket"."stock" (
 create table if not exists "gameMarket"."stockSnapshot" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "snapshotTimestamp" timestamptz default now(),
   "price" decimal not null,
   "rParticipantId" uuid not null,
@@ -376,8 +425,8 @@ create table if not exists "gameMarket"."stockSnapshot" (
 create table if not exists "gameMarket"."stockOwnership" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "amountOfStocksHold" integer default(0),
   "stockId" uuid not null,
   "playerBankAccountId" uuid not null,
@@ -391,8 +440,8 @@ create table if not exists "gameMarket"."stockOwnership" (
 create table if not exists "gameMarket"."stockTransaction" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "transactionTimestamp" timestamptz default now(),
   "stockAmount" integer default(0),
   "priceAtTransaction" decimal not null,
@@ -408,8 +457,8 @@ create table if not exists "gameMarket"."stockTransaction" (
 create table if not exists "gameMarket"."leaderboardPlayerRankSnapshot" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "snapshotTimestamp" timestamptz default now(),
   "position" integer not null,
   "gameSeasonMarketCycleId" uuid not null,
@@ -424,8 +473,8 @@ create table if not exists "gameMarket"."leaderboardPlayerRankSnapshot" (
 create table if not exists "gameMarket"."leaderboardBadge" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "badgeDescription" varchar(256) not null,
   "badgeImage" varchar(1024) null,
   "upperPositionRange" integer not null,
@@ -439,8 +488,8 @@ create table if not exists "gameMarket"."leaderboardBadge" (
 create table if not exists "gameMarket"."leaderboardBadgePlayer" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
-  "updatedAt" timestamptz default now(),
-  "deletedAt" timestamptz default now(),
+  "updatedAt" timestamptz default null,
+  "deletedAt" timestamptz default null,
   "leaderboardBadgeId" uuid not null,
   "leaderboardPlayerRankSnapshotId" uuid null,
   "playerId" uuid not null,
@@ -452,5 +501,3 @@ create table if not exists "gameMarket"."leaderboardBadgePlayer" (
     FOREIGN KEY ("playerId") REFERENCES "game"."gameSeasonPlayer"("id"),
   PRIMARY KEY ("id")
 );
-
-commit;
