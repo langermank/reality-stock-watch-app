@@ -5,9 +5,12 @@ import * as path from 'path';
 
 const migrationFolder = './app-domain/data-layer/migrations';
 const initialMigrationFile = '000-initial-db-structure.sql';
-const checkInitialMigrationQuery = `SELECT schema_name
+const checkCoreSchemaQuery = `SELECT schema_name
 FROM information_schema.schemata
 WHERE schema_name = 'core';`;
+const checkMigrationTableQuery = `SELECT table_name
+FROM Information_schema.tables
+WHERE table_schema = 'core' and table_name= '_migration';`;
 
 export class Database {
   _connectionConfig: ClientConfig;
@@ -37,10 +40,12 @@ export class Database {
     return migrationFiles;
   }
 
-  async checkInitialMigration(): Promise<boolean> {
-    const result = await this.query(checkInitialMigrationQuery);
+  async hasInitialMigration(): Promise<boolean> {
+    const schemaResult = await this.query(checkCoreSchemaQuery);
+    if (!schemaResult?.rows.length) return false;
 
-    return !!result?.rows.length;
+    const tableResult = await this.query(checkMigrationTableQuery);
+    return !!tableResult?.rows.length;
   }
 
   async migrate(migrationName: string) {}

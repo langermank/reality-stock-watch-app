@@ -9,17 +9,17 @@ import { Database } from '../data-layer/persistence/database';
   //console.log(JSON.stringify(configManager));
 
   const db = new Database(configManager.dbConfig!);
-  console.log(await db.applyMissingMigrations());
+  console.log(await db.hasInitialMigration());
   return;
   //await db.connect();
 
-  const result = await db.checkInitialMigration();
-  console.log(result);
-
-  await db.close();
-  return;
-  const app = new CliApp(configManager);
-
-  await app.boot();
-  await app.run();
+  //  const result = await db.checkInitialMigration();
+  //  console.log(result);
+  //
+  //  await db.close();
+  //  return;
+  //  const app = new CliApp(configManager);
+  //
+  //  await app.boot();
+  //  await app.run();
 })();

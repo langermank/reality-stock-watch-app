@@ -72,7 +72,9 @@ create table if not exists "core"."person" (
   "nickname" varchar(256) default null,
   "birthDate" date default null,
   "userId" uuid default null,
-  PRIMARY KEY("id")
+  PRIMARY KEY("id"),
+  CONSTRAINT cp_au_userId
+    FOREIGN KEY("userId") REFERENCES "auth"."users"("id")
 );
 create index if not exists 
   idx_cp_firstName_search ON "core"."person"("firstName" text_pattern_ops);
