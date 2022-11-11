@@ -1,21 +1,37 @@
-import React from "react";
+import React, { Children } from "react";
 import PropTypes from "prop-types";
 
 const NavList = React.forwardRef(({ children }, ref) => {
+  const arrChildren = Children.toArray(children);
+
   return (
-    <nav ref={ref}>
-      <ul class="NavList-list">{children}</ul>
-    </nav>
+    <>
+    {arrChildren.length &&
+      <nav ref={ref}>
+        <ul className="NavList-list">
+          {Children.map(arrChildren, (childElement, index) => {
+            return (
+              <li key={`navLink-${index}`} className="NavList-item">
+                {childElement}
+              </li>
+            );
+          })}</ul>
+      </nav>
+    }
+    </>
   );
 });
 
-NavList.propTypes = {
-  children: PropTypes.string,
-};
+// NavList.propTypes = {
+//   children: PropTypes.arrayOf(PropTypes.element),
+// };
 
-NavList.defaultProps = {
-  children: "Linky link",
-};
+NavList.propTypes = {
+  children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
+  ]).isRequired
+}
 
 export default NavList;
 

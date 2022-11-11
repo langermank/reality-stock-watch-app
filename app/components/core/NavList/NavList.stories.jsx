@@ -9,14 +9,8 @@ export default {
 
 export const Playground = (args) => (
   <NavList {...args}>
-    <li>
       <NavLink>First</NavLink>
-    </li>
-    <li>
       <NavLink>Second</NavLink>
-    </li>
-    <li>
       <NavLink>Third</NavLink>
-    </li>
   </NavList>
 );

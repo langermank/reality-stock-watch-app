@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import { Warning, WarningOctagon, CircleWavyCheck } from "phosphor-react";
+import { guid } from "../../../utils/uuid-generator";
 
 const Input = ({
   className,
@@ -15,27 +16,32 @@ const Input = ({
   fullWidth,
   ...other
 }) => {
+
+  const hintTextId = useMemo(() => guid("hint-text"), []);
+  const validationId = useMemo(() => guid("validation-id"), []);
+
+  const ariaDescribedBy = `${(hint ? hintTextId : '')} ${(validationMessage ? validationId : '')}`;
+
   return (
-    <div class="InputLayout" data-fullWidth={fullWidth ? "true" : undefined}>
-      <span class="InputLabelWrap">
-        <label for={id} class="Input-label">
+    <div className="InputLayout" data-fullWidth={fullWidth ? "true" : undefined}>
+      <span className="InputLabelWrap">
+        <label htmlFor={id} className="Input-label">
           {label}
         </label>
-        {/* TODO: generate unique id */}
-        {hint && <span id="hint-text" className="Input-hint">{hint}</span>}
+        {hint && <span id={hintTextId} className="Input-hint">{hint}</span>}
       </span>
-      <div class="InputWrap">
-        {icon && <span class="IconWrap">{icon}</span>}
+      <div className="InputWrap">
+        {icon && <span className="IconWrap">{icon}</span>}
         <input
           className={icon ? "Input--icon Input" : "Input"}
           disabled={disabled}
           id={id}
           data-size={size}
-          aria-describedby={hint ? "hint-text" : undefined}
+          aria-describedby={ariaDescribedBy || undefined}
           {...other}
         />
         {validationMessage && (
-          <span id="validation-id" className="Input-validation" data-state={state}>
+          <span id={validationId} className="Input-validation" data-state={state}>
             {state === "error" && <WarningOctagon />}
             {state === "warning" && <Warning />}
             {state === "success" && <CircleWavyCheck />}
