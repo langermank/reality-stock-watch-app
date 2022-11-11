@@ -56,7 +56,6 @@ const Button = React.forwardRef(
             <span hidden id={ariaLabelledById}>
               {children}
             </span>
-            {/* TODO: this should take an icon string instead of object */}
             {trailingActionIcon}
           </>
         )}

@@ -2,7 +2,7 @@
 import React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { Check, CheckCircle, CaretDown } from 'phosphor-react';
-import Button from '../Button/Button';
+import Button from '../button/Button';
 // import { CheckIcon } from '@radix-ui/react-icons';
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 
@@ -11,7 +11,7 @@ export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = React.forwardRef(({ children, ...props }, forwardedRef) => {
     return (
         <DropdownMenuPrimitive.Trigger asChild>
-            <Button variant="muted" trailingActionIcon={<CaretDown className="DropdownMenu-trigger-icon" />} className="DropdownMenu-trigger">
+            <Button variant="muted" {...props} ref={forwardedRef} trailingActionIcon={<CaretDown className="DropdownMenu-trigger-icon" />} className="DropdownMenu-trigger">
                 Temp
             </Button>
         </DropdownMenuPrimitive.Trigger>
