@@ -10,6 +10,9 @@ import { Database } from '../data-layer/persistence/database';
 
   const db = new Database(configManager.dbConfig!);
   console.log(await db.hasInitialMigration());
+
+  db.applyMissingMigrations();
+
   return;
   //await db.connect();
 

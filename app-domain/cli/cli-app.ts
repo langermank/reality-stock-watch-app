@@ -17,7 +17,7 @@ export class CliApp {
     return this;
   }
 
-  async run(route) {}
+  async run() {}
 
   //#region [ Rendering ]
   //#endregion

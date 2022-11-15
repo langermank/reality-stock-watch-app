@@ -37,9 +37,11 @@ export class Database {
 
   async applyMissingMigrations(): Promise<any> {
     const migrationsPath = path.join(process.cwd(), migrationFolder);
-    const migrationFiles = (await fs.readdir(migrationsPath)).filter(
-      (fileName) => fileName !== initialMigrationFile,
-    );
+    const migrationFiles = (await fs.readdir(migrationsPath)).sort();
+
+    for (const file of migrationFiles) {
+      console.log(file);
+    }
 
     return migrationFiles;
   }
@@ -55,7 +57,7 @@ export class Database {
   async migrate(migrationName: string) {}
 
   async atomicQuery(
-    query: QueryArrayConfig<any>,
+    query: QueryArrayConfig<any> | string,
     ...params: any
   ): Promise<QueryArrayResult<any[]> | null> {
     if (!this._client) return null;

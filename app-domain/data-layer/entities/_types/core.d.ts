@@ -5,7 +5,7 @@ namespace Core {
     id: ?Uuid;
     executedAt: ?Date;
     name: string;
-    hash: string;
+    hash: ?string;
     queryContent: ?string;
   }
 
