@@ -1,4 +1,8 @@
-import type { ClientConfig, QueryArrayConfig, QueryArrayResult } from 'pg';
+import type {
+  ClientConfig as DbConfigType,
+  QueryArrayConfig,
+  QueryArrayResult,
+} from 'pg';
 import { Client } from 'pg';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -13,7 +17,7 @@ FROM Information_schema.tables
 WHERE table_schema = 'core' and table_name= '_migration';`;
 
 export class Database {
-  _connectionConfig: ClientConfig;
+  _connectionConfig: DbConfigType;
   _client: Client | undefined;
   _isConnected = false;
 
@@ -21,7 +25,7 @@ export class Database {
     return this._isConnected;
   }
 
-  constructor(config: ClientConfig) {
+  constructor(config: DbConfigType) {
     this._connectionConfig = config;
   }
 

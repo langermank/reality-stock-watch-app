@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as dotenv from 'dotenv';
-import type { ClientConfig } from 'pg';
+import type { ClientConfig as DbConfigType } from 'pg';
 import type { ApiClientConfigType } from '../data-layer/persistence/api-client';
 
 export type TargetEnvironment = 'prod' | 'dev' | 'local-dev';
@@ -8,7 +8,7 @@ export type TargetEnvironment = 'prod' | 'dev' | 'local-dev';
 export class AppConfigManager {
   _targetEnvironment: TargetEnvironment;
   _envFilePath: string;
-  _dbConfig: ClientConfig | undefined;
+  _dbConfig: DbConfigType | undefined;
   _apiClientConfig: ApiClientConfigType | undefined;
 
   get dbConfig() {
