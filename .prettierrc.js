@@ -2,6 +2,7 @@ module.exports = {
     requirePragma: false,
     tabWidth: 2,
     useTabs: false,
+    printWidth: 100,
     overrides: [
         {
             files: '*.ts',

@@ -8,6 +8,7 @@
     "strict": true,
     "baseUrl": ".",
     "watch": true,
+    "sourceMap": true,
 
     "target": "ES2019",
     "module": "CommonJS",

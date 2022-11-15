@@ -4,7 +4,7 @@ namespace Core {
   export interface DbMigration {
     id: ?Uuid;
     executedAt: ?Date;
-    name: string;
+    name: ?string;
     hash: ?string;
     queryContent: ?string;
   }

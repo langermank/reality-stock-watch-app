@@ -1,6 +1,7 @@
 import { CliApp } from './cli-app';
 import { AppConfigManager } from '../app-components/app-config-manager';
 import { Database } from '../data-layer/persistence/database';
+import { MigrationRepository } from '../data-layer/repositories/migration-repository';
 
 (async () => {
   const configManager = new AppConfigManager('local-dev');
@@ -9,9 +10,13 @@ import { Database } from '../data-layer/persistence/database';
   //console.log(JSON.stringify(configManager));
 
   const db = new Database(configManager.dbConfig!);
-  console.log(await db.hasInitialMigration());
+  await db.connect();
+  const migrationRepository = new MigrationRepository(db);
+  const migrationsToApply = await migrationRepository.findNotAppliedMigration();
 
-  db.applyMissingMigrations();
+  for (const migration of migrationsToApply) {
+    await migrationRepository.applyMigrationByName(migration);
+  }
 
   return;
   //await db.connect();

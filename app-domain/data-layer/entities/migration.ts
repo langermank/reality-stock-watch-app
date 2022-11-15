@@ -8,38 +8,30 @@ export const filenameToMigrationName = (filename: string) => {
     : filename;
 };
 
-export const migrationNameToFilename = (name: string) =>
-  `${name}${defaultExtension}`;
+export const migrationNameToFilename = (name: string) => `${name}${defaultExtension}`;
 
 export class Migration implements Core.DbMigration {
   id: string | null = null;
   executedAt: Date | null = null;
-  name: string;
+  name: string | null = null;
   hash: string | null = null;
   queryContent: string | null = null;
 
   constructor({
-    id,
-    executedAt,
-    name,
-    hash,
-    queryContent,
-  }: {
-    id?: string | null;
-    executedAt?: Date | null;
-    name: string;
-    hash?: string | null;
-    queryContent?: string | null;
-  }) {
+    id = null,
+    executedAt = null,
+    name = null,
+    hash = null,
+    queryContent = null,
+  }: Partial<Core.DbMigration>) {
     this.name = name;
-
-    if (id) this.id = id;
-    if (executedAt) this.executedAt = executedAt;
-    if (hash) this.hash = hash;
-    if (queryContent) this.queryContent = queryContent;
+    this.id = id;
+    this.executedAt = executedAt;
+    this.hash = hash;
+    this.queryContent = queryContent;
   }
 
   setHashByContent(content: string) {
-    this.hash = crypto.createHash('sha512').update(content).toString();
+    this.hash = crypto.createHash('sha512').update(content).digest('hex');
   }
 }

@@ -2,11 +2,7 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import type { Database } from '../persistence/database';
-import {
-  Migration,
-  filenameToMigrationName,
-  migrationNameToFilename,
-} from '../entities/migration';
+import { Migration, filenameToMigrationName, migrationNameToFilename } from '../entities/migration';
 
 const schemaName = 'core';
 const tableName = '_migration';
@@ -40,14 +36,6 @@ export class MigrationRepository {
 
     const row = result.rows[0] as unknown;
     return new Migration(row as Core.DbMigration);
-    // const row = result.rows[0] as any;
-    // return {
-    //   row.id,
-    //   row.executedAt,
-    //   row.name,
-    //   row.hash,
-    //   row.queryContent,
-    // } as Core.DbMigration;
   }
 
   async hasInitialMigration(): Promise<boolean> {
@@ -60,13 +48,12 @@ export class MigrationRepository {
 
   async findNotAppliedMigration(): Promise<any> {
     const migrationsPath = path.join(process.cwd(), migrationFolder);
-    const allMigrations = (await fs.readdir(migrationsPath))
-      .map(filenameToMigrationName)
-      .sort();
+    const allMigrations = (await fs.readdir(migrationsPath)).map(filenameToMigrationName).sort();
 
+    const hasInitialMigration = await this.hasInitialMigration();
     const notAppliedMigrations: Array<string> = [];
     for (const migration of allMigrations) {
-      if (await this.getByName(migration)) continue;
+      if (hasInitialMigration && (await this.getByName(migration))) continue;
 
       notAppliedMigrations.push(migration);
     }
@@ -78,7 +65,10 @@ export class MigrationRepository {
     const filename = migrationNameToFilename(name);
     const fullpath = path.join(process.cwd(), migrationFolder, filename);
 
+    console.log(`Applying migration ${name}`);
     const queryContent = (await fs.readFile(fullpath)).toString();
+
+    console.log(queryContent);
 
     await this._db.atomicQuery(queryContent);
     const migration = new Migration({
@@ -88,6 +78,7 @@ export class MigrationRepository {
     });
     migration.setHashByContent(queryContent);
 
+    console.log(`Saving migration ${name}`);
     await this.insert(migration);
     return migration;
   }
