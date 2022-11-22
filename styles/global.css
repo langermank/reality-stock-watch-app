@@ -8,11 +8,19 @@
   /* base */
   --bg-1: var(--slate1);
   --bg-2: var(--slate2);
+  --bg-link: var(--text-link);
+  --bg-overlay: var(--bg-2);
   --border-default: var(--slate8);
   --text-default: var(--slate12);
   --text-secondary: var(--slate11);
   --text-link: var(--indigo11);
   --text-link-hover: var(--indigoA11);
+
+  /* shadows */
+  --shadow-strength: 25%;
+  --shadow-color: 220 40% 2%;
+
+  /* overlay */
 
   /* controls */
   /* bg */
@@ -62,6 +70,7 @@
   --text-control-danger: var(--text-negative);
   --text-control-danger-hover: var(--slate1);
   --text-control-danger-disabled: var(--tomato8);
+  --text-control-placeholder: var(--slate10);
 
   /* semantic */
   --bg-positive: var(--green3);
@@ -89,6 +98,34 @@
 /* } */
 
 :root {
+  /* black alpha */
+  --blackA1: hsla(0, 0%, 0%, 0.012);
+  --blackA2: hsla(0, 0%, 0%, 0.027);
+  --blackA3: hsla(0, 0%, 0%, 0.047);
+  --blackA4: hsla(0, 0%, 0%, 0.071);
+  --blackA5: hsla(0, 0%, 0%, 0.09);
+  --blackA6: hsla(0, 0%, 0%, 0.114);
+  --blackA7: hsla(0, 0%, 0%, 0.141);
+  --blackA8: hsla(0, 0%, 0%, 0.22);
+  --blackA9: hsla(0, 0%, 0%, 0.439);
+  --blackA10: hsla(0, 0%, 0%, 0.478);
+  --blackA11: hsla(0, 0%, 0%, 0.565);
+  --blackA12: hsla(0, 0%, 0%, 0.91);
+
+  /* white alpha */
+  --whiteA1: hsla(0, 0%, 100%, 0);
+  --whiteA2: hsla(0, 0%, 100%, 0.013);
+  --whiteA3: hsla(0, 0%, 100%, 0.034);
+  --whiteA4: hsla(0, 0%, 100%, 0.056);
+  --whiteA5: hsla(0, 0%, 100%, 0.086);
+  --whiteA6: hsla(0, 0%, 100%, 0.124);
+  --whiteA7: hsla(0, 0%, 100%, 0.176);
+  --whiteA8: hsla(0, 0%, 100%, 0.249);
+  --whiteA9: hsla(0, 0%, 100%, 0.386);
+  --whiteA10: hsla(0, 0%, 100%, 0.446);
+  --whiteA11: hsla(0, 0%, 100%, 0.592);
+  --whiteA12: hsla(0, 0%, 100%, 0.923);
+
   /* size */
   --size-4: 0.25rem;
   --size-8: 0.5rem;
@@ -108,6 +145,8 @@
   --size-96: 6rem;
   --size-112: 7rem;
   --size-128: 8rem;
+
+  /* border radius */
   --border-radius-default: var(--size-4);
   --border-radius-large: var(--size-12);
 
@@ -121,6 +160,34 @@
   --control-medium-height: var(--size-44);
   --control-small-fontSize: var(--size-14);
   --control-small-height: var(--size-32);
+
+  /* overlays */
+  --overlay-border-radius: var(--border-radius-large);
+  --overlay-padding: var(--size-16);
+  --overlay-padding-condensed: var(--size-8);
+  --overlay-min-width: calc(var(--size-64) * 3); /* 192px */
+  --overlay-height: calc(var(--size-64) * 6.75); /* 432px */
+  --overlay-width: calc(var(--size-64) * 5); /* 320px */
+  --overlay-shadow: 0 -2px 5px 0 hsl(var(--shadow-color) /
+          calc(var(--shadow-strength) + 2%)),
+    0 1px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+    0 2px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+    0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
+    0 9px 9px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
+    0 16px 16px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%));
+
+  /* typography */
+  --text-size-display: var(--size-40);
+  --text-size-title-large: var(--size-28);
+  --text-size-title-medium: var(--size-24);
+  --text-size-title-small: var(--size-20);
+  --text-size-body-large: var(--size-18);
+  --text-size-body-medium: var(--size-16);
+  --text-size-body-small: var(--size-14);
+  --text-weight-regular: 400;
+  --text-weight-semibold: 500;
+  --text-lineHeight-display: 1.4;
+  --text-lineHeight-default: 1.5;
 }
 
 :root {

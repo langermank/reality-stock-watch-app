@@ -34,6 +34,11 @@ SecondaryGhost.args = {
   variant: "secondaryGhost",
 };
 
+export const Danger = (args) => <Button {...args}>Default</Button>;
+Danger.args = {
+  variant: "danger",
+};
+
 export const PrimaryGhost = (args) => <Button {...args}>Default</Button>;
 PrimaryGhost.args = {
   variant: "primaryGhost",

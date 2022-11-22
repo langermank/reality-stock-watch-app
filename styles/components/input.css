@@ -1,3 +1,139 @@
-.input {
-  color: black;
+.InputLayout {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--size-4);
+
+  &[data-fullWidth="true"] {
+    width: 100%;
+    display: flex;
+  }
+}
+
+.InputLabelWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.Input-label {
+  font-size: var(--text-size-body-medium);
+  font-weight: var(--text-weight-semibold);
+  line-height: var(--text-lineHeight-default);
+  color: var(--text-default);
+  user-select: none;
+}
+
+.Input-hint {
+  font-size: var(--text-size-body-small);
+  font-weight: var(--text-weight-regular);
+  color: var(--text-secondary);
+}
+
+.Input-validation {
+  font-size: var(--text-size-body-small);
+  font-weight: var(--text-weight-regular);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--size-4);
+
+  &[data-state="error"] {
+    color: var(--text-negative);
+  }
+
+  &[data-state="success"] {
+    color: var(--text-positive);
+  }
+
+  &[data-state="warning"] {
+    color: var(--text-warning);
+  }
+}
+
+.Input,
+.Select {
+  @mixin Field;
+
+  width: 100%;
+  height: var(--control-medium-height);
+  font-size: var(--control-medium-fontSize);
+  border-radius: var(--control-borderRadius);
+  transition: 80ms cubic-bezier(0.33, 1, 0.68, 1);
+  transition-property: color, background-color, box-shadow, border-color;
+  padding-inline: var(--control-paddingInline-normal);
+
+  &[data-size="small"] {
+    height: var(--control-small-height);
+    font-size: var(--control-small-fontSize);
+    padding-inline: var(--control-paddingInline-condensed);
+  }
+
+  &[readonly] {
+    background-color: var(--bg-control-muted-disabled);
+  }
+
+  &::placeholder {
+    color: var(--text-control-placeholder);
+    opacity: 1;
+  }
+}
+
+.InputWrap {
+  position: relative;
+  display: grid;
+  gap: var(--size-4);
+
+  & .IconWrap {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: var(--size-8);
+    display: block;
+    width: var(--size-16);
+    height: var(--size-16);
+    color: var(--text-secondary);
+    pointer-events: none;
+
+    & svg {
+      display: block;
+      user-select: none;
+    }
+  }
+
+  & .Input--icon {
+    padding-inline-start: var(--size-32);
+  }
+
+  /* for the bright future */
+  /* &:has(.IconWrap) {
+    & .Input {
+      padding-inline-start: var(--size-32);
+    }
+  } */
+}
+
+.SelectWrap {
+  display: grid;
+  grid-template-columns: minmax(0, auto) var(--size-16);
+
+  &::after {
+    width: var(--size-16);
+    height: var(--size-16);
+    padding-inline-end: var(--size-20);
+    pointer-events: none;
+    content: "";
+    background-color: var(--text-default);
+    mask: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0iIzU4NjA2OSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNC40MjcgOS40MjdsMy4zOTYgMy4zOTZhLjI1MS4yNTEgMCAwMC4zNTQgMGwzLjM5Ni0zLjM5NkEuMjUuMjUgMCAwMDExLjM5NiA5SDQuNjA0YS4yNS4yNSAwIDAwLS4xNzcuNDI3ek00LjQyMyA2LjQ3TDcuODIgMy4wNzJhLjI1LjI1IDAgMDEuMzU0IDBMMTEuNTcgNi40N2EuMjUuMjUgMCAwMS0uMTc3LjQyN0g0LjZhLjI1LjI1IDAgMDEtLjE3Ny0uNDI3eiIgLz48L3N2Zz4=");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    grid-column: 2;
+    grid-row: 1;
+    place-self: center end;
+  }
+
+  & .Select {
+    grid-column: 1/-1;
+    grid-row: 1;
+    appearance: none;
+    padding-inline-end: var(--size-24);
+  }
 }

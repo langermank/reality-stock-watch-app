@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import clsx from 'clsx';
 
 const Button = React.forwardRef(
   (
@@ -26,19 +27,20 @@ const Button = React.forwardRef(
       <button
         ref={ref}
         onClick={onClick}
-        className={iconOnly ? "Button Button-iconOnly" : "Button"}
+        className={clsx('Button', iconOnly && 'Button-iconOnly', className)}
         disabled={disabled}
         aria-labelledby={ariaLabelledById}
         data-variant={variant}
         data-size={size}
         data-width={!iconOnly && width}
+        data-trailing-action={trailingActionIcon ? "true" : undefined}
         id={id}
         {...other}
       >
         {!iconOnly && (
           <>
             <span
-              class="Button-content"
+              className="Button-content"
               data-icon-position={!iconOnly && iconPosition}
               data-align-content={alignContent}
             >
@@ -54,6 +56,7 @@ const Button = React.forwardRef(
             <span hidden id={ariaLabelledById}>
               {children}
             </span>
+            {trailingActionIcon}
           </>
         )}
       </button>
