@@ -49,9 +49,14 @@
       @mixin focusOutline -2px, var(--text-link);
     }
 
-    /* &.hasIndicator {
-      padding-inline-start: 0;
-    } */
+    &.hasIndicator {
+      display: grid;
+      grid-template-columns: var(--size-16) auto;
+    }
+
+    & .DropdownMenu-itemLabel {
+      grid-column: 2 / 3;
+    }
   }
 
   .DropdownMenu-label {

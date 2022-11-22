@@ -87,7 +87,7 @@ export const DropdownMenuCheckboxItem = React.forwardRef(
         <DropdownMenuPrimitive.ItemIndicator>
           {props.checked === true && <Check />}
         </DropdownMenuPrimitive.ItemIndicator>
-        {children}
+        <span className="DropdownMenu-itemLabel">{children}</span>
       </DropdownMenuPrimitive.CheckboxItem>
     );
   }
@@ -115,8 +115,7 @@ export const DropdownMenuRadioItem = React.forwardRef(
             ></path>
           </svg>
         </DropdownMenuPrimitive.ItemIndicator>
-        <span className="dropdownMenuItemLabel">{children}</span>
-        {/* {children} */}
+        <span className="DropdownMenu-itemLabel">{children}</span>
       </DropdownMenuPrimitive.RadioItem>
     );
   }
