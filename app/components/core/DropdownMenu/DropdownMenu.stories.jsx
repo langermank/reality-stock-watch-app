@@ -1,5 +1,5 @@
 import { FileX, CaretDown } from "phosphor-react";
-import React from "react";
+import React, { useState } from "react";
 
 import {
   DropdownMenu,
@@ -12,8 +12,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
-} from './DropdownMenu';
-
+} from "./DropdownMenu";
 
 export default {
   title: "Components/DropdownMenu",
@@ -23,20 +22,30 @@ export default {
   },
 };
 
-export const Playground = (args) =>
-(
-  <DropdownMenu>
-    <DropdownMenuTrigger>DropdownMenu trigger</DropdownMenuTrigger>
-    <DropdownMenuContent>
-      <DropdownMenuItem>Item</DropdownMenuItem>
-      <DropdownMenuLabel>Label</DropdownMenuLabel>
-      <DropdownMenuGroup>Group</DropdownMenuGroup>
-      <DropdownMenuCheckboxItem>CheckboxItem</DropdownMenuCheckboxItem>
-      <DropdownMenuSeparator>Separator</DropdownMenuSeparator>
-      <DropdownMenuRadioGroup>
-        <DropdownMenuRadioItem>RadioItem</DropdownMenuRadioItem>
-        <DropdownMenuRadioItem>RadioItem</DropdownMenuRadioItem>
-      </DropdownMenuRadioGroup>
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
+export const Playground = (args) => {
+  const [color, setColor] = useState("blue");
+  const [checked, setChecked] = useState(true);
+
+  return (
+    <DropdownMenu open>
+      <DropdownMenuTrigger>DropdownMenu trigger</DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Item</DropdownMenuItem>
+        <DropdownMenuItem>Item</DropdownMenuItem>
+        <DropdownMenuLabel>Label</DropdownMenuLabel>
+        <DropdownMenuGroup>Group</DropdownMenuGroup>
+        <DropdownMenuCheckboxItem
+          checked={checked}
+          onCheckedChange={setChecked}
+        >
+          CheckboxItem
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuSeparator></DropdownMenuSeparator>
+        <DropdownMenuRadioGroup value={color} onValueChange={setColor}>
+          <DropdownMenuRadioItem value="red">RadioItem</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="blue">RadioItem</DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
