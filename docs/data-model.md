@@ -1,0 +1,1 @@
+## Stock Watch Data Model

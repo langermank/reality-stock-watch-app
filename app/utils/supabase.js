@@ -1,6 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
 
-const isServer = typeof window === "undefined";
+const isServer = typeof window === 'undefined';
 
 const supabaseUrl = isServer
   ? process.env.SUPABASE_URL

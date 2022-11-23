@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules/*"],
+
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "watch": false,
+    "sourceMap": true,
+
+    "target": "ES6",
+    "module": "CommonJS",
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+
+    "rootDir": ".",
+    "allowJs": true,
+
+    "outDir": "./_clidist",
+    "lib": ["DOM", "DOM.Iterable", "ES2019"],
+    "paths": {
+      "~/*": ["./app/*", "./cli/*", "./data-layer/*"]
+    }
+  }
+}
