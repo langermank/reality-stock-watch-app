@@ -5,7 +5,7 @@ module.exports = {
     printWidth: 100,
     overrides: [
         {
-            files: '*.ts',
+            files: '*.ts, *.tsx',
             options: {
                 tabWidth: 2,
                 semi: true,
@@ -25,7 +25,7 @@ module.exports = {
             files: '*.html',
             options: {
                 bracketSameLine: false,
-                arrowParens: 'always', 
+                arrowParens: 'always',
             }
         }, {
             files: '.prettierrc.js',
