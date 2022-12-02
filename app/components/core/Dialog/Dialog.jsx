@@ -16,33 +16,17 @@ export function Dialog({ children, align, ...props }) {
 }
 
 Dialog.propTypes = {
-//   className: PropTypes.string,
-//   id: PropTypes.string,
-//   children: PropTypes.oneOfType([
-//     PropTypes.arrayOf(PropTypes.node),
-//     PropTypes.node,
-//   ]).isRequired,
-//   disabled: PropTypes.bool,
-//   size: PropTypes.oneOf(["default", "small"]),
-//   width: PropTypes.oneOf(["default", "fullWidth"]),
   align: PropTypes.oneOf([
     "center"
   ]),
-//   icon: PropTypes.node,
-//   iconOnly: PropTypes.bool,
-//   iconPosition: PropTypes.oneOf(["left", "right"]),
-//   alignContent: PropTypes.oneOf(["center", "start"]),
-//   ariaLabelledById: PropTypes.string,
-//   trailingActionIcon: PropTypes.node,
-  // ref: PropTypes.string,
 };
 
-export const DialogContent = React.forwardRef(({ children, size, ...props }, forwardedRef) => (
+export const DialogContent = React.forwardRef(({ children, size, title, description, visuallyHideTitle, ...props }, forwardedRef) => (
     <DialogPrimitive.Content {...props} ref={forwardedRef} className="Dialog" data-size={size}>
         <div className='Dialog-header'>
             <div className="Dialog-titleWrap">
-                <DialogPrimitive.Title />
-                <DialogPrimitive.Description />
+                {title && <DialogPrimitive.Title>{title}</DialogPrimitive.Title>}
+                {description && <DialogPrimitive.Description>{description}</DialogPrimitive.Description>}
             </div>
             <DialogPrimitive.Close asChild>
                 <Button variant="muted" icon={<X />} iconOnly size="small" className="Dialog-close">
@@ -57,10 +41,15 @@ export const DialogContent = React.forwardRef(({ children, size, ...props }, for
 ));
 
 DialogContent.propTypes = {
-  size: PropTypes.oneOf(["auto", "full"]),
+    size: PropTypes.oneOf(["auto", "full"]),
+    title: PropTypes.string,
+    description: PropTypes.string,
+    visuallyHideTitle: PropTypes.bool,
 };
 
 export const DialogTrigger = DialogPrimitive.Trigger;
 export const DialogClose = DialogPrimitive.Close;
+export const DialogTitle = DialogPrimitive.Title;
+export const DialogDescription = DialogPrimitive.Description;
 
 Dialog.displayName = 'Dialog';
