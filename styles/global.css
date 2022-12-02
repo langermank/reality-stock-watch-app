@@ -161,6 +161,9 @@
   --control-small-fontSize: var(--size-14);
   --control-small-height: var(--size-32);
 
+  /* layout wip */
+  --gap-normal: var(--size-8);
+
   /* overlays */
   --overlay-border-radius: var(--border-radius-large);
   --overlay-padding: var(--size-16);

@@ -1,0 +1,63 @@
+@layer components {
+    .Dialog {
+        background-color: var(--bg-overlay);
+        border-radius: var(--border-radius-large);
+        box-shadow: var(--overlay-shadow);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(var(--overlay-width), 100vw - 2rem);
+        min-width: var(--overlay-min-width);
+        max-height: min(calc(100vh - 2rem), var(--overlay-height));
+        padding: var(--overlay-padding);
+        z-index: 2;
+
+        &[data-size="auto"] {
+            min-width: var(--overlay-min-width);
+            max-width: calc(100vw - 2rem);
+            max-height: calc(100vh - 2rem);
+        }
+
+        &[data-size="full"] {
+            width: 100vw;
+            height: 100vh;
+        }
+    }
+
+    .Dialog-backdrop {
+        background-color: var(--blackA11);
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &[data-align="center"] {
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .Dialog-header {
+        display: grid;
+        grid-template-columns: auto min-content;
+        gap: var(--gap-normal);
+    }
+
+    .Dialog-titleWrap {
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-4);
+    }
+
+    .Dialog-close {
+        position: absolute;
+        top: var(--size-8);
+        right: var(--size-8);
+    }
+}
