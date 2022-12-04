@@ -1,0 +1,57 @@
+@layer components {
+    .Card {
+        border: solid var(--border-width-default) var(--border-default);
+        border-radius: var(--border-radius-default);
+        background-color: var(--bg-2);
+
+        &[data-padding="normal"] {
+            padding: var(--card-padding-normal);
+        }
+
+        &[data-padding="condensed"] {
+            padding: var(--card-padding-condensed);
+        }
+
+        &[data-variant="positive"] {
+            background-color: var(--bg-positive);
+            border-color: var(--border-positive);
+            color: var(--text-positive);
+        }
+
+        &[data-variant="negative"] {
+            background-color: var(--bg-negative);
+            border-color: var(--border-negative);
+            color: var(--text-negative);
+        }
+
+        &[data-variant="warning"] {
+            background-color: var(--bg-warning);
+            border-color: var(--border-warning);
+            color: var(--text-warning);
+        }
+
+        &[data-variant="neutral"] {
+            background-color: var(--bg-neutral);
+            border-color: var(--border-neutral);
+            color: var(--text-neutral);
+        }
+
+        &[data-variant="gold"] {
+            background-color: var(--bg-gold);
+            border-color: var(--border-gold);
+            color: var(--text-gold);
+        }
+
+        &[data-variant="silver"] {
+            background-color: var(--bg-silver);
+            border-color: var(--border-silver);
+            color: var(--text-silver);
+        }
+
+        &[data-variant="bronze"] {
+            background-color: var(--bg-bronze);
+            border-color: var(--border-bronze);
+            color: var(--text-bronze);
+        }
+    }
+}

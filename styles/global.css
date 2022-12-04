@@ -150,6 +150,14 @@
   --border-radius-default: var(--size-4);
   --border-radius-large: var(--size-12);
 
+  /* border */
+  --border-width-default: 1px;
+
+  /* card */
+
+  --card-padding-condensed: var(--size-4);
+  --card-padding-normal: var(--size-8);
+
   /* controls */
   --control-borderRadius: var(--border-radius-default);
   --control-paddingInline-normal: var(--size-16);
@@ -162,6 +170,7 @@
   --control-small-height: var(--size-32);
 
   /* layout wip */
+  --gap-condensed: var(--size-4);
   --gap-normal: var(--size-8);
 
   /* overlays */
@@ -203,7 +212,6 @@
 
   --logo-size: 64px;
   --outline-width: 3px;
-  --border-width-default: 1px;
   --full-content-min-width: 320px;
   --full-content-max-width: 1280px;
 
@@ -224,7 +232,6 @@
     font-family: sans-serif;
     color: var(--c-text-default);
     background: var(--c-bg-default);
-    text-align: left;
   }
 }
 
