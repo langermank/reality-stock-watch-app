@@ -1,5 +1,5 @@
 import React from "react";
-import { ChangeVisualizer } from "./ChangeVisualizer.tsx";
+import { ChangeVisualizer } from "./ChangeVisualizer";
 
 export default {
   title: "Components/ChangeVisualizer",
