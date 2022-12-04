@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'phosphor-react';
 import Button from '../button/Button.jsx';
+import {Heading} from '../Heading/Heading.tsx';
 
 
 export function Dialog({ children, align, ...props }) {
@@ -24,9 +25,11 @@ Dialog.propTypes = {
 export const DialogContent = React.forwardRef(({ children, size, title, description, visuallyHideTitle, ...props }, forwardedRef) => (
     <DialogPrimitive.Content {...props} ref={forwardedRef} className="Dialog" data-size={size}>
         <div className='Dialog-header'>
-            <div className="Dialog-titleWrap">
-                {title && <DialogPrimitive.Title>{title}</DialogPrimitive.Title>}
-                {description && <DialogPrimitive.Description>{description}</DialogPrimitive.Description>}
+            <div className="Dialog-titleWrap" data-hidden={visuallyHideTitle}>
+                {title && <DialogPrimitive.Title asChild>
+                    <Heading as="h2" size="title-small">{title}</Heading>
+                </DialogPrimitive.Title>}
+                {description && <DialogPrimitive.Description className='Dialog-description'>{description}</DialogPrimitive.Description>}
             </div>
             <DialogPrimitive.Close asChild>
                 <Button variant="muted" icon={<X />} iconOnly size="small" className="Dialog-close">

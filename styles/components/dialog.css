@@ -7,6 +7,7 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        text-align: left;
         width: min(var(--overlay-width), 100vw - 2rem);
         min-width: var(--overlay-min-width);
         max-height: min(calc(100vh - 2rem), var(--overlay-height));
@@ -53,11 +54,25 @@
         display: flex;
         flex-direction: column;
         gap: var(--size-4);
+
+        &[data-hidden="true"] {
+            @mixin visuallyHidden;
+        }
+    }
+
+    .Dialog-description {
+        font-size: var(--text-size-body-small);
     }
 
     .Dialog-close {
         position: absolute;
         top: var(--size-8);
         right: var(--size-8);
+    }
+
+    .Dialog-content {
+        overflow-y: auto;
+        max-height: 100%;
+        padding-block-start: var(--size-8);
     }
 }

@@ -224,6 +224,7 @@
     font-family: sans-serif;
     color: var(--c-text-default);
     background: var(--c-bg-default);
+    text-align: left;
   }
 }
 
