@@ -1,5 +1,18 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "features": {
-  }
+  "name": "Reality Stock Watch App",
+  "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:16",
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ],
+  "forwardPorts": [
+    8000,
+    6006
+  ],
+  "postCreateCommand": [
+    "/bin/bash",
+    "-c",
+    "pushd apps/docs && npm install --legacy-peer-deps && popd && npm install"
+  ],
+  "remoteUser": "node"
 }
