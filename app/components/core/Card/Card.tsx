@@ -12,12 +12,31 @@ export type CardProps = {
     | undefined;
   padding?: "normal" | "condensed" | "spacious";
   children?: React.ReactNode;
+  title?: string;
+  fullWidth?: boolean;
 };
 
-export function Card({ variant, padding = "normal", children }: CardProps) {
+export function Card({
+  variant,
+  padding = "normal",
+  children,
+  title,
+  fullWidth = false,
+}: CardProps) {
   return (
-    <div className="Card" data-variant={variant} data-padding={padding}>
-      {children}
+    <div className="Card" data-variant={variant} data-padding={padding} data-fullwidth={fullWidth}>
+      {title && (
+        <div className="Card-title" data-padding={padding}>
+          {title}
+        </div>
+      )}
+      {title ? (
+        <div className="Card-body" data-padding={padding}>
+          {children}
+        </div>
+      ) : (
+        children
+      )}
     </div>
   );
 }

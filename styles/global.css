@@ -8,11 +8,13 @@
   /* base */
   --bg-1: var(--slate1);
   --bg-2: var(--slate2);
+  --bg-inverse: var(--slate11);
   --bg-link: var(--text-link);
   --bg-overlay: var(--bg-2);
   --border-default: var(--slate8);
   --text-default: var(--slate12);
   --text-secondary: var(--slate11);
+  --text-inverse: var(--slate1);
   --text-link: var(--indigo11);
   --text-link-hover: var(--indigoA11);
 
