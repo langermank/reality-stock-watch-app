@@ -11,7 +11,7 @@
     "sourceMap": true,
 
     "target": "ES6",
-    "module": "CommonJS",
+    "module": "ESNext",
     "isolatedModules": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
