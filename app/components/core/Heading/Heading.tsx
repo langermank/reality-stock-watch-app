@@ -1,4 +1,5 @@
-import React, { PropsWithChildren, forwardRef, type Ref } from "react";
+import React, { forwardRef, useCallback } from "react";
+import type { Ref, PropsWithChildren } from "react";
 
 type BaseProps<T> = {
   className?: string;
@@ -6,25 +7,26 @@ type BaseProps<T> = {
   ref?: Ref<T>;
 };
 
-export const HeadingSizes = [
-  "display",
-  "title-large",
-  "title-medium",
-  "title-small",
-  "body-large",
-  "body-medium",
-] as const;
-export const HeadingTags = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
-export const defaultHeadingTag = HeadingTags[1];
+type HeadingSizesType =
+  | "display"
+  | "title-large"
+  | "title-medium"
+  | "title-small"
+  | "body-large"
+  | "body-medium";
 
-export const classMap = {
-  h1: HeadingSizes[0],
-  h2: HeadingSizes[1],
-  h3: HeadingSizes[2],
-  h4: HeadingSizes[3],
-  h5: HeadingSizes[4],
-  h6: HeadingSizes[5],
-};
+type HeadingTagsType = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+
+// export const HeadingSizes = [
+//   "display",
+//   "title-large",
+//   "title-medium",
+//   "title-small",
+//   "body-large",
+//   "body-medium",
+// ] as const;
+// export const HeadingTags = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
+export const defaultHeadingTag = HeadingTags[1];
 
 type HeadingTags = BaseProps<HTMLHeadingElement> & {
   as?: typeof HeadingTags[number];
@@ -42,7 +44,7 @@ export const Heading = forwardRef(
   ) => {
     const headingSize = size && [`${size}`];
 
-    const HeadingComponent = React.useCallback(
+    const HeadingComponent = useCallback(
       ({ ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
         if (!HeadingTags.includes(as)) {
           // eslint-disable-next-line no-console
