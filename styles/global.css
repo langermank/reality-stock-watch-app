@@ -235,6 +235,10 @@
     color: var(--c-text-default);
     background: var(--c-bg-default);
   }
+
+  img {
+    border-radius: var(--border-radius-default);
+  }
 }
 
 /* #region [ Layout ] */

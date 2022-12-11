@@ -24,7 +24,13 @@ export function Card({
   fullWidth = false,
 }: CardProps) {
   return (
-    <div className="Card" data-variant={variant} data-padding={padding} data-fullwidth={fullWidth}>
+    <div
+      className="Card"
+      data-variant={variant}
+      data-padding={padding}
+      data-fullwidth={fullWidth}
+      data-has-title={title ? "true" : undefined}
+    >
       {title && (
         <div className="Card-title" data-padding={padding}>
           {title}

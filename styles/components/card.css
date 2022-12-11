@@ -76,7 +76,12 @@
             color: var(--text-bronze);
         }
 
-        &:has(.Card-title) {
+        /* soooooon */
+        /* &:has(.Card-title) {
+            padding: 0;
+        } */
+
+        &[data-has-title="true"] {
             padding: 0;
         }
 
