@@ -62,7 +62,8 @@
     "postcss-import-ext-glob": "^2.0.1",
     "postcss-mixins": "^9.0.4",
     "postcss-preset-env": "^7.8.2",
-    "prettier": "2.6.2"
+    "prettier": "2.6.2",
+    "copy-webpack-plugin": "^6.0.3"
   },
   "engines": {
     "node": ">=14"
