@@ -6,19 +6,21 @@ import { MigrationRepository } from '../data-layer/repositories/migration-reposi
 (async () => {
   const configManager = new AppConfigManager('local-dev');
   configManager.load();
+  const app = new CliApp(configManager);
+  app.run();
 
-  //console.log(JSON.stringify(configManager));
+  ////console.log(JSON.stringify(configManager));
 
-  const db = new Database(configManager.dbConfig!);
-  await db.connect();
-  const migrationRepository = new MigrationRepository(db);
-  const migrationsToApply = await migrationRepository.findNotAppliedMigration();
+  //const db = new Database(configManager.dbConfig!);
+  //await db.connect();
+  //const migrationRepository = new MigrationRepository(db);
+  //const migrationsToApply = await migrationRepository.findNotAppliedMigration();
 
-  for (const migration of migrationsToApply) {
-    await migrationRepository.applyMigrationByName(migration);
-  }
+  //for (const migration of migrationsToApply) {
+  //  await migrationRepository.applyMigrationByName(migration);
+  //}
 
-  return;
+  //return;
   //await db.connect();
 
   //  const result = await db.checkInitialMigration();

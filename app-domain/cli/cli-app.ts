@@ -1,5 +1,6 @@
 import type { AppConfigManager } from '../app-components/app-config-manager';
-import type { PathRouter } from '../app-components/path-router_old/path-router';
+import type { PathRouter } from '@krhkt/path-router';
+import type { Arguments } from 'yargs';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { ApiClient } from '../data-layer/persistence/api-client';
@@ -25,7 +26,18 @@ export class CliApp {
 
   async run() {
     yargs(hideBin(process.argv)).parse();
-    this._pathRouter.executeRoute();
+    const argv = yargs.argv as Arguments;
+
+    const path = this.getPathFromArgv(argv);
+
+    console.log(path);
+    this._pathRouter.executeRoute(path);
+  }
+
+  getPathFromArgv(argv: Arguments): string {
+    if (argv.hasOwnProperty('path')) return argv.path as string;
+
+    return argv._.at(0) as string;
   }
 
   //#region [ Rendering ]

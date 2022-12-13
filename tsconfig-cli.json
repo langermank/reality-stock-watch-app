@@ -11,11 +11,11 @@
     "sourceMap": true,
 
     "target": "ES6",
-    "module": "ESNext",
+    "module": "CommonJS",
     "isolatedModules": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "skipLibCheck": true,
 
     "rootDir": ".",

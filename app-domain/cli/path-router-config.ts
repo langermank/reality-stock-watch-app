@@ -1,10 +1,10 @@
-import { PathRoute } from 'app-domain/app-components/path-router_old/path-route';
-import type { HandlerParamsType } from 'app-domain/app-components/path-router_old/path-route-default-handler';
-import { PathRouteDefaultHandler } from 'app-domain/app-components/path-router_old/path-route-default-handler';
-import { PathRouter } from '../app-components/path-router_old/path-router';
+import { PathRouter, PathRoute, PathRouteDefaultHandler } from '@krhkt/path-router';
+import type { HandlerParamsType } from '@krhkt/path-router';
 
 export const cliPathRouter = () => {
-  const defaultHandler = new PathRouteDefaultHandler(`${__dirname}/../../cli/controllers`);
+  const defaultHandler = new PathRouteDefaultHandler(
+    `${__dirname}/../../app-domain/cli/controllers`,
+  );
 
   const notFoundHandler = async (params: HandlerParamsType) => {
     console.log(`${params.path} is not a valid command`);
