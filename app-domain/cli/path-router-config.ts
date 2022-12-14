@@ -22,17 +22,12 @@ export const cliPathRouter = () => {
     .addRoute({
       name: 'db-migration',
       path: 'infra:{controller}:{action}',
-      defaults: { action: 'main' },
+      defaults: { namespace: 'infra', action: 'main' },
     })
     .addRoute({
       name: 'default',
       path: '{controller}:{action}:{id}',
       constraints: { id: PathRoute.OptionalParam },
-      defaults: { action: 'main' },
-    })
-    .addRoute({
-      name: 'default-no-id',
-      path: '{controller}:{action}',
       defaults: { action: 'main' },
     });
 

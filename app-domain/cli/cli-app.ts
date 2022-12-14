@@ -6,6 +6,7 @@ import { hideBin } from 'yargs/helpers';
 import { ApiClient } from '../data-layer/persistence/api-client';
 import { Database } from '../data-layer/persistence/database';
 import { cliPathRouter } from './path-router-config';
+import { QrCode } from 'phosphor-react';
 
 export class CliApp {
   _db: Database;
@@ -30,8 +31,11 @@ export class CliApp {
 
     const path = this.getPathFromArgv(argv);
 
-    console.log(path);
-    this._pathRouter.executeRoute(path);
+    try {
+      await this._pathRouter.executeRoute(path);
+    } catch (e: any) {
+      console.log(`error executing path: ${e.message}`);
+    }
   }
 
   getPathFromArgv(argv: Arguments): string {
