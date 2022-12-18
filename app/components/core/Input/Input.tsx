@@ -1,10 +1,21 @@
 import React, { useMemo } from "react";
-import PropTypes from "prop-types";
 import { Warning, WarningOctagon, CircleWavyCheck } from "phosphor-react";
 import { guid } from "../../../utils/uuid-generator";
 
-const Input = ({
-  className,
+export type InputProps = {
+  label: string;
+  hint?: string;
+  validationMessage?: string;
+  disabled?: boolean;
+  id?: string;
+  size?: "default" | "small";
+  state?: "warning" | "error" | "success";
+  icon?: React.ReactNode;
+  fullWidth?: boolean;
+};
+
+// TODO: Q for Kiran, should we be doing default exports?
+export const Input = ({
   disabled,
   id,
   label,
@@ -14,13 +25,11 @@ const Input = ({
   validationMessage,
   state,
   fullWidth,
-  ...other
-}) => {
-
+}: InputProps) => {
   const hintTextId = useMemo(() => guid("hint-text"), []);
   const validationId = useMemo(() => guid("validation-id"), []);
 
-  const ariaDescribedBy = `${(hint ? hintTextId : '')} ${(validationMessage ? validationId : '')}`;
+  const ariaDescribedBy = `${hint ? hintTextId : ""} ${validationMessage ? validationId : ""}`;
 
   return (
     <div className="InputLayout" data-fullWidth={fullWidth ? "true" : undefined}>
@@ -28,7 +37,11 @@ const Input = ({
         <label htmlFor={id} className="Input-label">
           {label}
         </label>
-        {hint && <span id={hintTextId} className="Input-hint">{hint}</span>}
+        {hint && (
+          <span id={hintTextId} className="Input-hint">
+            {hint}
+          </span>
+        )}
       </span>
       <div className="InputWrap">
         {icon && <span className="IconWrap">{icon}</span>}
@@ -38,7 +51,6 @@ const Input = ({
           id={id}
           data-size={size}
           aria-describedby={ariaDescribedBy || undefined}
-          {...other}
         />
         {validationMessage && (
           <span id={validationId} className="Input-validation" data-state={state}>
@@ -52,31 +64,3 @@ const Input = ({
     </div>
   );
 };
-
-Input.propTypes = {
-  className: PropTypes.string,
-  label: PropTypes.string.isRequired,
-  hint: PropTypes.string,
-  validationMessage: PropTypes.string,
-  disabled: PropTypes.bool,
-  id: PropTypes.string,
-  size: PropTypes.oneOf(["default", "small"]),
-  state: PropTypes.oneOf(["warning", "error", "success"]),
-  icon: PropTypes.node,
-  fullWidth: PropTypes.bool,
-};
-
-Input.defaultProps = {
-  className: null,
-  disabled: false,
-  id: "",
-  width: null,
-  size: "default",
-  icon: null,
-  hint: null,
-  validationMessage: null,
-  state: null,
-  fullWidth: false,
-};
-
-export default Input;
