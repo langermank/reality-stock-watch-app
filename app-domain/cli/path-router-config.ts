@@ -19,11 +19,13 @@ export const cliPathRouter = () => {
   });
 
   pathRouter
+    // routes under infra are potentially dangerous to execute
     .addRoute({
       name: 'db-migration',
       path: 'infra:{controller}:{action}',
       defaults: { namespace: 'infra', action: 'main' },
     })
+
     .addRoute({
       name: 'default',
       path: '{controller}:{action}:{id}',

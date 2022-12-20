@@ -3,11 +3,18 @@ import * as dotenv from 'dotenv';
 import type { ClientConfig as DbConfigType } from 'pg';
 import type { ApiClientConfigType } from '../data-layer/persistence/api-client';
 
-export type TargetEnvironment = 'prod' | 'dev' | 'local-dev';
+export const TargetEnvironments = {
+  production: 'prod',
+  development: 'dev',
+  localDevelopment: 'local-dev',
+};
+
+type TargetEnvironmentKeys = keyof typeof TargetEnvironments;
+export type TargetEnvironmentType = typeof TargetEnvironments[TargetEnvironmentKeys];
 
 export class AppConfigManager {
-  _targetEnvironment: TargetEnvironment;
-  _envFilePath: string;
+  _targetEnvironment: TargetEnvironmentType;
+  _envFilePath: string | undefined;
   _dbConfig: DbConfigType | undefined;
   _apiClientConfig: ApiClientConfigType | undefined;
 
@@ -19,7 +26,7 @@ export class AppConfigManager {
     return this._apiClientConfig;
   }
 
-  constructor(targetEnvironment: TargetEnvironment = 'dev') {
+  constructor(targetEnvironment: TargetEnvironmentType = 'dev') {
     this._targetEnvironment = targetEnvironment;
     this._envFilePath = path.resolve(process.cwd(), `${targetEnvironment}.env`);
   }

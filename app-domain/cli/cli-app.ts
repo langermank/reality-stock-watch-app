@@ -6,7 +6,6 @@ import { hideBin } from 'yargs/helpers';
 import { ApiClient } from '../data-layer/persistence/api-client';
 import { Database } from '../data-layer/persistence/database';
 import { cliPathRouter } from './path-router-config';
-import { QrCode } from 'phosphor-react';
 
 export class CliApp {
   _db: Database;
