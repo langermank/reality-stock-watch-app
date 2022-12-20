@@ -55,8 +55,5 @@ export const DialogContent = forwardRef<Ref, PropsWithChildren<DialogContentProp
 );
 
 export const DialogTrigger = DialogPrimitive.Trigger;
-export const DialogClose = DialogPrimitive.Close;
-export const DialogTitle = DialogPrimitive.Title;
-export const DialogDescription = DialogPrimitive.Description;
 
 Dialog.displayName = "Dialog";
