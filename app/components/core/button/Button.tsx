@@ -21,6 +21,7 @@ export type ButtonProps = {
   alignContent?: "center" | "start";
   ariaLabelledById?: string;
   id?: string;
+  className?: string;
   // ref?: Ref<HTMLButtonElement>;
 };
 
@@ -38,11 +39,12 @@ export const Button = ({
   alignContent,
   ariaLabelledById,
   id,
+  className,
 }: PropsWithChildren<ButtonProps>) => {
   return (
     <button
       onClick={onClick}
-      className={clsx("Button", iconOnly && "Button-iconOnly")}
+      className={clsx("Button", iconOnly && "Button-iconOnly", className && className)}
       disabled={disabled}
       aria-labelledby={ariaLabelledById}
       data-variant={variant}
