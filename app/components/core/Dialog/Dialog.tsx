@@ -1,5 +1,5 @@
-/* eslint-disable react/display-name */
-import React, { Children, PropsWithChildren, forwardRef, type Ref } from "react";
+import React, { useRef } from "react";
+import type { PropsWithChildren } from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "phosphor-react";
 import { Button } from "../button/Button";
@@ -25,8 +25,15 @@ export type DialogContentProps = {
   visuallyHideTitle?: boolean;
 };
 
-export const DialogContent = forwardRef<Ref, PropsWithChildren<DialogContentProps>>(
-  ({ children, size, title, description, visuallyHideTitle = false }, ref) => {
+export const DialogContent = ({
+  children,
+  size,
+  title,
+  description,
+  visuallyHideTitle = false,
+}: PropsWithChildren<DialogContentProps>) => {
+  const ref = useRef<HTMLDivElement>(null);
+  return (
     <DialogPrimitive.Content ref={ref} className="Dialog" data-size={size}>
       <div className="Dialog-header">
         <div className="Dialog-titleWrap" data-hidden={visuallyHideTitle}>
@@ -50,9 +57,9 @@ export const DialogContent = forwardRef<Ref, PropsWithChildren<DialogContentProp
         </DialogPrimitive.Close>
       </div>
       <div className="Dialog-content">{children}</div>
-    </DialogPrimitive.Content>;
-  }
-);
+    </DialogPrimitive.Content>
+  );
+};
 
 export const DialogTrigger = DialogPrimitive.Trigger;
 

@@ -14,7 +14,6 @@ export type InputProps = {
   fullWidth?: boolean;
 };
 
-// TODO: Q for Kiran, should we be doing default exports?
 export const Input = ({
   disabled,
   id,

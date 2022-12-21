@@ -1,10 +1,11 @@
-import React, { Children, PropsWithChildren, forwardRef, type Ref } from "react";
+import React, { useRef, Children } from "react";
+import type { PropsWithChildren } from "react";
 
 export type NavListProps = {};
 
-export const NavList = forwardRef<Ref, PropsWithChildren<NavListProps>>(({ children }, ref) => {
+export const NavList = ({ children }: PropsWithChildren<NavListProps>) => {
   const arrChildren = Children.toArray(children);
-
+  const ref = useRef<HTMLElement>(null);
   return (
     <>
       {arrChildren.length && (
@@ -22,6 +23,6 @@ export const NavList = forwardRef<Ref, PropsWithChildren<NavListProps>>(({ child
       )}
     </>
   );
-});
+};
 
 NavList.displayName = "NavList";
