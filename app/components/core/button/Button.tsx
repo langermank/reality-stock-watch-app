@@ -1,4 +1,5 @@
-import React, { PropsWithChildren, forwardRef, type Ref } from "react";
+import React, { useRef } from "react";
+import type { PropsWithChildren } from "react";
 import clsx from "clsx";
 
 export type ButtonProps = {
@@ -22,12 +23,9 @@ export type ButtonProps = {
   ariaLabelledById?: string;
   id?: string;
   className?: string;
-  // ref?: Ref<HTMLButtonElement>;
-};
+} & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
 export const Button = ({
-  onClick,
-  disabled,
   children,
   size,
   width,
@@ -38,20 +36,20 @@ export const Button = ({
   trailingActionIcon,
   alignContent,
   ariaLabelledById,
-  id,
   className,
+  ...rest
 }: PropsWithChildren<ButtonProps>) => {
+  const ref = useRef<HTMLButtonElement>(null);
   return (
     <button
-      onClick={onClick}
       className={clsx("Button", iconOnly && "Button-iconOnly", className && className)}
-      disabled={disabled}
       aria-labelledby={ariaLabelledById}
       data-variant={variant}
       data-size={size}
       data-width={!iconOnly && width}
       data-trailing-action={trailingActionIcon ? "true" : undefined}
-      id={id}
+      ref={ref}
+      {...rest}
     >
       {!iconOnly && (
         <>
@@ -80,31 +78,3 @@ export const Button = ({
 };
 
 Button.displayName = "Button";
-
-// TODO: pass ref and ...rest to access all default button types
-
-// https://react-typescript-cheatsheet.netlify.app/docs/advanced/patterns_by_usecase/
-
-// export type Ref = HTMLButtonElement;
-
-// export const Button = forwardRef<Ref, ButtonProps>(
-//   (
-//     {
-//       onClick,
-//       disabled,
-//       children,
-//       size,
-//       width,
-//       variant,
-//       icon,
-//       iconOnly,
-//       iconPosition,
-//       trailingActionIcon,
-//       alignContent,
-//       ariaLabelledById,
-//       id,
-//       ...rest
-//     },
-//     ref
-//   ) => {
-//     return ()});
