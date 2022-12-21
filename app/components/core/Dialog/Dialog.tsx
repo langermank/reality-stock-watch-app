@@ -64,3 +64,4 @@ export const DialogContent = ({
 export const DialogTrigger = DialogPrimitive.Trigger;
 
 Dialog.displayName = "Dialog";
+DialogContent.displayName = "DialogContent";

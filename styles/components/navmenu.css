@@ -1,0 +1,72 @@
+@layer components {
+  .NavMenu-trigger[data-state="open"] {
+    & .NavMenu-trigger-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .NavMenu-overlay {
+    background: var(--bg-overlay);
+    border-radius: var(--overlay-border-radius);
+    padding: var(--overlay-padding-condensed);
+    display: flex;
+    flex-direction: column;
+    width: min(var(--overlay-width), 100vw - 2rem);
+    min-width: var(--overlay-min-width);
+    max-height: min(100vh - 2rem, var(--overlay-height));
+    box-shadow: 0 -2px 5px 0 hsl(var(--shadow-color) /
+            calc(var(--shadow-strength) + 2%)),
+      0 1px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+      0 2px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
+      0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
+      0 9px 9px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)),
+      0 16px 16px -2px hsl(var(--shadow-color) /
+            calc(var(--shadow-strength) + 6%));
+    opacity: 1;
+  }
+
+  .NavMenu-item {
+    color: var(--text-default);
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    height: var(--control-small-height);
+    padding-inline: var(--control-paddingInline-condensed);
+    border-radius: var(--border-radius-default);
+    transition: var(--transition);
+    position: relative;
+    gap: var(--control-gap-normal);
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--bg-control-muted-hover);
+    }
+
+    &:focus-visible {
+      @mixin focusOutline -2px, var(--text-link);
+    }
+
+    &.hasIndicator {
+      display: grid;
+      grid-template-columns: var(--size-16) auto;
+    }
+
+    & .NavMenu-itemLabel {
+      grid-column: 2 / 3;
+    }
+  }
+
+  .NavMenu-label {
+    color: var(--text-secondary);
+    font-size: var(--text-size-body-small);
+    padding-inline: var(--control-paddingInline-condensed);
+  }
+
+  .NavMenu-divider {
+    height: 1px;
+    background-color: var(--border-default);
+    margin: var(--size-4);
+  }
+}
