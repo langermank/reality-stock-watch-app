@@ -1,5 +1,6 @@
 import { FileX, CaretDown } from "phosphor-react";
 import React, { useState } from "react";
+import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import {
   DropdownMenu,
@@ -8,10 +9,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuItem,
   DropdownMenuGroup,
-  DropdownMenuCheckboxItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuLinkItem,
 } from "./DropdownMenu";
 
 export default {
@@ -22,29 +21,19 @@ export default {
   },
 };
 
-export const Playground = (args) => {
+export const Playground: ComponentStory<typeof DropdownMenu> = (args) => {
   const [color, setColor] = useState("blue");
   const [checked, setChecked] = useState(true);
 
   return (
-    <DropdownMenu open>
+    <DropdownMenu>
       <DropdownMenuTrigger>DropdownMenu trigger</DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>Item</DropdownMenuItem>
+        <DropdownMenuLinkItem>Item</DropdownMenuLinkItem>
         <DropdownMenuItem>Item</DropdownMenuItem>
         <DropdownMenuLabel>Label</DropdownMenuLabel>
         <DropdownMenuGroup>Group</DropdownMenuGroup>
-        <DropdownMenuCheckboxItem
-          checked={checked}
-          onCheckedChange={setChecked}
-        >
-          CheckboxItem
-        </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator></DropdownMenuSeparator>
-        <DropdownMenuRadioGroup value={color} onValueChange={setColor}>
-          <DropdownMenuRadioItem value="red">RadioItem</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="blue">RadioItem</DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -1,4 +1,14 @@
 @layer components {
+
+  .NavMenu-root {
+    position: relative;
+    width: 300px;
+  }
+
+  .NavMenu-trigger {
+    position: relative;
+  }
+
   .NavMenu-trigger[data-state="open"] {
     & .NavMenu-trigger-icon {
       transform: rotate(180deg);
@@ -23,7 +33,49 @@
       0 16px 16px -2px hsl(var(--shadow-color) /
             calc(var(--shadow-strength) + 6%));
     opacity: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    animation-duration: 250ms;
+    animation-timing-function: ease;
   }
+
+  .NavMenu-overlayPosition {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    /* width: 100%; */
+    top: 0;
+    left: 0;
+    /* perspective: 2000px; */
+  }
+
+  .NavigationMenuViewport {
+    position: absolute;
+    z-index: 1000;
+    /* transform-origin: top center; */
+    margin-top: 0.5rem;
+    width: 100%;
+    /* background-color: white;
+    border-radius: 6px;
+    overflow: hidden; */
+    /* box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px; */
+    /* height: var(--radix-navigation-menu-viewport-height); */
+    /* transition: width, height, 300ms ease; */
+  }
+  .NavigationMenuViewport[data-state='open'] {
+    animation: scaleIn 200ms ease;
+  }
+  .NavigationMenuViewport[data-state='closed'] {
+    animation: scaleOut 200ms ease;
+  }
+  @media only screen and (min-width: 600px) {
+    .NavigationMenuViewport {
+      width: var(--radix-navigation-menu-viewport-width);
+    }
+  }
+
 
   .NavMenu-item {
     color: var(--text-default);

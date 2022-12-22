@@ -11,6 +11,7 @@ import {
   NavMenuSub,
   NavMenuIndicator,
 } from "./NavMenu";
+import * as Popover from "@radix-ui/react-popover";
 
 export default {
   title: "Components/NavMenu",
@@ -18,33 +19,27 @@ export default {
 };
 
 export const Playground: ComponentStory<typeof NavMenu> = (args) => (
-  <NavMenuRoot orientation="vertical">
-    <NavMenuList>
-      <NavMenuItem>
-        <NavMenuTrigger>Sub group 1</NavMenuTrigger>
-        <NavMenuContent>
-          <NavMenuLink>Hello</NavMenuLink>
-        </NavMenuContent>
-      </NavMenuItem>
-
-      <NavMenuItem>
-        <NavMenuLink>Item 2</NavMenuLink>
-      </NavMenuItem>
-
-      <NavMenuItem>
-        <NavMenuTrigger>Sub group 2</NavMenuTrigger>
-        <NavMenuContent>
-          <NavMenuSub>
+  <div style={{ maxWidth: "300px" }}>
+    <NavMenuRoot orientation="vertical">
+      <NavMenuList>
+        <NavMenuItem>
+          <NavMenuTrigger>Sub group 1</NavMenuTrigger>
+          <NavMenuContent>
             <NavMenuLink>Hello</NavMenuLink>
-            {/* <NavMenuList />
-            <NavMenuViewport /> */}
-          </NavMenuSub>
-        </NavMenuContent>
-      </NavMenuItem>
+          </NavMenuContent>
+          {/* <div className="NavMenu-overlayPosition"> */}
+          <NavMenuViewport className="NavigationMenuViewport" />
+          {/* </div> */}
+        </NavMenuItem>
 
-      <NavMenuIndicator />
-    </NavMenuList>
+        <NavMenuItem>
+          <NavMenuLink>Item 2</NavMenuLink>
+        </NavMenuItem>
+      </NavMenuList>
 
-    <NavMenuViewport />
-  </NavMenuRoot>
+      {/* <div className="NavMenu-overlayPosition">
+        <NavMenuViewport className="NavigationMenuViewport" />
+      </div> */}
+    </NavMenuRoot>
+  </div>
 );
