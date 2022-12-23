@@ -28,10 +28,12 @@ import { NavLink } from "../NavList/NavLink";
 //   ref?: Ref<T>
 // }
 
+// TODO extend props from radix
+
 type DropdownMenuTriggerProps = PropsWithChildren<HTMLButtonElement>;
 
 export const DropdownMenuTrigger = forwardRef<HTMLButtonElement, DropdownMenuTriggerProps>(
-  ({ children, ...rest }, ref) => {
+  ({ children }, ref) => {
     return (
       <DropdownMenuPrimitive.Trigger asChild>
         <Button
@@ -75,6 +77,7 @@ export const DropdownMenuItem = ({ children }: PropsWithChildren<{}>) => {
   );
 };
 
+// TODO: how to handle prop drilling for NavLink?
 export const DropdownMenuLinkItem = ({ children }: PropsWithChildren<{}>) => {
   return (
     <DropdownMenuPrimitive.Item className="DropdownMenu-label" asChild>

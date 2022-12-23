@@ -28,12 +28,10 @@ export const Playground: ComponentStory<typeof DropdownMenu> = (args) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>DropdownMenu trigger</DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent sideOffset={5}>
         <DropdownMenuLinkItem>Item</DropdownMenuLinkItem>
-        <DropdownMenuItem>Item</DropdownMenuItem>
-        <DropdownMenuLabel>Label</DropdownMenuLabel>
-        <DropdownMenuGroup>Group</DropdownMenuGroup>
-        <DropdownMenuSeparator></DropdownMenuSeparator>
+        <DropdownMenuLinkItem>Item 2</DropdownMenuLinkItem>
+        <DropdownMenuLinkItem>Item 3</DropdownMenuLinkItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
