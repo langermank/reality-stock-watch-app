@@ -15,7 +15,11 @@ export class CliApp {
   constructor(config: AppConfigManager) {
     this._db = new Database(config.dbConfig!);
     this._apiClient = new ApiClient(config.apiClientConfig!);
-    this._pathRouter = cliPathRouter();
+
+    this._pathRouter = cliPathRouter({
+      db: this._db,
+      apiClient: this._apiClient,
+    });
   }
 
   async boot() {
@@ -33,7 +37,7 @@ export class CliApp {
     try {
       await this._pathRouter.executeRoute(path);
     } catch (e: any) {
-      console.log(`error executing path: ${e.message}`);
+      console.log(`error executing path (${path}): ${e.message}`);
     }
   }
 

@@ -3,17 +3,8 @@ import * as fs from 'node:fs';
 import * as dotenv from 'dotenv';
 import { prompt } from 'prompts';
 import { TargetEnvironments } from '../app-components/app-config-manager';
+import type { EnvFileType } from '../app-components/app-config-manager';
 import 'colors';
-
-type EnvFileType = {
-  PG_HOST: string;
-  PG_PORT: string;
-  PG_DATABASE: string;
-  PG_USER: string;
-  PG_PSWD: string;
-  SB_REST_ENDPOINT: string;
-  SB_SERVICE_SECRET: string;
-};
 
 type EnvFileStatType = {
   name: string;
