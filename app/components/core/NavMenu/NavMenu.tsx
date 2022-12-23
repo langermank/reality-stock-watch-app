@@ -51,6 +51,7 @@ export const NavMenuTrigger = ({ children }: PropsWithChildren<{}>) => {
         className="NavMenu-trigger"
         width="full"
         alignContent="start"
+        onTriggerEnter={onTriggerEnter()}
       >
         {children}
       </Button>

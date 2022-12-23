@@ -18,28 +18,30 @@ export default {
   //   component: NavMenu,
 };
 
-export const Playground: ComponentStory<typeof NavMenu> = (args) => (
-  <div style={{ maxWidth: "300px" }}>
-    <NavMenuRoot orientation="vertical">
-      <NavMenuList>
-        <NavMenuItem>
-          <NavMenuTrigger>Sub group 1</NavMenuTrigger>
-          <NavMenuContent>
-            <NavMenuLink>Hello</NavMenuLink>
-          </NavMenuContent>
-          {/* <div className="NavMenu-overlayPosition"> */}
-          <NavMenuViewport className="NavigationMenuViewport" />
-          {/* </div> */}
-        </NavMenuItem>
+export const Playground: ComponentStory<typeof NavMenu> = (args) => {
+  return (
+    <div style={{ maxWidth: "300px" }}>
+      <NavMenuRoot orientation="vertical">
+        <NavMenuList>
+          <NavMenuItem>
+            <NavMenuTrigger>Sub group 1</NavMenuTrigger>
+            <NavMenuContent>
+              <NavMenuLink>Hello</NavMenuLink>
+            </NavMenuContent>
+            {/* <div className="NavMenu-overlayPosition"> */}
+            <NavMenuViewport className="NavigationMenuViewport" />
+            {/* </div> */}
+          </NavMenuItem>
 
-        <NavMenuItem>
-          <NavMenuLink>Item 2</NavMenuLink>
-        </NavMenuItem>
-      </NavMenuList>
+          <NavMenuItem>
+            <NavMenuLink>Item 2</NavMenuLink>
+          </NavMenuItem>
+        </NavMenuList>
 
-      {/* <div className="NavMenu-overlayPosition">
+        {/* <div className="NavMenu-overlayPosition">
         <NavMenuViewport className="NavigationMenuViewport" />
       </div> */}
-    </NavMenuRoot>
-  </div>
-);
+      </NavMenuRoot>
+    </div>
+  );
+};

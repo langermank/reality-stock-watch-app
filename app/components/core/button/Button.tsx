@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from "react";
+import React, { forwardRef } from "react";
 import type { PropsWithChildren } from "react";
 import clsx from "clsx";
 
@@ -26,7 +26,9 @@ export type ButtonProps = {
   className?: string;
 } & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+type ButtonPropsWithChildren = PropsWithChildren<ButtonProps>;
+
+export const Button = forwardRef<HTMLButtonElement, ButtonPropsWithChildren>(
   (
     {
       children,
@@ -44,7 +46,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    // const ref = useRef<HTMLButtonElement>(null);
     return (
       <button
         className={clsx("Button", iconOnly && "Button-iconOnly", className && className)}
