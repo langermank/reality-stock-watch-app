@@ -1,11 +1,11 @@
-import React, { useRef, Children, PropsWithChildren, forwardRef, type Ref } from "react";
+import React, { useRef } from "react";
+import type { PropsWithChildren } from "react";
 import { DismissButton, Overlay, usePopover } from "react-aria";
 
 export type PopoverProps = {
   offset?: number;
 };
 
-// TODO: ask Kiran about the difference between const and function
 // TODO: figure out how to get types for these props
 export const Popover = ({
   children,
@@ -13,8 +13,9 @@ export const Popover = ({
   offset = 8,
   ...props
 }: PropsWithChildren<PopoverProps>) => {
+  //   const popoverRef = useRef<HTMLDivElement>(null);
   let popoverRef = useRef();
-  let { popoverProps, underlayProps, arrowProps, placement } = usePopover(
+  let { popoverProps, underlayProps, placement } = usePopover(
     {
       ...props,
       offset,
@@ -32,7 +33,7 @@ export const Popover = ({
         style={{
           ...popoverProps.style,
           background: "lightgray",
-          border: "1px solid gray",
+          border: "1px solid deeppink",
         }}
       >
         <DismissButton onDismiss={state.close} />
