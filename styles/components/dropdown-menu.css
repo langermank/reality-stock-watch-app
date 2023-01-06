@@ -24,6 +24,8 @@
       0 16px 16px -2px hsl(var(--shadow-color) /
             calc(var(--shadow-strength) + 6%));
     opacity: 1;
+    /* overflow-y: hidden; */
+    overflow-y: auto;
   }
 
   .DropdownMenu-item {

@@ -15,7 +15,8 @@
   --text-default: var(--slate12);
   --text-secondary: var(--slate11);
   --text-inverse: var(--slate1);
-  --text-link: var(--indigo11);
+  /* --text-link: var(--indigo11); */
+  --text-link: deeppink;
   --text-link-hover: var(--indigoA11);
 
   /* shadows */
@@ -240,6 +241,15 @@
 
   img {
     border-radius: var(--border-radius-default);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
   }
 }
 

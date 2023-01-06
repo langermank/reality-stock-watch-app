@@ -1,38 +1,41 @@
-import { FileX, CaretDown } from "phosphor-react";
-import React, { useState } from "react";
-import type { ComponentMeta, ComponentStory } from "@storybook/react";
-
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuItem,
-  DropdownMenuGroup,
-  DropdownMenuSeparator,
-  DropdownMenuLinkItem,
-} from "./DropdownMenu";
+import React from "react";
+// import Button from "../button/Button.jsx";
+import { MenuButton } from "./DropdownMenu";
+import { Item } from "@react-stately/collections";
 
 export default {
   title: "Components/DropdownMenu",
-  component: DropdownMenu,
-  args: {
-    variant: "primary",
-  },
+  // component: Button,
 };
 
-export const Playground: ComponentStory<typeof DropdownMenu> = (args) => {
-  const [color, setColor] = useState("blue");
-  const [checked, setChecked] = useState(true);
+export const Playground = () => {
+  let [open, setOpen] = React.useState(false);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>DropdownMenu trigger</DropdownMenuTrigger>
-      <DropdownMenuContent sideOffset={5}>
-        <DropdownMenuLinkItem>Item</DropdownMenuLinkItem>
-        <DropdownMenuLinkItem>Item 2</DropdownMenuLinkItem>
-        <DropdownMenuLinkItem>Item 3</DropdownMenuLinkItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    // <MenuButton label="hello" isOpen={open} onOpenChange={setOpen}>
+    //   <Item hasChildItems>
+    //     <a href="/" target="_blank">
+    //       Item 1
+    //     </a>
+    //   </Item>
+    //   <Item href="/">Item 2</Item>
+    // </MenuButton>
+    <MenuButton
+      isOpen={open}
+      onOpenChange={setOpen}
+      label="Actions"
+      onAction={(key) => {
+        alert(key);
+      }}
+    >
+      <Item key="copy">Copy</Item>
+      <Item key="cut">Cut</Item>
+      <Item key="paste">Paste</Item>
+      <Item key="view" href="https://google.com">
+        View
+      </Item>
+    </MenuButton>
   );
 };
+
+// figure out how to pass href to item

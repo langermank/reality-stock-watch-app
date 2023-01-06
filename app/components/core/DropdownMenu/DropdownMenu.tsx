@@ -1,138 +1,136 @@
-/* eslint-disable react/display-name */
-import React, { forwardRef } from "react";
-import type { PropsWithChildren } from "react";
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import { Check, WifiNone, CaretDown } from "phosphor-react";
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import { Popover } from "../Popover/Popover";
 import { Button } from "../button/Button";
-import { NavLink } from "../NavList/NavLink";
+import { MenuNavLink } from "../NavList/NavLink";
+import { CaretDown } from "phosphor-react";
+import type { AriaMenuProps } from "@react-types/menu";
+import type { ReactNode } from "react";
+import { useRef, useState } from "react";
+import { useMenu, useMenuItem, useFocus, mergeProps, useButton, useMenuTrigger } from "react-aria";
+import { useTreeState, useMenuTriggerState } from "react-stately";
 
-// export const DropdownMenuTrigger = ({ children }: PropsWithChildren<{}>) => {
-//   return (
-//     <DropdownMenuPrimitive.Trigger asChild>
-//       <Button
-//         variant="muted"
-//         trailingActionIcon={<CaretDown className="NavMenu-trigger-icon" />}
-//         className="NavMenu-trigger"
-//         width="full"
-//         alignContent="start"
-//       >
-//         {children}
-//       </Button>
-//     </DropdownMenuPrimitive.Trigger>
-//   );
-// };
+interface MenuButtonProps<T> extends AriaMenuProps<T> {
+  label: ReactNode;
+}
 
-// export type BaseProps<T> = {
-//   className?: string
-//   id?: string
-//   ref?: Ref<T>
-// }
+export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
+  // Create state based on the incoming props
+  let state = useMenuTriggerState(props);
 
-// TODO extend props from radix
+  // Get props for the menu trigger and menu elements
+  let ref = useRef<HTMLButtonElement>(null);
+  let { menuTriggerProps, menuProps } = useMenuTrigger({}, state, ref);
 
-type DropdownMenuTriggerProps = PropsWithChildren<HTMLButtonElement>;
+  // Get props for the button based on the trigger props from useMenuTrigger
+  let { buttonProps } = useButton(menuTriggerProps, ref);
 
-export const DropdownMenuTrigger = forwardRef<HTMLButtonElement, DropdownMenuTriggerProps>(
-  ({ children }, ref) => {
+  return (
+    <div style={{ position: "relative" }}>
+      <Button
+        variant="muted"
+        trailingActionIcon={<CaretDown className="NavMenu-trigger-icon" />}
+        className="NavMenu-trigger"
+        width="full"
+        alignContent="start"
+        ref={ref}
+        {...buttonProps}
+      >
+        {props.label}
+      </Button>
+      {state.isOpen && (
+        <Popover state={state} triggerRef={ref} placement="bottom start">
+          <Menu {...props} {...menuProps} />
+        </Popover>
+      )}
+    </div>
+  );
+}
+
+interface MenuPopupProps<T> extends AriaMenuProps<T> {
+  domProps?: any;
+  autoFocus: any;
+  onClose?: () => void;
+}
+
+function Menu<T extends object>(props: MenuPopupProps<T>) {
+  // Create menu state based on the incoming props
+  let state = useTreeState({ ...props, selectionMode: "none" });
+
+  // Get props for the menu element
+  let ref = useRef<HTMLUListElement>(null);
+  let { menuProps } = useMenu(props, state, ref);
+
+  // Wrap in <FocusScope> so that focus is restored back to the
+  // trigger when the menu is closed. In addition, add hidden
+  // <DismissButton> components at the start and end of the list
+  // to allow screen reader users to dismiss the popup easily.
+  return (
+    <ul {...menuProps} ref={ref}>
+      {[...state.collection].map((item) => (
+        <MenuItem
+          key={item.key}
+          item={item}
+          state={state}
+          // href={props.href}
+          onAction={props.onAction}
+          onClose={props.onClose}
+        />
+      ))}
+    </ul>
+  );
+}
+
+function MenuItem({ item, state, onAction, onClose }) {
+  // Get props for the menu item element
+  let ref = useRef<HTMLLIElement | HTMLAnchorElement>(null);
+  let { menuItemProps } = useMenuItem(
+    {
+      key: item.key,
+      isDisabled: item.isDisabled,
+      onAction,
+      onClose,
+    },
+    state,
+    ref
+  );
+
+  const isLink = !!item.props.href;
+
+  // Handle focus events so we can apply highlighted
+  // style to the focused menu item
+  let [isFocused, setFocused] = useState(false);
+  let { focusProps } = useFocus({ onFocusChange: setFocused });
+
+  const props = mergeProps(menuItemProps, focusProps, {
+    // style: {
+    //   display: "block",
+    //   background: isFocused ? "gray" : "transparent",
+    //   color: isFocused ? "white" : undefined,
+    //   padding: "2px 5px",
+    //   outline: "none",
+    //   cursor: "pointer",
+    // },
+  });
+
+  if (isLink) {
     return (
-      <DropdownMenuPrimitive.Trigger asChild>
-        <Button
-          variant="muted"
-          trailingActionIcon={<CaretDown className="NavMenu-trigger-icon" />}
-          className="NavMenu-trigger"
-          width="full"
-          alignContent="start"
+      <li role="none">
+        <MenuNavLink
           ref={ref}
+          to={item.props.href}
+          {...props}
+          onPointerUp={() => {}}
+          onKeyDown={() => {}}
         >
-          {children}
-        </Button>
-      </DropdownMenuPrimitive.Trigger>
+          {item.rendered}
+        </MenuNavLink>
+      </li>
     );
   }
-);
 
-export const DropdownMenuContent = ({ children }: PropsWithChildren<{}>) => {
   return (
-    // <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.Content align="start" sideOffset={5} className="DropdownMenu-overlay">
-      {children}
-    </DropdownMenuPrimitive.Content>
-    // </DropdownMenuPrimitive.Portal>
+    <li ref={ref} {...props} className="linkWrap">
+      {item.rendered}
+    </li>
   );
-};
-
-export const DropdownMenuLabel = ({ children }: PropsWithChildren<{}>) => {
-  return (
-    <DropdownMenuPrimitive.Label className="DropdownMenu-label">
-      {children}
-    </DropdownMenuPrimitive.Label>
-  );
-};
-
-export const DropdownMenuItem = ({ children }: PropsWithChildren<{}>) => {
-  return (
-    <DropdownMenuPrimitive.Item className="DropdownMenu-label">
-      {children}
-    </DropdownMenuPrimitive.Item>
-  );
-};
-
-// TODO: how to handle prop drilling for NavLink?
-export const DropdownMenuLinkItem = ({ children }: PropsWithChildren<{}>) => {
-  return (
-    <DropdownMenuPrimitive.Item className="DropdownMenu-label" asChild>
-      <NavLink>{children}</NavLink>
-    </DropdownMenuPrimitive.Item>
-  );
-};
-
-// extend props from radix
-// export const DropdownMenuCheckboxItem = ({ children }: PropsWithChildren<{}>) => {
-//   return (
-//     <DropdownMenuPrimitive.CheckboxItem {...props} className="DropdownMenu-item hasIndicator">
-//       <DropdownMenuPrimitive.ItemIndicator>
-//         {props.checked === true && <Check />}
-//       </DropdownMenuPrimitive.ItemIndicator>
-//       <span className="DropdownMenu-itemLabel">{children}</span>
-//     </DropdownMenuPrimitive.CheckboxItem>
-//   );
-// };
-
-// export const DropdownMenuRadioItem = ({ children, value }: PropsWithChildren<{}>) => {
-//   return (
-//     <DropdownMenuPrimitive.RadioItem className="DropdownMenu-item hasIndicator" value={value}>
-//       <DropdownMenuPrimitive.ItemIndicator className="ItemIndicator">
-//         <svg
-//           width="15"
-//           height="15"
-//           viewBox="0 0 15 15"
-//           fill="none"
-//           xmlns="http://www.w3.org/2000/svg"
-//         >
-//           <path
-//             d="M9.875 7.5C9.875 8.81168 8.81168 9.875 7.5 9.875C6.18832 9.875 5.125 8.81168 5.125 7.5C5.125 6.18832 6.18832 5.125 7.5 5.125C8.81168 5.125 9.875 6.18832 9.875 7.5Z"
-//             fill="currentColor"
-//           ></path>
-//         </svg>
-//       </DropdownMenuPrimitive.ItemIndicator>
-//       <span className="DropdownMenu-itemLabel">{children}</span>
-//     </DropdownMenuPrimitive.RadioItem>
-//   );
-// };
-
-export const DropdownMenuSeparator = () => {
-  return <DropdownMenuPrimitive.Separator className="DropdownMenu-divider" />;
-};
-
-export const DropdownMenu = DropdownMenuPrimitive.Root;
-export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
-export const DropdownMenuGroup = DropdownMenuPrimitive.Group;
-// export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
-
-DropdownMenuTrigger.displayName = "DropdownMenuTrigger";
-DropdownMenuContent.displayName = "DropdownMenuContent";
-DropdownMenuLabel.displayName = "DropdownMenuLabel";
-DropdownMenuItem.displayName = "DropdownMenuItem";
-// DropdownMenuCheckboxItem.displayName = "DropdownMenuCheckboxItem";
-// DropdownMenuRadioItem.displayName = "DropdownMenuRadioItem";
-DropdownMenuSeparator.displayName = "DropdownMenuSeparator";
+}
