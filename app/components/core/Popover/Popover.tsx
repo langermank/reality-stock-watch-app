@@ -30,10 +30,9 @@ export const Popover = ({
       <div
         {...popoverProps}
         ref={popoverRef}
+        className="DropdownMenu-overlay"
         style={{
           ...popoverProps.style,
-          background: "lightgray",
-          border: "1px solid deeppink",
         }}
       >
         <DismissButton onDismiss={state.close} />

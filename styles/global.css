@@ -4,7 +4,7 @@
 
 /* @media (prefers-color-scheme: dark) {
   :root { */
-.dark-theme {
+[data-theme="dark"] {
   /* base */
   --bg-1: var(--slate1);
   --bg-2: var(--slate2);

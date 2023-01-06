@@ -13,6 +13,7 @@ import { useFocus } from "@react-aria/interactions";
 import { useOverlay, DismissButton } from "@react-aria/overlays";
 import React, { useRef, useState } from "react";
 import { Popover } from "../Popover/Popover";
+import { Link } from "@remix-run/react";
 
 export function MenuButton(props) {
   // Create state based on the incoming props
@@ -79,59 +80,16 @@ function Menu(props) {
       }}
     >
       {[...state.collection].map((item) => (
-        <MenuItem key={item.key} item={item} state={state} />
+        <MenuItem key={item.key} item={item} state={state} href={props.href} />
       ))}
     </ul>
   );
 }
 
-// export function MenuItem({ item, state, onAction, onClose, onClick }) {
-//   // Get props for the menu item element
-//   let ref = useRef();
-//   let { menuItemProps } = useMenuItem(
-//     {
-//       key: item.key,
-//       isDisabled: item.isDisabled,
-//       onAction,
-//       onClose,
-//       // Navigation works when set to false, but then menu stays open :/
-//       closeOnSelect: false,
-//     },
-//     state,
-//     ref
-//   );
-
-//   // Handle focus events so we can apply highlighted
-//   // style to the focused menu item
-//   let [isFocused, setFocused] = useState(false);
-//   let { focusProps } = useFocus({ onFocusChange: setFocused });
-
-//   return (
-//     <>
-//       <li role="none">
-//         <NavLink
-//           icon={item.props.icon}
-//           href={item.props.href}
-//           ref={ref}
-//           {...mergeProps(menuItemProps, focusProps, {
-//             onClick,
-//           })}>
-//           {item.props.children}
-//         </NavLink>
-//       </li>
-//     </>
-//   );
-// }
-
-// MenuItem.propTypes = {
-//   icon: PropTypes.node,
-//   children: PropTypes.node,
-// };
-
-function MenuItem({ item, state }) {
+function MenuItem({ item, state, href }) {
   // Get props for the menu item element
   let ref = React.useRef();
-  let { menuItemProps, isFocused, isSelected, isDisabled } = useMenuItem(
+  let { menuItemProps, isFocused, isSelected, isDisabled, label } = useMenuItem(
     { key: item.key },
     state,
     ref
@@ -143,18 +101,19 @@ function MenuItem({ item, state }) {
       ref={ref}
       style={{
         background: isFocused ? 'gray' : 'transparent',
-        color: isDisabled ? 'gray' : isFocused ? 'white' : 'black',
+        color: label ? 'purple' : isFocused ? 'white' : 'pink',
         padding: '2px 5px',
-        outline: 'none',
+        outline: 'solid 1px pink',
         cursor: 'default',
         display: 'flex',
         justifyContent: 'space-between'
       }}
-    >
+      >
+      {/* {item.label} */}
       {item.rendered}
       {isSelected && <span aria-hidden="true">✅</span>}
     </li>
-    // <>
+    // href ? (
     //   <li role="none">
     //     <NavLink
     //       icon={item.props.icon}
@@ -166,6 +125,28 @@ function MenuItem({ item, state }) {
     //       {item.props.children}
     //     </NavLink>
     //   </li>
-    // </>
+    // ) : (<li
+    //   {...menuItemProps}
+    //   ref={ref}
+    //   style={{
+    //     background: isFocused ? 'gray' : 'transparent',
+    //     color: label ? 'purple' : isFocused ? 'white' : 'pink',
+    //     padding: '2px 5px',
+    //     outline: 'solid 1px pink',
+    //     cursor: 'default',
+    //     display: 'flex',
+    //     justifyContent: 'space-between'
+    //   }}
+    //   >
+    //   {/* {item.label} */}
+    //   {item.rendered}
+    //   {isSelected && <span aria-hidden="true">✅</span>}
+    // </li>)
   );
 }
+
+MenuItem.propTypes = {
+  // icon: PropTypes.node,
+  // children: PropTypes.node,
+  href: PropTypes.string,
+};
