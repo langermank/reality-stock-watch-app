@@ -12,6 +12,9 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  'data-theme-toggle': {
+    default: 'dark',
+  },
   layout: 'fullscreen',
   // darkMode: {
   //   // Override the default dark theme

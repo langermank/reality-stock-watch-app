@@ -21,7 +21,7 @@ export const Playground = () => {
     //   <Item href="/">Item 2</Item>
     // </MenuButton>
     <MenuButton
-      isOpen={open}
+      isOpen={"true"}
       onOpenChange={setOpen}
       label="Actions"
       onAction={(key) => {

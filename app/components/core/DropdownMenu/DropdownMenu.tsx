@@ -25,12 +25,12 @@ export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
   let { buttonProps } = useButton(menuTriggerProps, ref);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", display: "inline-block" }}>
       <Button
         variant="muted"
         trailingActionIcon={<CaretDown className="NavMenu-trigger-icon" />}
         className="NavMenu-trigger"
-        width="full"
+        // width="full"
         alignContent="start"
         ref={ref}
         {...buttonProps}
@@ -38,7 +38,7 @@ export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
         {props.label}
       </Button>
       {state.isOpen && (
-        <Popover state={state} triggerRef={ref} placement="bottom start">
+        <Popover state={state} triggerRef={ref} offset={20}>
           <Menu {...props} {...menuProps} />
         </Popover>
       )}
@@ -129,7 +129,7 @@ function MenuItem({ item, state, onAction, onClose }) {
   }
 
   return (
-    <li ref={ref} {...props} className="linkWrap">
+    <li ref={ref} {...props} className="linkWfrap">
       {item.rendered}
     </li>
   );
