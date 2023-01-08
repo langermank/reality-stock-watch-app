@@ -15,8 +15,7 @@
   --text-default: var(--slate12);
   --text-secondary: var(--slate11);
   --text-inverse: var(--slate1);
-  /* --text-link: var(--indigo11); */
-  --text-link: deeppink;
+  --text-link: var(--indigo11);
   --text-link-hover: var(--indigoA11);
 
   /* shadows */

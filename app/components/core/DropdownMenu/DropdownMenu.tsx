@@ -11,6 +11,7 @@ import { useTreeState, useMenuTriggerState } from "react-stately";
 
 interface MenuButtonProps<T> extends AriaMenuProps<T> {
   label: ReactNode;
+  width?: "default" | "full";
 }
 
 export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
@@ -25,12 +26,12 @@ export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
   let { buttonProps } = useButton(menuTriggerProps, ref);
 
   return (
-    <div style={{ position: "relative", display: "inline-block" }}>
+    <div style={{ position: "relative" }}>
       <Button
         variant="muted"
         trailingActionIcon={<CaretDown className="NavMenu-trigger-icon" />}
         className="NavMenu-trigger"
-        // width="full"
+        width={props.width}
         alignContent="start"
         ref={ref}
         {...buttonProps}
@@ -38,7 +39,13 @@ export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
         {props.label}
       </Button>
       {state.isOpen && (
-        <Popover state={state} triggerRef={ref} offset={20}>
+        <Popover
+          state={state}
+          triggerRef={ref}
+          offset={8}
+          placement="bottom start"
+          width={props.width}
+        >
           <Menu {...props} {...menuProps} />
         </Popover>
       )}
@@ -129,7 +136,7 @@ function MenuItem({ item, state, onAction, onClose }) {
   }
 
   return (
-    <li ref={ref} {...props} className="linkWfrap">
+    <li ref={ref} {...props} className="linkWrap">
       {item.rendered}
     </li>
   );

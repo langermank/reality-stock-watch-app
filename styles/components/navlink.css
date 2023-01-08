@@ -29,14 +29,25 @@
     position: relative;
     gap: var(--control-gap-spacious);
     cursor: pointer;
+    outline: 0;
 
     &:hover {
       background-color: var(--bg-control-muted-hover);
+
+      /* &:focus-visible, &:focus {
+        outline: 0 !important;
+      } */
     }
 
     &:focus-visible {
       @mixin focusOutline -2px, var(--text-link);
     }
+
+    /* @media (pointer: fine) {
+      &:focus-visible {
+        outline: 0;
+      }
+    } */
 
     &[data-active="true"] {
       &:before {
