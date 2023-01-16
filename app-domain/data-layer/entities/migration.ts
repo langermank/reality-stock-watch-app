@@ -1,7 +1,7 @@
 /// <reference path="./_types/core.d.ts" />
-import * as crypto from 'crypto';
+import * as crypto from "crypto";
 
-const defaultExtension = '.sql';
+const defaultExtension = ".sql";
 export const filenameToMigrationName = (filename: string) => {
   return filename.endsWith(defaultExtension)
     ? filename.slice(0, -defaultExtension.length)
@@ -32,6 +32,6 @@ export class Migration implements Core.DbMigration {
   }
 
   setHashByContent(content: string) {
-    this.hash = crypto.createHash('sha512').update(content).digest('hex');
+    this.hash = crypto.createHash("sha512").update(content).digest("hex");
   }
 }

@@ -4,15 +4,17 @@
 
 /* @media (prefers-color-scheme: dark) {
   :root { */
-.dark-theme {
+[data-theme="dark"] {
   /* base */
   --bg-1: var(--slate1);
   --bg-2: var(--slate2);
+  --bg-inverse: var(--slate11);
   --bg-link: var(--text-link);
   --bg-overlay: var(--bg-2);
   --border-default: var(--slate8);
   --text-default: var(--slate12);
   --text-secondary: var(--slate11);
+  --text-inverse: var(--slate1);
   --text-link: var(--indigo11);
   --text-link-hover: var(--indigoA11);
 
@@ -23,10 +25,11 @@
   /* overlay */
 
   /* controls */
+
   /* bg */
   --bg-control-secondary: #ffffff;
   --bg-control-secondary-hover: var(--slate12);
-  --bg-control-secondary-active: hsl(210, 6%, 83%);
+  --bg-control-secondary-active: hsl(210 6% 83%);
   --bg-control-secondary-disabled: var(--slate10);
   --bg-control-secondaryGhost-hover: var(--slateA4);
   --bg-control-secondaryGhost-active: var(--slateA5);
@@ -34,12 +37,11 @@
   --bg-control-muted: var(--slate3);
   --bg-control-muted-hover: var(--slate4);
   --bg-control-muted-active: var(--slate5);
-  --bg-control-muted-disabled: hsla(182, 86.7%, 91.4%, 0.057);
-  --bg-control-primary-disabled: hsla(322, 74.9%, 45%, 60%);
+  --bg-control-muted-disabled: hsl(182 86.7% 91.4% / 5.7%);
+  --bg-control-primary-disabled: hsl(322 74.9% 45% / 60%);
   --bg-control-primary: var(--pink8);
-  --bg-control-primary-hover: hsl(322, 74.9%, 45%);
-  --bg-control-primary-active: hsl(322, 74.9%, 49%);
-  --bg-control-primary-disabled: hsla(322, 74.9%, 45%, 60%);
+  --bg-control-primary-hover: hsl(322 74.9% 45%);
+  --bg-control-primary-active: hsl(322 74.9% 49%);
   --bg-control-primaryGhost-hover: var(--pinkA4);
   --bg-control-primaryGhost-active: var(--pinkA5);
   --bg-control-primaryGhost-disabled: var(--pinkA7);
@@ -47,6 +49,7 @@
   --bg-control-danger-hover: var(--text-negative);
   --bg-control-danger-active: var(--tomato4);
   --bg-control-danger-disabled: var(--tomato5);
+
   /* border */
   --border-control-secondaryGhost: #ffffff;
   --border-control-secondaryGhost-disabled: var(--slate11);
@@ -55,12 +58,12 @@
   --border-control-primaryGhost-disabled: var(--pink9);
   --border-control-danger: var(--text-negative);
   --border-control-danger-disabled: var(--tomato8);
+
   /* text */
   --text-control-secondary: var(--slate1);
   --text-control-secondary-disabled: var(--slate12);
   --text-control-secondaryGhost: #ffffff;
   --text-control-secondaryGhost-disabled: var(--slate11);
-  --text-control-secondary-disabled: var(--slate11);
   --text-control-primary: #ffffff;
   --text-control-primary-disabled: var(--pink11);
   --text-control-primaryGhost: var(--pink10);
@@ -95,36 +98,37 @@
   --text-silver: var(--slate11);
   --text-bronze: var(--bronze11);
 }
+
 /* } */
 
 :root {
   /* black alpha */
-  --blackA1: hsla(0, 0%, 0%, 0.012);
-  --blackA2: hsla(0, 0%, 0%, 0.027);
-  --blackA3: hsla(0, 0%, 0%, 0.047);
-  --blackA4: hsla(0, 0%, 0%, 0.071);
-  --blackA5: hsla(0, 0%, 0%, 0.09);
-  --blackA6: hsla(0, 0%, 0%, 0.114);
-  --blackA7: hsla(0, 0%, 0%, 0.141);
-  --blackA8: hsla(0, 0%, 0%, 0.22);
-  --blackA9: hsla(0, 0%, 0%, 0.439);
-  --blackA10: hsla(0, 0%, 0%, 0.478);
-  --blackA11: hsla(0, 0%, 0%, 0.565);
-  --blackA12: hsla(0, 0%, 0%, 0.91);
+  --blackA1: hsl(0 0% 0% / 1.2%);
+  --blackA2: hsl(0 0% 0% / 2.7%);
+  --blackA3: hsl(0 0% 0% / 4.7%);
+  --blackA4: hsl(0 0% 0% / 7.1%);
+  --blackA5: hsl(0 0% 0% / 9%);
+  --blackA6: hsl(0 0% 0% / 11.4%);
+  --blackA7: hsl(0 0% 0% / 14.1%);
+  --blackA8: hsl(0 0% 0% / 22%);
+  --blackA9: hsl(0 0% 0% / 43.9%);
+  --blackA10: hsl(0 0% 0% / 47.8%);
+  --blackA11: hsl(0 0% 0% / 56.5%);
+  --blackA12: hsl(0 0% 0% / 91%);
 
   /* white alpha */
-  --whiteA1: hsla(0, 0%, 100%, 0);
-  --whiteA2: hsla(0, 0%, 100%, 0.013);
-  --whiteA3: hsla(0, 0%, 100%, 0.034);
-  --whiteA4: hsla(0, 0%, 100%, 0.056);
-  --whiteA5: hsla(0, 0%, 100%, 0.086);
-  --whiteA6: hsla(0, 0%, 100%, 0.124);
-  --whiteA7: hsla(0, 0%, 100%, 0.176);
-  --whiteA8: hsla(0, 0%, 100%, 0.249);
-  --whiteA9: hsla(0, 0%, 100%, 0.386);
-  --whiteA10: hsla(0, 0%, 100%, 0.446);
-  --whiteA11: hsla(0, 0%, 100%, 0.592);
-  --whiteA12: hsla(0, 0%, 100%, 0.923);
+  --whiteA1: hsl(0 0% 100% / 0%);
+  --whiteA2: hsl(0 0% 100% / 1.3%);
+  --whiteA3: hsl(0 0% 100% / 3.4%);
+  --whiteA4: hsl(0 0% 100% / 5.6%);
+  --whiteA5: hsl(0 0% 100% / 8.6%);
+  --whiteA6: hsl(0 0% 100% / 12.4%);
+  --whiteA7: hsl(0 0% 100% / 17.6%);
+  --whiteA8: hsl(0 0% 100% / 24.9%);
+  --whiteA9: hsl(0 0% 100% / 38.6%);
+  --whiteA10: hsl(0 0% 100% / 44.6%);
+  --whiteA11: hsl(0 0% 100% / 59.2%);
+  --whiteA12: hsl(0 0% 100% / 92.3%);
 
   /* size */
   --size-4: 0.25rem;
@@ -150,6 +154,13 @@
   --border-radius-default: var(--size-4);
   --border-radius-large: var(--size-12);
 
+  /* border */
+  --border-width-default: 1px;
+
+  /* card */
+  --card-padding-condensed: var(--size-4);
+  --card-padding-normal: var(--size-8);
+
   /* controls */
   --control-borderRadius: var(--border-radius-default);
   --control-paddingInline-normal: var(--size-16);
@@ -161,6 +172,10 @@
   --control-small-fontSize: var(--size-14);
   --control-small-height: var(--size-32);
 
+  /* layout wip */
+  --gap-condensed: var(--size-4);
+  --gap-normal: var(--size-8);
+
   /* overlays */
   --overlay-border-radius: var(--border-radius-large);
   --overlay-padding: var(--size-16);
@@ -168,8 +183,7 @@
   --overlay-min-width: calc(var(--size-64) * 3); /* 192px */
   --overlay-height: calc(var(--size-64) * 6.75); /* 432px */
   --overlay-width: calc(var(--size-64) * 5); /* 320px */
-  --overlay-shadow: 0 -2px 5px 0 hsl(var(--shadow-color) /
-          calc(var(--shadow-strength) + 2%)),
+  --overlay-shadow: 0 -2px 5px 0 hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)),
     0 1px 1px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
     0 2px 2px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)),
     0 5px 5px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)),
@@ -177,6 +191,10 @@
     0 16px 16px -2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%));
 
   /* typography */
+  --font-family-fallback: -apple-system, blinkmacsystemfont, segoe, ui, roboto, oxygen, ubuntu,
+    cantarell, fira sans, droid sans, helvetica neue, sans-serif;
+  --font-family-regular: "Manrope Regular", var(--font-family-fallback);
+  --font-family-semibold: "Manrope Semibold", var(--font-family-fallback);
   --text-size-display: var(--size-40);
   --text-size-title-large: var(--size-28);
   --text-size-title-medium: var(--size-24);
@@ -190,30 +208,25 @@
   --text-lineHeight-default: 1.5;
 }
 
-:root {
+/* :root {
   --grid-size: 4px;
   --grid-1x: var(--grid-size);
   --grid-2x: calc(var(--grid-size) * 2);
   --grid-3x: calc(var(--grid-size) * 3);
   --grid-4x: calc(var(--grid-size) * 4);
   --grid-8x: calc(var(--grid-size) * 8);
-
   --logo-size: 64px;
   --outline-width: 3px;
-  --border-width-default: 1px;
   --full-content-min-width: 320px;
   --full-content-max-width: 1280px;
-
-  /* #region [ Colors ] */
-  --c-fg-accent: hsl(223, 55%, 45%);
-  --c-bg-default: hsl(214, 100%, 99%);
-  --c-bg-dark: hsl(229, 12%, 67%);
-  --c-bg-accent: hsl(223, 61%, 89%);
-  --c-border-default: hsla(223, 72%, 82%, 0.35);
-  --c-text-default: hsl(240, 10%, 15%);
-  --c-text-link: hsl(223, 55%, 45%);
-  /* #endregion */
-}
+  --c-fg-accent: hsl(223 55% 45%);
+  --c-bg-default: hsl(214 100% 99%);
+  --c-bg-dark: hsl(229 12% 67%);
+  --c-bg-accent: hsl(223 61% 89%);
+  --c-border-default: hsl(223 72% 82% / 35%);
+  --c-text-default: hsl(240 10% 15%);
+  --c-text-link: hsl(223 55% 45%);
+} */
 
 @layer base {
   html,
@@ -222,27 +235,44 @@
     color: var(--c-text-default);
     background: var(--c-bg-default);
   }
+
+  img {
+    border-radius: var(--border-radius-default);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+  }
 }
 
 /* #region [ Layout ] */
 .LayoutContent-wrapper {
   min-height: 100vh;
 }
+
 .LayoutContent-inner-content-wrapper {
   min-width: var(--full-content-min-width);
   max-width: var(--full-content-max-width);
   margin-inline: auto;
 }
+
 /* #endregion */
 
 /* #region [ Header ] */
 .Header-wrapper {
   border-bottom: var(--border-width-default) solid var(--c-border-default);
 }
+
 .Header-inner-wrapper {
   display: flex;
   padding: var(--grid-2x) var(--grid-4x);
 }
+
 .Header-logo-link {
   --focus-offset: 2px;
 
@@ -251,7 +281,6 @@
   width: var(--logo-size);
   height: var(--logo-size);
   margin: calc(var(--outline-width, 1px) + var(--focus-offset));
-
   border-radius: var(--logo-size);
   outline-width: 0;
   outline-offset: var(--focus-offset);
@@ -259,17 +288,19 @@
   outline-color: var(--c-fg-accent);
   transition: outline-width 200ms ease-in;
 }
+
 .Header-logo-link:hover {
   outline-width: var(--outline-width, 3px);
   transition: outline-width 80ms ease-out;
 }
+
 .Header-logo {
   display: inline-block;
   width: var(--logo-size);
   height: var(--logo-size);
-
   border-radius: var(--logo-size);
 }
+
 .Header-logo:hover {
   outline: none;
 }
@@ -278,19 +309,19 @@
   flex-grow: 1;
   align-self: stretch;
 }
+
 .Header-navigation-wrapper ul {
   height: 100%;
   list-style: none;
   margin: 0;
   padding: 0;
-
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
+
 .Header-navigation-item {
   padding: var(--grid-2x) var(--grid-3x);
-
   color: var(--c-text-link);
   border-radius: var(--grid-1x);
   text-align: center;
@@ -298,10 +329,12 @@
   background-color: transparent;
   transition: background-color 100ms ease-in;
 }
+
 .Header-navigation-item:hover {
   background-color: var(--c-bg-accent);
   transition: background-color 80ms ease-out;
 }
+
 /* #endregion */
 
 /* #region [ Page ] */
@@ -310,6 +343,7 @@
   grid-template-columns: minmax(200px, 1fr) minmax(66%, 1fr);
   gap: var(--grid-2x);
 }
+
 /* #endregion */
 
 /* #region [ Footer ] */
@@ -317,4 +351,5 @@
   background: var(--c-bg-dark);
   min-height: 35vh;
 }
+
 /* #endregion */

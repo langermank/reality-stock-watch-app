@@ -7,9 +7,7 @@ export const loader = async ({ params: { short_name } }) => {
   //   const season = seasons.filter((c) => c.show_short_name === show_short_name);
 
   //   return { season };
-  const { data: seasons, error } = await supabase
-    .from("seasons")
-    .select("name, short_name");
+  const { data: seasons, error } = await supabase.from("seasons").select("name, short_name");
 
   if (error) {
     console.log("error,", error.message);

@@ -25,10 +25,6 @@
       border-color: var(--bg-control-primary);
       color: var(--text-control-primary);
 
-      &:hover:not(:disabled) {
-        background: var(--bg-control-primary-hover);
-      }
-
       &:active {
         background: var(--bg-control-primary-active);
       }
@@ -41,16 +37,16 @@
       &:focus-visible {
         @mixin focusOutline -2px, currentColor;
       }
+
+      &:hover:not(:disabled) {
+        background: var(--bg-control-primary-hover);
+      }
     }
 
     &[data-variant="primaryGhost"] {
       background: transparent;
       border: solid 1px var(--border-control-primaryGhost);
       color: var(--text-control-primaryGhost);
-
-      &:hover:not(:disabled) {
-        background: var(--bg-control-primaryGhost-hover);
-      }
 
       &:active {
         background: var(--bg-control-primaryGhost-active);
@@ -65,16 +61,16 @@
       &:focus-visible {
         @mixin focusOutline -2px, var(--text-control-primary);
       }
+
+      &:hover:not(:disabled) {
+        background: var(--bg-control-primaryGhost-hover);
+      }
     }
 
     &[data-variant="secondary"] {
       background: var(--bg-control-secondary);
       border-color: var(--bg-control-secondary);
       color: var(--text-control-secondary);
-
-      &:hover:not(:disabled) {
-        background: var(--bg-control-secondary-hover);
-      }
 
       &:active {
         background: var(--bg-control-secondary-active);
@@ -88,16 +84,16 @@
       &:focus-visible {
         @mixin focusOutline -4px, currentColor;
       }
+
+      &:hover:not(:disabled) {
+        background: var(--bg-control-secondary-hover);
+      }
     }
 
     &[data-variant="secondaryGhost"] {
       background: transparent;
       border: solid 1px var(--border-control-secondaryGhost);
       color: var(--text-control-secondaryGhost);
-
-      &:hover:not(:disabled) {
-        background: var(--bg-control-secondaryGhost-hover);
-      }
 
       &:active {
         background: var(--bg-control-secondaryGhost-active);
@@ -112,16 +108,16 @@
       &:focus-visible {
         @mixin focusOutline -2px, var(--text-link);
       }
+
+      &:hover:not(:disabled) {
+        background: var(--bg-control-secondaryGhost-hover);
+      }
     }
 
     &[data-variant="muted"] {
       background: var(--bg-control-muted);
       border-color: var(--bg-control-muted);
       color: var(--text-control-primary);
-
-      &:hover:not(:disabled) {
-        background: var(--bg-control-muted-hover);
-      }
 
       &:active {
         background: var(--bg-control-muted-active);
@@ -136,17 +132,16 @@
       &:focus-visible {
         @mixin focusOutline -2px, currentColor;
       }
+
+      &:hover:not(:disabled) {
+        background: var(--bg-control-muted-hover);
+      }
     }
 
     &[data-variant="danger"] {
       background: var(--bg-control-danger);
       border-color: var(--border-control-danger);
       color: var(--text-control-danger);
-
-      &:hover:not(:disabled) {
-        background: var(--bg-control-danger-hover);
-        color: var(--text-control-danger-hover);
-      }
 
       &:active {
         background: var(--bg-control-danger-active);
@@ -161,9 +156,14 @@
       &:focus-visible {
         @mixin focusOutline -2px, var(--text-control-primary);
       }
+
+      &:hover:not(:disabled) {
+        background: var(--bg-control-danger-hover);
+        color: var(--text-control-danger-hover);
+      }
     }
 
-    &[data-width="fullWidth"] {
+    &[data-width="full"] {
       width: 100%;
     }
 
@@ -192,6 +192,11 @@
     }
   }
 
+  .Button-icon {
+    display: grid;
+    place-content: center;
+  }
+
   .Button-content {
     flex: 1 0 auto;
     display: flex;
@@ -208,10 +213,5 @@
     &[data-align-content="start"] {
       justify-content: flex-start;
     }
-  }
-
-  .Button-icon {
-    display: grid;
-    place-content: center;
   }
 }

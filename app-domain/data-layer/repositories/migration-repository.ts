@@ -1,14 +1,14 @@
 /// <reference path="../entities/_types/core.d.ts" />
-import * as path from 'path';
-import * as fs from 'fs/promises';
-import type { Database } from '../persistence/database';
-import { Migration, filenameToMigrationName, migrationNameToFilename } from '../entities/migration';
+import * as path from "path";
+import * as fs from "fs/promises";
+import type { Database } from "../persistence/database";
+import { Migration, filenameToMigrationName, migrationNameToFilename } from "../entities/migration";
 
-const schemaName = 'core';
-const tableName = '_migration';
+const schemaName = "core";
+const tableName = "_migration";
 const fullTableReference = `${schemaName}.${tableName}`;
 
-const migrationFolder = './app-domain/data-layer/migrations';
+const migrationFolder = "./app-domain/data-layer/migrations";
 const checkCoreSchemaQuery = `SELECT schema_name
 FROM information_schema.schemata
 WHERE schema_name = '${schemaName}';`;
@@ -29,7 +29,7 @@ export class MigrationRepository {
 
   async getByName(migrationName: string): Promise<Core.DbMigration | null> {
     const result = await this._db.query(
-      `select * from ${this._tableName} where name = ${migrationName}`,
+      `select * from ${this._tableName} where name = ${migrationName}`
     );
 
     if (!result?.rows.length) return null;

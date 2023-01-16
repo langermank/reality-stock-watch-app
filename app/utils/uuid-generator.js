@@ -5,4 +5,4 @@ export const guid = (prefix) => {
   globalIdCounter = (globalIdCounter + 1) % largestId;
 
   return `${prefix}-${globalIdCounter}`;
-}
+};

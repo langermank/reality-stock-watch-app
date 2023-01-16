@@ -7,7 +7,6 @@ export default function Index() {
       <PageHeader>
         <h1>Index</h1>
       </PageHeader>
-
       content ouside page header
     </PageLayout>
   );

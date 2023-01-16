@@ -1,9 +1,12 @@
 module.exports = {
-  stories: ["../app/**/*.stories.mdx", "../app/**/*.stories.@(js|jsx|ts|tsx)"],
+  stories: ['../app/**/*.stories.mdx', '../app/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    // 'storybook-dark-mode',
+    'storybook-addon-dark-mode-toggle',
   ],
-  framework: "@storybook/react",
+  staticDirs: ['../public'],
+  framework: '@storybook/react',
 };
