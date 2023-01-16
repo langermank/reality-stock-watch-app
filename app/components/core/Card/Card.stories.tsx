@@ -10,7 +10,7 @@ export default {
 export const Playground = (args) => <Card {...args}>Child</Card>;
 
 export const Networth = (args) => (
-  <Card {...args} title="Networth">
-    <ChangeVisualizer label="$3,000" />
+  <Card {...args} title='Networth'>
+    <ChangeVisualizer label='$3,000' />
   </Card>
 );

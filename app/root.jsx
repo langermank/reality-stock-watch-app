@@ -25,10 +25,10 @@ export const meta = () => ({
 });
 
 export const links = () => [
-//  { rel: "stylesheet", href: globalStylesUrl },
-//  { rel: "stylesheet", href: reset },
-//  { rel: "stylesheet", href: radixDark },
-//  { rel: "stylesheet", href: radixLight },
+  //  { rel: "stylesheet", href: globalStylesUrl },
+  //  { rel: "stylesheet", href: reset },
+  //  { rel: "stylesheet", href: radixDark },
+  //  { rel: "stylesheet", href: radixLight },
 ];
 export const title = (() => {
   let titleText = "";
@@ -51,7 +51,7 @@ export const loader = () => {
 //#region [ App Components]
 export default function App() {
   return (
-    <Document titleText="Reality Stock Watch App">
+    <Document titleText='Reality Stock Watch App'>
       <Layout>
         <Outlet />
       </Layout>
@@ -62,7 +62,7 @@ export default function App() {
 export function Document({ children, titleText }) {
   const { env } = useLoaderData();
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
         <Links />
 
@@ -90,7 +90,7 @@ export function Document({ children, titleText }) {
 export function Layout({ children }) {
   return (
     <>
-      <div class="LayoutContent-wrapper">
+      <div class='LayoutContent-wrapper'>
         <Header />
 
         {children}
@@ -106,7 +106,7 @@ export function ErrorBoundary({ error }) {
 
   return (
     <>
-      <Document title="Error">
+      <Document title='Error'>
         <h1>Error</h1>
 
         <p>{error.message}</p>

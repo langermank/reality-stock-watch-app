@@ -10,10 +10,10 @@ export const NavList = ({ children }: PropsWithChildren<NavListProps>) => {
     <>
       {arrChildren.length && (
         <nav ref={ref}>
-          <ul className="NavList-list">
+          <ul className='NavList-list'>
             {Children.map(arrChildren, (childElement, index) => {
               return (
-                <li key={`navLink-${index}`} className="NavList-item">
+                <li key={`navLink-${index}`} className='NavList-item'>
                   {childElement}
                 </li>
               );

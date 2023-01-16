@@ -9,17 +9,17 @@ export type ChangeVisualizerProps = {
 export function ChangeVisualizer({ label, changeState = "nochange" }: ChangeVisualizerProps) {
   const icon = () => {
     if (changeState === "increase") {
-      return <ArrowSquareUp weight="fill" />;
+      return <ArrowSquareUp weight='fill' />;
     } else if (changeState === "decrease") {
-      return <ArrowSquareDown weight="fill" />;
+      return <ArrowSquareDown weight='fill' />;
     } else {
-      return <DiceOne weight="fill" />;
+      return <DiceOne weight='fill' />;
     }
   };
   return (
-    <div className="ChangeVisualizer" data-state={changeState}>
+    <div className='ChangeVisualizer' data-state={changeState}>
       {icon()}
-      {label && <p className="ChangeVisualizer-label">{label}</p>}
+      {label && <p className='ChangeVisualizer-label'>{label}</p>}
     </div>
   );
 }

@@ -1,10 +1,10 @@
-import { CliApp } from './cli-app';
-import { AppConfigManager } from '../app-components/app-config-manager';
-import { Database } from '../data-layer/persistence/database';
-import { MigrationRepository } from '../data-layer/repositories/migration-repository';
+import { CliApp } from "./cli-app";
+import { AppConfigManager } from "../app-components/app-config-manager";
+import { Database } from "../data-layer/persistence/database";
+import { MigrationRepository } from "../data-layer/repositories/migration-repository";
 
 (async () => {
-  const configManager = new AppConfigManager('local-dev');
+  const configManager = new AppConfigManager("local-dev");
   configManager.load();
 
   //console.log(JSON.stringify(configManager));

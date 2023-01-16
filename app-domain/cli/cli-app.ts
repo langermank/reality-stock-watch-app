@@ -1,6 +1,6 @@
-import type { AppConfigManager } from '../app-components/app-config-manager';
-import { ApiClient } from '../data-layer/persistence/api-client';
-import { Database } from '../data-layer/persistence/database';
+import type { AppConfigManager } from "../app-components/app-config-manager";
+import { ApiClient } from "../data-layer/persistence/api-client";
+import { Database } from "../data-layer/persistence/database";
 
 export class CliApp {
   _db: Database;

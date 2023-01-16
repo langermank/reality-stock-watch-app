@@ -32,7 +32,7 @@ export const MenuNavLink = forwardRef<HTMLAnchorElement, MenuNavLinkPropsWithChi
       //   </span>
       // </NavLink>
       <a
-        className="linkWrap"
+        className='linkWrap'
         ref={ref}
         href={to}
         data-active={isActive}
@@ -41,7 +41,7 @@ export const MenuNavLink = forwardRef<HTMLAnchorElement, MenuNavLinkPropsWithChi
         {...rest}
       >
         {icon}
-        <span className="linkLabel" data-visible={alwaysVisible}>
+        <span className='linkLabel' data-visible={alwaysVisible}>
           {children}
         </span>
       </a>

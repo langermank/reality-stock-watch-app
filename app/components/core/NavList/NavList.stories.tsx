@@ -14,22 +14,22 @@ export const Playground: ComponentStory<typeof NavList> = (args) => {
   let [open, setOpen] = React.useState(false);
   return (
     <NavList {...args}>
-      <MenuNavLink to="/">First</MenuNavLink>
-      <MenuNavLink to="/">Second</MenuNavLink>
-      <MenuNavLink to="/">Third</MenuNavLink>
+      <MenuNavLink to='/'>First</MenuNavLink>
+      <MenuNavLink to='/'>Second</MenuNavLink>
+      <MenuNavLink to='/'>Third</MenuNavLink>
       <MenuButton
         isOpen={open}
         onOpenChange={setOpen}
-        label="Actions"
+        label='Actions'
         onAction={(key) => {
           alert(key);
         }}
-        width="full"
+        width='full'
       >
-        <Item key="copy">Copy</Item>
-        <Item key="cut">Cut</Item>
-        <Item key="paste">Paste</Item>
-        <Item key="view" href="https://google.com">
+        <Item key='copy'>Copy</Item>
+        <Item key='cut'>Cut</Item>
+        <Item key='paste'>Paste</Item>
+        <Item key='view' href='https://google.com'>
           View
         </Item>
       </MenuButton>

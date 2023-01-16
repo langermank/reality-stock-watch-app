@@ -60,19 +60,19 @@ export const Button = forwardRef<HTMLButtonElement, ButtonPropsWithChildren>(
         {!iconOnly && (
           <>
             <span
-              className="Button-content"
+              className='Button-content'
               data-icon-position={!iconOnly && iconPosition}
               data-align-content={alignContent}
             >
-              {icon && <span className="Button-icon">{icon}</span>}
-              <span className="Button-label">{children}</span>
+              {icon && <span className='Button-icon'>{icon}</span>}
+              <span className='Button-label'>{children}</span>
             </span>
             {trailingActionIcon}
           </>
         )}
         {iconOnly && (
           <>
-            <span className="Button-icon">{icon}</span>
+            <span className='Button-icon'>{icon}</span>
             <span hidden id={ariaLabelledById}>
               {children}
             </span>

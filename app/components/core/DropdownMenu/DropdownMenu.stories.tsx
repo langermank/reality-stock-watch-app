@@ -23,15 +23,15 @@ export const Playground = () => {
     <MenuButton
       isOpen={open}
       onOpenChange={setOpen}
-      label="Actions"
+      label='Actions'
       onAction={(key) => {
         alert(key);
       }}
     >
-      <Item key="copy">Copy</Item>
-      <Item key="cut">Cut</Item>
-      <Item key="paste">Paste</Item>
-      <Item key="view" href="https://google.com">
+      <Item key='copy'>Copy</Item>
+      <Item key='cut'>Cut</Item>
+      <Item key='paste'>Paste</Item>
+      <Item key='view' href='https://google.com'>
         View
       </Item>
     </MenuButton>

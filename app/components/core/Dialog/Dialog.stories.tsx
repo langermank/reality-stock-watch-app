@@ -28,7 +28,7 @@ export default {
 export const Playground: ComponentStory<typeof Dialog> = (args) => (
   <Dialog {...args}>
     <DialogTrigger>Dialog trigger</DialogTrigger>
-    <DialogContent {...args} title="hello" description="This is a description">
+    <DialogContent {...args} title='hello' description='This is a description'>
       Dialog Content
     </DialogContent>
   </Dialog>

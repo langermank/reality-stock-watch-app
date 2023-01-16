@@ -25,19 +25,19 @@ export function Card({
 }: CardProps) {
   return (
     <div
-      className="Card"
+      className='Card'
       data-variant={variant}
       data-padding={padding}
       data-fullwidth={fullWidth}
       data-has-title={title ? "true" : undefined}
     >
       {title && (
-        <div className="Card-title" data-padding={padding}>
+        <div className='Card-title' data-padding={padding}>
           {title}
         </div>
       )}
       {title ? (
-        <div className="Card-body" data-padding={padding}>
+        <div className='Card-body' data-padding={padding}>
           {children}
         </div>
       ) : (

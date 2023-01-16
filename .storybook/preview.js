@@ -42,12 +42,12 @@ export const decorators = [
   (Story, context) => {
     if (context.globals.theme === 'all') {
       return (
-        <div class="theme-wrap">
-          <div className="dark-theme">
+        <div class='theme-wrap'>
+          <div className='dark-theme'>
             <Story {...context} />
           </div>
 
-          <div className="light-theme">
+          <div className='light-theme'>
             <Story {...context} />
           </div>
         </div>
@@ -56,14 +56,14 @@ export const decorators = [
 
     if (context.globals.theme === 'dark') {
       return (
-        <div className="dark-theme">
+        <div className='dark-theme'>
           <Story {...context} />
         </div>
       );
     }
 
     return (
-      <div className="light-theme">
+      <div className='light-theme'>
         <Story {...context} />
       </div>
     );

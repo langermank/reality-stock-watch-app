@@ -5,16 +5,6 @@
     padding: 0;
   }
 
-  body[data-panel-state="closed"] {
-    & .linkLabel:not([data-visible]) {
-      @mixin visuallyHidden;
-    }
-
-    & .linkWrap {
-      justify-content: center;
-    }
-  }
-
   .linkWrap {
     color: var(--text-default);
     display: flex;
@@ -33,10 +23,6 @@
 
     &:hover {
       background-color: var(--bg-control-muted-hover);
-
-      /* &:focus-visible, &:focus {
-        outline: 0 !important;
-      } */
     }
 
     &:focus-visible {
@@ -50,7 +36,7 @@
     } */
 
     &[data-active="true"] {
-      &:before {
+      &::before {
         content: "";
         background: var(--bg-link);
         position: absolute;
@@ -59,6 +45,16 @@
         height: var(--size-40);
         border-radius: 2px;
       }
+    }
+  }
+
+  body[data-panel-state="closed"] {
+    & .linkWrap {
+      justify-content: center;
+    }
+
+    & .linkLabel:not([data-visible]) {
+      @mixin visuallyHidden;
     }
   }
 }

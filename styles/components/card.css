@@ -2,6 +2,7 @@
     .Card {
         --card-border: var(--border-default);
         --card-bg: var(--bg-inverse);
+
         border: solid var(--border-width-default) var(--border-default);
         border-radius: var(--border-radius-default);
         background-color: var(--bg-2);
@@ -23,6 +24,7 @@
         &[data-variant="positive"] {
             --card-border: var(--border-positive);
             --card-bg: var(--text-positive);
+
             background-color: var(--bg-positive);
             border-color: var(--border-positive);
             color: var(--text-positive);
@@ -31,6 +33,7 @@
         &[data-variant="negative"] {
             --card-border: var(--border-negative);
             --card-bg: var(--text-negative);
+
             background-color: var(--bg-negative);
             border-color: var(--border-negative);
             color: var(--text-negative);
@@ -39,6 +42,7 @@
         &[data-variant="warning"] {
             --card-border: var(--border-warning);
             --card-bg: var(--text-warning);
+
             background-color: var(--bg-warning);
             border-color: var(--border-warning);
             color: var(--text-warning);
@@ -47,6 +51,7 @@
         &[data-variant="neutral"] {
             --card-border: var(--border-neutral);
             --card-bg: var(--text-neutral);
+
             background-color: var(--bg-neutral);
             border-color: var(--border-neutral);
             color: var(--text-neutral);
@@ -55,6 +60,7 @@
         &[data-variant="gold"] {
             --card-border: var(--border-gold);
             --card-bg: var(--text-gold);
+
             background-color: var(--bg-gold);
             border-color: var(--border-gold);
             color: var(--text-gold);
@@ -63,6 +69,7 @@
         &[data-variant="silver"] {
             --card-border: var(--border-silver);
             --card-bg: var(--text-silver);
+
             background-color: var(--bg-silver);
             border-color: var(--border-silver);
             color: var(--text-silver);
@@ -71,12 +78,14 @@
         &[data-variant="bronze"] {
             --card-border: var(--border-bronze);
             --card-bg: var(--text-bronze);
+
             background-color: var(--bg-bronze);
             border-color: var(--border-bronze);
             color: var(--text-bronze);
         }
 
         /* soooooon */
+
         /* &:has(.Card-title) {
             padding: 0;
         } */

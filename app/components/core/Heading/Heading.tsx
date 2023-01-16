@@ -56,7 +56,7 @@ export const Heading = forwardRef(
     );
 
     return (
-      <HeadingComponent className="Heading" ref={ref} data-size={headingSize} {...rest}>
+      <HeadingComponent className='Heading' ref={ref} data-size={headingSize} {...rest}>
         {children}
       </HeadingComponent>
     );

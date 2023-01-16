@@ -1,9 +1,5 @@
-import type {
-  ClientConfig as DbConfigType,
-  QueryArrayConfig,
-  QueryArrayResult,
-} from 'pg';
-import { Client } from 'pg';
+import type { ClientConfig as DbConfigType, QueryArrayConfig, QueryArrayResult } from "pg";
+import { Client } from "pg";
 
 export class Database {
   _connectionConfig: DbConfigType;
@@ -31,13 +27,13 @@ export class Database {
     if (!this._client) return null;
 
     try {
-      await this._client.query('begin');
+      await this._client.query("begin");
       const result = await this._client.query(query, params);
-      await this._client.query('commit');
+      await this._client.query("commit");
 
       return result;
     } catch (e) {
-      await this._client.query('rollback');
+      await this._client.query("rollback");
       throw e;
     }
   }

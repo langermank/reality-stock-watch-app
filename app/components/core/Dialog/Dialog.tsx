@@ -12,7 +12,7 @@ export type DialogProps = {
 export const Dialog = ({ children, align }: PropsWithChildren<DialogProps>) => {
   return (
     <DialogPrimitive.Root>
-      <DialogPrimitive.Overlay className="Dialog-backdrop" data-align={align} />
+      <DialogPrimitive.Overlay className='Dialog-backdrop' data-align={align} />
       {children}
     </DialogPrimitive.Root>
   );
@@ -34,29 +34,29 @@ export const DialogContent = ({
 }: PropsWithChildren<DialogContentProps>) => {
   const ref = useRef<HTMLDivElement>(null);
   return (
-    <DialogPrimitive.Content ref={ref} className="Dialog" data-size={size}>
-      <div className="Dialog-header">
-        <div className="Dialog-titleWrap" data-hidden={visuallyHideTitle}>
+    <DialogPrimitive.Content ref={ref} className='Dialog' data-size={size}>
+      <div className='Dialog-header'>
+        <div className='Dialog-titleWrap' data-hidden={visuallyHideTitle}>
           {title && (
             <DialogPrimitive.Title asChild>
-              <Heading as="h2" size="title-small">
+              <Heading as='h2' size='title-small'>
                 {title}
               </Heading>
             </DialogPrimitive.Title>
           )}
           {description && (
-            <DialogPrimitive.Description className="Dialog-description">
+            <DialogPrimitive.Description className='Dialog-description'>
               {description}
             </DialogPrimitive.Description>
           )}
         </div>
         <DialogPrimitive.Close asChild>
-          <Button variant="muted" icon={<X />} iconOnly size="small" className="Dialog-close">
+          <Button variant='muted' icon={<X />} iconOnly size='small' className='Dialog-close'>
             Close
           </Button>
         </DialogPrimitive.Close>
       </div>
-      <div className="Dialog-content">{children}</div>
+      <div className='Dialog-content'>{children}</div>
     </DialogPrimitive.Content>
   );
 };

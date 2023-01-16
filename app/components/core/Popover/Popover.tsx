@@ -24,7 +24,7 @@ export function Popover(props: PopoverProps) {
   return (
     <Overlay>
       <div {...underlayProps} style={{ position: "fixed", inset: 0 }} />
-      <div {...popoverProps} ref={ref} className="DropdownMenu-overlay" data-width={width}>
+      <div {...popoverProps} ref={ref} className='DropdownMenu-overlay' data-width={width}>
         <DismissButton onDismiss={state.close} />
         {children}
         <DismissButton onDismiss={state.close} />

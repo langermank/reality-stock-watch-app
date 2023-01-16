@@ -31,19 +31,19 @@ export const Input = ({
   const ariaDescribedBy = `${hint ? hintTextId : ""} ${validationMessage ? validationId : ""}`;
 
   return (
-    <div className="InputLayout" data-fullWidth={fullWidth ? "true" : undefined}>
-      <span className="InputLabelWrap">
-        <label htmlFor={id} className="Input-label">
+    <div className='InputLayout' data-fullWidth={fullWidth ? "true" : undefined}>
+      <span className='InputLabelWrap'>
+        <label htmlFor={id} className='Input-label'>
           {label}
         </label>
         {hint && (
-          <span id={hintTextId} className="Input-hint">
+          <span id={hintTextId} className='Input-hint'>
             {hint}
           </span>
         )}
       </span>
-      <div className="InputWrap">
-        {icon && <span className="IconWrap">{icon}</span>}
+      <div className='InputWrap'>
+        {icon && <span className='IconWrap'>{icon}</span>}
         <input
           className={icon ? "Input--icon Input" : "Input"}
           disabled={disabled}
@@ -52,7 +52,7 @@ export const Input = ({
           aria-describedby={ariaDescribedBy || undefined}
         />
         {validationMessage && (
-          <span id={validationId} className="Input-validation" data-state={state}>
+          <span id={validationId} className='Input-validation' data-state={state}>
             {state === "error" && <WarningOctagon />}
             {state === "warning" && <Warning />}
             {state === "success" && <CircleWavyCheck />}

@@ -28,11 +28,11 @@ export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
   return (
     <div style={{ position: "relative" }}>
       <Button
-        variant="muted"
-        trailingActionIcon={<CaretDown className="NavMenu-trigger-icon" />}
-        className="NavMenu-trigger"
+        variant='muted'
+        trailingActionIcon={<CaretDown className='NavMenu-trigger-icon' />}
+        className='NavMenu-trigger'
         width={props.width}
-        alignContent="start"
+        alignContent='start'
         ref={ref}
         {...buttonProps}
       >
@@ -43,7 +43,7 @@ export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
           state={state}
           triggerRef={ref}
           offset={8}
-          placement="bottom start"
+          placement='bottom start'
           width={props.width}
         >
           <Menu {...props} {...menuProps} />
@@ -121,7 +121,7 @@ function MenuItem({ item, state, onAction, onClose }) {
 
   if (isLink) {
     return (
-      <li role="none">
+      <li role='none'>
         <MenuNavLink
           ref={ref}
           to={item.props.href}
@@ -136,7 +136,7 @@ function MenuItem({ item, state, onAction, onClose }) {
   }
 
   return (
-    <li ref={ref} {...props} className="linkWrap">
+    <li ref={ref} {...props} className='linkWrap'>
       {item.rendered}
     </li>
   );
