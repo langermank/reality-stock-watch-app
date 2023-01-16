@@ -65,7 +65,6 @@
       &:hover:not(:disabled) {
         background: var(--bg-control-primaryGhost-hover);
       }
-
     }
 
     &[data-variant="secondary"] {
