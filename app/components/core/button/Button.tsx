@@ -52,7 +52,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonPropsWithChildren>(
         aria-labelledby={ariaLabelledById}
         data-variant={variant}
         data-size={size}
-        data-width={!iconOnly && width}
+        data-width={width ? width : undefined}
         data-trailing-action={trailingActionIcon ? "true" : undefined}
         ref={ref}
         {...rest}

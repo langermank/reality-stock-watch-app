@@ -232,8 +232,8 @@
   html,
   body {
     font-family: sans-serif;
-    color: var(--c-text-default);
-    background: var(--c-bg-default);
+    color: var(--text-default);
+    background: var(--bg-1);
   }
 
   img {

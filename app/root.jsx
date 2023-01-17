@@ -7,10 +7,10 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-//import globalStylesUrl from "./styles/global.css";
-//import reset from "./styles/reset.css";
-//import radixDark from "./styles/radix-dark.css";
-//import radixLight from "./styles/radix-light.css";
+import globalStylesUrl from "./styles/global.css";
+import reset from "./styles/reset.css";
+import radixDark from "./styles/radix-dark.css";
+import radixLight from "./styles/radix-light.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 
@@ -25,10 +25,10 @@ export const meta = () => ({
 });
 
 export const links = () => [
-  //  { rel: "stylesheet", href: globalStylesUrl },
-  //  { rel: "stylesheet", href: reset },
-  //  { rel: "stylesheet", href: radixDark },
-  //  { rel: "stylesheet", href: radixLight },
+  { rel: "stylesheet", href: globalStylesUrl },
+  { rel: "stylesheet", href: reset },
+  { rel: "stylesheet", href: radixDark },
+  { rel: "stylesheet", href: radixLight },
 ];
 export const title = (() => {
   let titleText = "";
@@ -62,7 +62,7 @@ export default function App() {
 export function Document({ children, titleText }) {
   const { env } = useLoaderData();
   return (
-    <html lang='en'>
+    <html lang='en' data-theme='dark'>
       <head>
         <Links />
 
