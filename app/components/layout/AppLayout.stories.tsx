@@ -9,5 +9,12 @@ export default {
 } as ComponentMeta<typeof AppLayout>;
 
 export const Playground: ComponentStory<typeof AppLayout> = (args) => (
-  <AppLayout {...args}>Default</AppLayout>
+  <AppLayout>
+    <AppLayout.Nav>
+      <button>hey</button>
+    </AppLayout.Nav>
+    <AppLayout.Logo>
+      <img src='/' />
+    </AppLayout.Logo>
+  </AppLayout>
 );

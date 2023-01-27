@@ -1,4 +1,4 @@
-$Layout-divider-color: var(--color-border-default) !default;
+/* $Layout-divider-color: var(--color-border-default) !default;
 $Layout-responsive-variant-max-breakpoint: "md" !default;
 
 :root {
@@ -411,4 +411,4 @@ $Layout-responsive-variant-max-breakpoint: "md" !default;
 .PageLayout-footer {
   // stylelint-disable-next-line primer/spacing
   padding: var(--Layout-inner-spacing-min);
-}
+} */
