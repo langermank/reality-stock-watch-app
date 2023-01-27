@@ -2,7 +2,6 @@ import React, { forwardRef } from "react";
 import type { PropsWithChildren } from "react";
 import clsx from "clsx";
 
-// TODO: how to get PropsWithChildren in here?
 export type ButtonProps = {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
