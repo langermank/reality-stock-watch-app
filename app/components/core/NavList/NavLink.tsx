@@ -18,33 +18,33 @@ export const MenuNavLink = forwardRef<HTMLAnchorElement, MenuNavLinkPropsWithChi
 
     return (
       // remove remix until storybook supports routes
-      <NavLink
-        className='linkWrap'
-        ref={ref}
-        to={to}
-        data-active={isActive}
-        target={newTab ? "_blank" : undefined}
-        rel={newTab ? "noopener noreferrer" : undefined}
-      >
-        {icon}
-        <span className='linkLabel' data-visible={alwaysVisible}>
-          {children}
-        </span>
-      </NavLink>
-      // <a
+      // <NavLink
       //   className='linkWrap'
       //   ref={ref}
-      //   href={to}
+      //   to={to}
       //   data-active={isActive}
       //   target={newTab ? "_blank" : undefined}
       //   rel={newTab ? "noopener noreferrer" : undefined}
-      //   {...rest}
       // >
       //   {icon}
       //   <span className='linkLabel' data-visible={alwaysVisible}>
       //     {children}
       //   </span>
-      // </a>
+      // </NavLink>
+      <a
+        className='linkWrap'
+        ref={ref}
+        href={to}
+        data-active={isActive}
+        target={newTab ? "_blank" : undefined}
+        rel={newTab ? "noopener noreferrer" : undefined}
+        {...rest}
+      >
+        {icon}
+        <span className='linkLabel' data-visible={alwaysVisible}>
+          {children}
+        </span>
+      </a>
     );
   }
 );
