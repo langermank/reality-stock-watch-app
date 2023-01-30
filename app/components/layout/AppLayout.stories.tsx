@@ -1,4 +1,4 @@
-import { Sidebar } from "phosphor-react";
+import { Sidebar, Heart } from "phosphor-react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { AppLayout } from "./AppLayout";
@@ -16,21 +16,36 @@ export default {
 
 export const Playground: ComponentStory<typeof AppLayout> = (args) => {
   let [open, setOpen] = React.useState(false);
+  let [panelState, setpanelState] = React.useState(false);
   return (
-    <AppLayout>
+    <AppLayout panelCollapsed={panelState}>
       <AppLayout.Logo>StockWatch</AppLayout.Logo>
       <AppLayout.Toggle>
-        <Button iconOnly icon={<Sidebar />} size='small' variant='muted'></Button>
+        <Button
+          iconOnly
+          icon={<Sidebar />}
+          size='small'
+          variant='muted'
+          // set panel state to expanded or collapsed
+          onClick={() => setpanelState(!panelState)}
+        ></Button>
       </AppLayout.Toggle>
       <AppLayout.PageNotification>Notification</AppLayout.PageNotification>
       <AppLayout.Nav>
         <NavList {...args}>
-          <MenuNavLink to='/'>First</MenuNavLink>
-          <MenuNavLink to='/'>Second</MenuNavLink>
-          <MenuNavLink to='/'>Third</MenuNavLink>
+          <MenuNavLink to='/' icon={<Heart />}>
+            First
+          </MenuNavLink>
+          <MenuNavLink to='/' icon={<Heart />}>
+            Second
+          </MenuNavLink>
+          <MenuNavLink to='/' icon={<Heart />}>
+            Third
+          </MenuNavLink>
           <MenuButton
             isOpen={open}
             onOpenChange={setOpen}
+            icon={<Heart />}
             label='Actions'
             onAction={(key) => {
               alert(key);

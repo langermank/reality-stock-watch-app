@@ -9,6 +9,7 @@
 .AppLayout {
   --sidepane-width: 280px;
   --header-height: var(--size-64);
+  --logo-display: block;
 
   display: grid;
   grid-template-columns: min-content auto;
@@ -27,6 +28,11 @@
       "header header"
       "sidepane content"
       "sidepane content";
+  }
+
+  &[data-panel-collapsed="true"] {
+    --sidepane-width: 80px;
+    --logo-display: none;
   }
 }
 
@@ -47,6 +53,10 @@
   align-content: center;
   align-items: center;
   height: var(--header-height);
+}
+
+.AppLayout-header--logo {
+  display: var(--logo-display);
 }
 
 .AppLayout-header--notif {

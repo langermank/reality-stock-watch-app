@@ -48,9 +48,10 @@
     }
   }
 
-  body[data-panel-state="closed"] {
+  [data-panel-collapsed="true"] {
     & .linkWrap {
       justify-content: center;
+      gap: unset;
     }
 
     & .linkLabel:not([data-visible]) {

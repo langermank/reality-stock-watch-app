@@ -1,20 +1,25 @@
 import React from "react";
 import type { PropsWithChildren } from "react";
+import { Button } from "../core/button/Button";
+import { Sidebar } from "phosphor-react";
 
-type AppLayoutProps = PropsWithChildren<{}>;
+type AppLayoutProps = PropsWithChildren<{
+  panelCollapsed?: boolean;
+}>;
 type NavProps = {
-  open?: boolean;
+  // state?: "collapsed" | "expanded";
+};
+type ToggleProps = {
+  state?: "collapsed" | "expanded";
 };
 
-const Nav: React.FC<PropsWithChildren<NavProps>> = ({ children, open }): JSX.Element => {
-  return <div data-id={open ? "open" : "closed"}>{children}</div>;
+const Nav: React.FC<PropsWithChildren<NavProps>> = ({ children }): JSX.Element => {
+  return <div>{children}</div>;
 };
-const Logo: React.FC<PropsWithChildren> = ({ children }): JSX.Element => <div>{children}</div>;
-const Toggle: React.FC<PropsWithChildren> = ({ children }): JSX.Element => <div>{children}</div>;
+const Logo: React.FC<PropsWithChildren> = ({ children }): JSX.Element => <>{children}</>;
+const Toggle: React.FC<PropsWithChildren> = ({ children }): JSX.Element => <>{children}</>;
 const PageNotification: React.FC<PropsWithChildren> = ({ children }): JSX.Element => (
-  <div className='AppLayout-header--notif' data-id='notifications'>
-    {children}
-  </div>
+  <>{children}</>
 );
 const PageContent: React.FC<PropsWithChildren> = ({ children }): JSX.Element => (
   <div>{children}</div>
@@ -23,7 +28,7 @@ const FooterContent: React.FC<PropsWithChildren> = ({ children }): JSX.Element =
   <div>{children}</div>
 );
 
-export function AppLayout({ children }: AppLayoutProps) {
+export function AppLayout({ children, panelCollapsed }: AppLayoutProps) {
   const slots = {
     nav: null,
     logo: null,
@@ -59,16 +64,23 @@ export function AppLayout({ children }: AppLayoutProps) {
       return;
     }
   });
+  let [collapsePanel, setcollapsePanel] = React.useState(false);
   return (
-    <div className='AppLayout'>
+    <div className='AppLayout' data-panel-collapsed={panelCollapsed}>
       <header className='AppLayout-header'>
         <div className='AppLayout-header--control' data-id='sidepane-control'>
-          {slots.logo}
+          <div className='AppLayout-header--logo'>{slots.logo}</div>
           {slots.toggle}
         </div>
-        {slots.pageNotification}
+        <div className='AppLayout-header--notif' data-id='notifications'>
+          {slots.pageNotification}
+        </div>
       </header>
-      <div className='AppLayout-sidebar' data-state='open' data-id='sidepanel'>
+      <div
+        className='AppLayout-sidebar'
+        // data-state={collapsePanel ? "collapsed" : "expanded"}
+        data-id='sidepanel'
+      >
         <div data-id='sidepane'>{slots.nav}</div>
       </div>
       <div className='AppLayout-content'>
