@@ -73,7 +73,7 @@ export function AppLayout({ children, panelCollapsed }: AppLayoutProps) {
           {slots.toggle}
         </div>
         <div className='AppLayout-header--notif' data-id='notifications'>
-          {slots.pageNotification}
+          <div>{slots.pageNotification}</div>
         </div>
       </header>
       <div

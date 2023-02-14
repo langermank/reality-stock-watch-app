@@ -7,7 +7,7 @@
 }
 
 .AppLayout {
-  --sidepane-width: 280px;
+  --sidepane-width: 17.5rem;
   --header-height: var(--size-64);
   --logo-display: block;
 
@@ -31,8 +31,13 @@
   }
 
   &[data-panel-collapsed="true"] {
-    --sidepane-width: 80px;
+    --sidepane-width: var(--size-64);
     --logo-display: none;
+
+    & .AppLayout-header--control {
+      grid-template-columns: auto;
+      justify-content: center;
+    }
   }
 }
 
@@ -57,9 +62,13 @@
 
 .AppLayout-header--logo {
   display: var(--logo-display);
+  padding-inline-start: var(--padding-spacious);
 }
 
 .AppLayout-header--notif {
+  padding: var(--padding-condensed);
+  display: grid;
+  place-content: center;
 }
 
 .AppLayout-content {
@@ -71,7 +80,7 @@
 
 main {
   overflow: auto;
-
+  padding: var(--padding-spacious);
   /* height: calc(100vh - var(--header-height)); */
   height: 100vh;
 }

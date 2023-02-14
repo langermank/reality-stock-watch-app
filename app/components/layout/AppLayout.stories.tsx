@@ -3,6 +3,7 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import { AppLayout } from "./AppLayout";
 import { Button } from "../core/button/Button";
+import { Card } from "../core/Card/Card";
 import { MenuNavLink } from "../core/NavList/NavLink";
 import { NavList } from "../core/NavList/NavList";
 import { MenuButton } from "../core/DropdownMenu/DropdownMenu";
@@ -30,7 +31,9 @@ export const Playground: ComponentStory<typeof AppLayout> = (args) => {
           onClick={() => setpanelState(!panelState)}
         ></Button>
       </AppLayout.Toggle>
-      <AppLayout.PageNotification>Notification</AppLayout.PageNotification>
+      <AppLayout.PageNotification>
+        <Card variant='neutral'>The market opens in 5 hours!</Card>
+      </AppLayout.PageNotification>
       <AppLayout.Nav>
         <NavList {...args}>
           <MenuNavLink to='/' icon={<Heart />}>
@@ -46,6 +49,8 @@ export const Playground: ComponentStory<typeof AppLayout> = (args) => {
             isOpen={open}
             onOpenChange={setOpen}
             icon={<Heart />}
+            iconSpacing='spacious'
+            iconOnly={panelState}
             label='Actions'
             onAction={(key) => {
               alert(key);

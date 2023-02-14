@@ -204,6 +204,10 @@
     justify-content: center;
     gap: var(--control-gap-normal);
 
+    &[data-icon-spacing="spacious"] {
+      gap: var(--control-gap-spacious);
+    }
+
     &[data-icon-position="right"] {
       & .Button-icon {
         order: 2;
