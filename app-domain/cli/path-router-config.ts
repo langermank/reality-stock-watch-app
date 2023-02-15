@@ -4,7 +4,7 @@ import type { HandlerParamsType } from '@krhkt/path-router';
 export const cliPathRouter = (defaultControllerConstructorParams: any | undefined = undefined) => {
   const defaultHandler = new PathRouteDefaultHandler(
     `${__dirname}/../../app-domain/cli/controllers`,
-    defaultControllerConstructorParams,
+    [defaultControllerConstructorParams],
   );
 
   const notFoundHandler = async (params: HandlerParamsType) => {

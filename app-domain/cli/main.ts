@@ -21,7 +21,6 @@ import { MigrationRepository } from '../data-layer/repositories/migration-reposi
   configManager.load();
 
   const app = new CliApp(configManager);
-  await app.boot();
   await app.run();
 
   ////console.log(JSON.stringify(configManager));

@@ -1,4 +1,4 @@
-namespace Core {
+export namespace Core {
   export type Uuid = string;
 
   export interface DbMigration {
