@@ -19,57 +19,62 @@ export const Playground: ComponentStory<typeof AppLayout> = (args) => {
   let [open, setOpen] = React.useState(false);
   let [panelState, setpanelState] = React.useState(false);
   return (
-    <AppLayout panelCollapsed={panelState}>
-      <AppLayout.Logo>StockWatch</AppLayout.Logo>
-      <AppLayout.Toggle>
-        <Button
-          iconOnly
-          icon={<Sidebar />}
-          size='small'
-          variant='muted'
-          // set panel state to expanded or collapsed
-          onClick={() => setpanelState(!panelState)}
-        ></Button>
-      </AppLayout.Toggle>
-      <AppLayout.PageNotification>
-        <Card variant='neutral'>The market opens in 5 hours!</Card>
-      </AppLayout.PageNotification>
-      <AppLayout.Nav>
-        <NavList {...args}>
-          <MenuNavLink to='/' icon={<Heart />}>
-            First
-          </MenuNavLink>
-          <MenuNavLink to='/' icon={<Heart />}>
-            Second
-          </MenuNavLink>
-          <MenuNavLink to='/' icon={<Heart />}>
-            Third
-          </MenuNavLink>
-          <MenuButton
-            isOpen={open}
-            onOpenChange={setOpen}
-            icon={<Heart />}
-            iconSpacing='spacious'
-            iconOnly={panelState}
-            label='Actions'
-            onAction={(key) => {
-              alert(key);
-            }}
-            width='full'
-          >
-            <Item key='copy'>Copy</Item>
-            <Item key='cut'>Cut</Item>
-            <Item key='paste'>Paste</Item>
-            <Item key='view' href='https://google.com'>
-              View
-            </Item>
-          </MenuButton>
-        </NavList>
-      </AppLayout.Nav>
-      <AppLayout.PageContent>
-        <div>Page Content</div>
-      </AppLayout.PageContent>
-      <AppLayout.FooterContent>Footer</AppLayout.FooterContent>
-    </AppLayout>
+    <div data-theme='dark'>
+      <AppLayout panelCollapsed={panelState}>
+        <AppLayout.Logo>StockWatch</AppLayout.Logo>
+        <AppLayout.Toggle>
+          <Button
+            iconOnly
+            icon={<Sidebar />}
+            size='small'
+            variant='muted'
+            // set panel state to expanded or collapsed
+            onClick={() => setpanelState(!panelState)}
+          ></Button>
+        </AppLayout.Toggle>
+        <AppLayout.PageTitle>
+          <h1>Page title</h1>
+        </AppLayout.PageTitle>
+        <AppLayout.PageNotification>
+          <Card variant='neutral'>The market opens in 5 hours!</Card>
+        </AppLayout.PageNotification>
+        <AppLayout.Nav>
+          <NavList {...args}>
+            <MenuNavLink to='/' icon={<Heart />}>
+              First
+            </MenuNavLink>
+            <MenuNavLink to='/' icon={<Heart />}>
+              Second
+            </MenuNavLink>
+            <MenuNavLink to='/' icon={<Heart />}>
+              Third
+            </MenuNavLink>
+            <MenuButton
+              isOpen={open}
+              onOpenChange={setOpen}
+              icon={<Heart />}
+              iconSpacing='spacious'
+              iconOnly={panelState}
+              label='Actions'
+              onAction={(key) => {
+                alert(key);
+              }}
+              width='full'
+            >
+              <Item key='copy'>Copy</Item>
+              <Item key='cut'>Cut</Item>
+              <Item key='paste'>Paste</Item>
+              <Item key='view' href='https://google.com'>
+                View
+              </Item>
+            </MenuButton>
+          </NavList>
+        </AppLayout.Nav>
+        <AppLayout.PageContent>
+          <div>Page Content</div>
+        </AppLayout.PageContent>
+        <AppLayout.FooterContent>Footer</AppLayout.FooterContent>
+      </AppLayout>
+    </div>
   );
 };

@@ -12,7 +12,7 @@
   --logo-display: block;
 
   display: grid;
-  grid-template-columns: min-content auto;
+  grid-template-columns: var(--sidepane-width) auto;
   grid-template-rows: var(--header-height) auto;
   grid-template-areas:
     "header content"
@@ -23,7 +23,7 @@
     max-height: 100dvh;
   } */
 
-  &:has(.AppLayout-header--notif) {
+  &:has(.AppLayout-header--topbar) {
     grid-template-areas:
       "header header"
       "sidepane content"
@@ -65,16 +65,21 @@
   padding-inline-start: var(--padding-spacious);
 }
 
-.AppLayout-header--notif {
-  padding: var(--padding-condensed);
+.AppLayout-header--topbar {
+  padding: var(--padding-condensed) var(--padding-spacious);
   display: grid;
-  place-content: center;
+  grid-template-columns: max-content auto;
+  align-content: center;
+}
+
+.AppLayout-header--notif {
+  place-self: center;
+  display: grid;
 }
 
 .AppLayout-content {
   grid-area: content;
   overflow: auto;
-  padding: var(--padding-normal);
   display: grid;
 }
 
@@ -83,6 +88,15 @@ main {
   padding: var(--padding-spacious);
   /* height: calc(100vh - var(--header-height)); */
   height: 100vh;
+}
+
+/* large */
+
+@media (--md-n-above) {
+  .AppLayout {
+    --sidepane-width: 17.5rem;
+    --header-height: var(--size-64);
+  }
 }
 
 /* $Layout-divider-color: var(--color-border-default) !default;
