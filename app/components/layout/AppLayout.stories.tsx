@@ -35,9 +35,9 @@ export const Playground: ComponentStory<typeof AppLayout> = (args) => {
         <AppLayout.PageTitle>
           <h1>Page title</h1>
         </AppLayout.PageTitle>
-        <AppLayout.PageNotification>
+        {/* <AppLayout.PageNotification>
           <Card variant='neutral'>The market opens in 5 hours!</Card>
-        </AppLayout.PageNotification>
+        </AppLayout.PageNotification> */}
         <AppLayout.Nav>
           <NavList {...args}>
             <MenuNavLink to='/' icon={<Heart />}>
