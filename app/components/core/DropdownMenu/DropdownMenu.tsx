@@ -12,6 +12,8 @@ import { useTreeState, useMenuTriggerState } from "react-stately";
 interface MenuButtonProps<T> extends AriaMenuProps<T> {
   label: ReactNode;
   width?: "default" | "full";
+  icon?: React.ReactNode;
+  iconOnly?: boolean;
 }
 
 export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
@@ -32,6 +34,8 @@ export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
         trailingActionIcon={<CaretDown className='NavMenu-trigger-icon' />}
         className='NavMenu-trigger'
         width={props.width}
+        icon={props.icon}
+        iconOnly={props.iconOnly}
         alignContent='start'
         ref={ref}
         {...buttonProps}

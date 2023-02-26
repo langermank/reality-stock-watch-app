@@ -46,6 +46,7 @@ export const Playground: ComponentStory<typeof AppLayout> = (args) => {
             isOpen={open}
             onOpenChange={setOpen}
             icon={<Heart />}
+            iconOnly={panelState}
             label='Actions'
             onAction={(key) => {
               alert(key);
