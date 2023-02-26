@@ -14,6 +14,8 @@ interface MenuButtonProps<T> extends AriaMenuProps<T> {
   width?: "default" | "full";
   icon?: React.ReactNode;
   iconOnly?: boolean;
+  iconPosition?: "left" | "right";
+  iconSpacing?: "default" | "spacious";
 }
 
 export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
@@ -36,6 +38,8 @@ export function MenuButton<T extends object>(props: MenuButtonProps<T>) {
         width={props.width}
         icon={props.icon}
         iconOnly={props.iconOnly}
+        iconPosition={props.iconPosition}
+        iconSpacing={props.iconSpacing}
         alignContent='start'
         ref={ref}
         {...buttonProps}

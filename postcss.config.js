@@ -4,6 +4,7 @@ const autoprefixer = require('autoprefixer');
 const presetEnv = require('postcss-preset-env');
 const mixins = require('postcss-mixins');
 const path = require('path');
+const postcssCustomMedia = require('postcss-custom-media');
 
 module.exports = {
   plugins: [
@@ -13,6 +14,7 @@ module.exports = {
     mixins({
       mixinsDir: path.join(__dirname, 'styles/mixins'),
     }),
+    postcssCustomMedia(),
     presetEnv({
       stage: 3,
       // https://preset-env.cssdb.org/

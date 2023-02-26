@@ -21,6 +21,7 @@ const Toggle: React.FC<PropsWithChildren> = ({ children }): JSX.Element => <>{ch
 const PageNotification: React.FC<PropsWithChildren> = ({ children }): JSX.Element => (
   <>{children}</>
 );
+const PageTitle: React.FC<PropsWithChildren> = ({ children }): JSX.Element => <>{children}</>;
 const PageContent: React.FC<PropsWithChildren> = ({ children }): JSX.Element => (
   <div>{children}</div>
 );
@@ -34,6 +35,7 @@ export function AppLayout({ children, panelCollapsed }: AppLayoutProps) {
     logo: null,
     toggle: null,
     pageNotification: null,
+    pageTitle: null,
     pageContent: null,
     footerContent: null,
   };
@@ -55,6 +57,10 @@ export function AppLayout({ children, panelCollapsed }: AppLayoutProps) {
       slots.pageNotification = child;
       return;
     }
+    if (child.type === PageTitle) {
+      slots.pageTitle = child;
+      return;
+    }
     if (child.type === PageContent) {
       slots.pageContent = child;
       return;
@@ -72,8 +78,9 @@ export function AppLayout({ children, panelCollapsed }: AppLayoutProps) {
           <div className='AppLayout-header--logo'>{slots.logo}</div>
           {slots.toggle}
         </div>
-        <div className='AppLayout-header--notif' data-id='notifications'>
-          {slots.pageNotification}
+        <div className='AppLayout-header--topbar' data-id='notifications'>
+          <div className='AppLayout-header--title'>{slots.pageTitle}</div>
+          <div className='AppLayout-header--notif'>{slots.pageNotification}</div>
         </div>
       </header>
       <div
@@ -95,5 +102,6 @@ AppLayout.Nav = Nav;
 AppLayout.Logo = Logo;
 AppLayout.Toggle = Toggle;
 AppLayout.PageNotification = PageNotification;
+AppLayout.PageTitle = PageTitle;
 AppLayout.PageContent = PageContent;
 AppLayout.FooterContent = FooterContent;

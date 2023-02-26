@@ -7,13 +7,13 @@
 }
 
 .AppLayout {
-  --sidepane-width: 280px;
+  --sidepane-width: 17.5rem;
   --header-height: var(--size-64);
   --logo-display: block;
   --header-align: space-between;
 
   display: grid;
-  grid-template-columns: min-content auto;
+  grid-template-columns: var(--sidepane-width) auto;
   grid-template-rows: var(--header-height) auto;
   grid-template-areas:
     "header content"
@@ -24,7 +24,7 @@
     max-height: 100dvh;
   } */
 
-  &:has(.AppLayout-header--notif) {
+  &:has(.AppLayout-header--topbar) {
     grid-template-areas:
       "header header"
       "sidepane content"
@@ -32,9 +32,13 @@
   }
 
   &[data-panel-collapsed="true"] {
-    --sidepane-width: 91px;
+    --sidepane-width: var(--size-64);
     --logo-display: none;
-    --header-align: center;
+
+    & .AppLayout-header--control {
+      grid-template-columns: auto;
+      justify-content: center;
+    }
   }
 }
 
@@ -59,23 +63,42 @@
 
 .AppLayout-header--logo {
   display: var(--logo-display);
+  padding-inline-start: var(--padding-spacious);
+}
+
+.AppLayout-header--topbar {
+  padding: var(--padding-condensed) var(--padding-spacious);
+  display: grid;
+  grid-template-columns: max-content auto;
+  align-content: center;
 }
 
 .AppLayout-header--notif {
+  place-self: center;
+  display: grid;
 }
 
 .AppLayout-content {
   grid-area: content;
   overflow: auto;
-  padding: var(--padding-normal);
   display: grid;
 }
 
 main {
   overflow: auto;
+  padding: var(--padding-spacious);
 
   /* height: calc(100vh - var(--header-height)); */
   height: 100vh;
+}
+
+/* large */
+
+@media (--md-n-above) {
+  .AppLayout {
+    --sidepane-width: 17.5rem;
+    --header-height: var(--size-64);
+  }
 }
 
 /* $Layout-divider-color: var(--color-border-default) !default;
