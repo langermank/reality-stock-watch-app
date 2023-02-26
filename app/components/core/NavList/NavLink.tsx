@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useRef } from "react";
 import type { PropsWithChildren } from "react";
 import { NavLink } from "@remix-run/react";
 
@@ -19,7 +19,7 @@ export const MenuNavLink = forwardRef<HTMLAnchorElement, MenuNavLinkPropsWithChi
     return (
       // remove remix until storybook supports routes
       // <NavLink
-      //   className="linkWrap"
+      //   className='linkWrap'
       //   ref={ref}
       //   to={to}
       //   data-active={isActive}
@@ -27,7 +27,7 @@ export const MenuNavLink = forwardRef<HTMLAnchorElement, MenuNavLinkPropsWithChi
       //   rel={newTab ? "noopener noreferrer" : undefined}
       // >
       //   {icon}
-      //   <span className="linkLabel" data-visible={alwaysVisible}>
+      //   <span className='linkLabel' data-visible={alwaysVisible}>
       //     {children}
       //   </span>
       // </NavLink>

@@ -1,6 +1,6 @@
 import { useLoaderData, Link, Outlet, useLocation } from "@remix-run/react";
 // import shows from "~/data/show.json";
-import supabase from "~/utils/supabase";
+// import supabase from "~/utils/supabase";
 // import withAuthRequired from "~/utils/withAuthRequired";
 
 // this component wraps around any component in sister folder components (folder with same name)

@@ -1,4 +1,5 @@
 @import-glob "./components/**/*.css";
+@import-glob "./open-props/**/*.css";
 
 @layer reset, base, components;
 
@@ -175,6 +176,9 @@
   /* layout wip */
   --gap-condensed: var(--size-4);
   --gap-normal: var(--size-8);
+  --padding-condensed: var(--size-4);
+  --padding-normal: var(--size-8);
+  --padding-spacious: var(--size-16);
 
   /* overlays */
   --overlay-border-radius: var(--border-radius-large);
@@ -232,8 +236,8 @@
   html,
   body {
     font-family: sans-serif;
-    color: var(--c-text-default);
-    background: var(--c-bg-default);
+    color: var(--text-default);
+    background: var(--bg-1);
   }
 
   img {

@@ -6,4 +6,4 @@ const supabaseUrl = isServer ? process.env.SUPABASE_URL : window.env.SUPABASE_UR
 
 const supabaseKey = isServer ? process.env.SUPABASE_KEY : window.env.SUPABASE_KEY;
 
-export default createClient(supabaseUrl, supabaseKey);
+// export default createClient(supabaseUrl, supabaseKey);

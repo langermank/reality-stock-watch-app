@@ -2,7 +2,6 @@ import React, { forwardRef } from "react";
 import type { PropsWithChildren } from "react";
 import clsx from "clsx";
 
-// TODO: how to get PropsWithChildren in here?
 export type ButtonProps = {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
@@ -19,6 +18,7 @@ export type ButtonProps = {
   icon?: React.ReactNode;
   iconOnly?: boolean;
   iconPosition?: "left" | "right";
+  iconSpacing?: "default" | "spacious";
   trailingActionIcon?: React.ReactNode;
   alignContent?: "center" | "start";
   ariaLabelledById?: string;
@@ -38,6 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonPropsWithChildren>(
       icon,
       iconOnly,
       iconPosition,
+      iconSpacing,
       trailingActionIcon,
       alignContent,
       ariaLabelledById,
@@ -52,7 +53,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonPropsWithChildren>(
         aria-labelledby={ariaLabelledById}
         data-variant={variant}
         data-size={size}
-        data-width={!iconOnly && width}
+        data-width={width ? width : undefined}
         data-trailing-action={trailingActionIcon ? "true" : undefined}
         ref={ref}
         {...rest}
@@ -62,6 +63,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonPropsWithChildren>(
             <span
               className='Button-content'
               data-icon-position={!iconOnly && iconPosition}
+              data-icon-spacing={!iconOnly && iconSpacing}
               data-align-content={alignContent}
             >
               {icon && <span className='Button-icon'>{icon}</span>}
@@ -70,13 +72,20 @@ export const Button = forwardRef<HTMLButtonElement, ButtonPropsWithChildren>(
             {trailingActionIcon}
           </>
         )}
-        {iconOnly && (
+        {iconOnly && trailingActionIcon && (
+          <>
+            <span hidden id={ariaLabelledById}>
+              {children}
+            </span>
+            {trailingActionIcon}
+          </>
+        )}
+        {iconOnly && !trailingActionIcon && (
           <>
             <span className='Button-icon'>{icon}</span>
             <span hidden id={ariaLabelledById}>
               {children}
             </span>
-            {trailingActionIcon}
           </>
         )}
       </button>
