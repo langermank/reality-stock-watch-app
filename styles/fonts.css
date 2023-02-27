@@ -32,3 +32,12 @@
   src: local("Bungee Regular"), local("Bungee Regular"),
     url("/fonts/Bungee-Regular-webfont.woff") format("woff");
 }
+
+@font-face {
+  font-family: "Bungee Shade";
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: local("Bungee Shade"), local("Bungee Shade"),
+    url("/fonts/Bungee-Shade-webfont.woff") format("woff");
+}
