@@ -1,7 +1,7 @@
 
 export default function PageHeader({ children }) {
   return (
-    <section class="PageHeader">
+    <section clasName="PageHeader">
         {children} 
     </section>
   )

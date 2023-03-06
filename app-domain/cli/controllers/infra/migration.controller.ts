@@ -1,8 +1,16 @@
-export class MigrationController {
+import { MigrationRepository } from '../../../data-layer/repositories/migration-repository';
+import { BaseController } from '../base.controller';
+
+export class MigrationController extends BaseController {
   async applyAll(params: any = null) {
     console.log('apply all migration action');
     console.log(params);
 
-    console.log(this);
+    const migrationRepository = new MigrationRepository(this._app.db);
+    const migrationsToApply = await migrationRepository.findNotAppliedMigration();
+
+    for (const migration of migrationsToApply) {
+      await migrationRepository.applyMigrationByName(migration);
+    }
   }
 }

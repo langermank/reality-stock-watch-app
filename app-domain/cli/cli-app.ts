@@ -3,40 +3,39 @@ import type { Arguments } from 'yargs';
 import type { PathRouter } from '@krhkt/path-router';
 import { hideBin } from 'yargs/helpers';
 
+import { App } from '../app';
 import type { AppConfigManager } from '../app-components/app-config-manager';
-import { ApiClient } from '../data-layer/persistence/api-client';
 import { Database } from '../data-layer/persistence/database';
 import { cliPathRouter } from './path-router-config';
 
-export class CliApp {
+export class CliApp extends App {
   db: Database;
-  apiClient: ApiClient;
   _pathRouter: PathRouter;
-  _isBooted: boolean = false;
 
   constructor(config: AppConfigManager) {
+    super(config);
     this.db = new Database(config.dbConfig!);
-    this.apiClient = new ApiClient(config.apiClientConfig!);
 
-    this._pathRouter = cliPathRouter({
-      app: this,
-      db: this.db,
-      apiClient: this.apiClient,
-    });
+    this._pathRouter = cliPathRouter(this);
   }
 
   async boot() {
     if (this._isBooted) return this;
 
+    super.boot();
     await this.db.connect();
-    await this.apiClient.init();
-
-    this._isBooted = true;
 
     return this;
   }
 
   async run() {
+    try {
+      await this.boot();
+    } catch (e) {
+      console.error(`Error initializing the application: ${(e as Error).message}`);
+      return;
+    }
+
     yargs(hideBin(process.argv)).parse();
     const argv = yargs.argv as Arguments;
 
@@ -45,7 +44,7 @@ export class CliApp {
     try {
       await this._pathRouter.executeRoute(path);
     } catch (e: any) {
-      console.log(`error executing path (${path}): ${e.message}`);
+      console.error(`Error executing path (${path}): ${e.message}`);
     }
   }
 

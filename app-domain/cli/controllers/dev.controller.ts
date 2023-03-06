@@ -10,8 +10,6 @@ export class DevController {
   async testConfig() {}
 
   async testApi() {
-    await this.app.boot();
-
     const data = await this.app.apiClient.readSingle(
       'realityShow',
       '5e5026bc-8605-4a44-bc43-3f3ede8bab5a',

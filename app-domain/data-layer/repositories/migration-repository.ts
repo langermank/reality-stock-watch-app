@@ -1,6 +1,6 @@
-/// <reference path="../entities/_types/core.d.ts" />
-import * as path from 'path';
 import * as fs from 'fs/promises';
+import * as path from 'path';
+import type { Core } from '../entities/_types/core';
 import type { Database } from '../persistence/database';
 import { Migration, filenameToMigrationName, migrationNameToFilename } from '../entities/migration';
 

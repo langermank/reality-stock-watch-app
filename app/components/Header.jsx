@@ -2,16 +2,16 @@ import { Link } from "@remix-run/react";
 
 export default function Header() {
   return (
-    <header class="Header-wrapper">
-      <div class="Header-inner-wrapper LayoutContent-inner-content-wrapper">
-        <a class="Header-logo-link" href="/">
+    <header className="Header-wrapper">
+      <div className="Header-inner-wrapper LayoutContent-inner-content-wrapper">
+        <a className="Header-logo-link" href="/">
           <img 
-            class="Header-logo"
+            className="Header-logo"
             src="images/logo.png"
             alt="Reality Stocker Watch App logo" />
         </a>
 
-        <nav class="Header-navigation-wrapper">
+        <nav className="Header-navigation-wrapper">
           <ul>
             <li>
               <Link to='/shows' className="Header-navigation-item">

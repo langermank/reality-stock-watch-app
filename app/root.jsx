@@ -90,7 +90,7 @@ export function Document({ children, titleText }) {
 export function Layout({ children }) {
   return (
     <>
-      <div class="LayoutContent-wrapper">
+      <div className="LayoutContent-wrapper">
         <Header />
 
         {children}
