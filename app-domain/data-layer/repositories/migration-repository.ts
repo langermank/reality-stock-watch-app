@@ -27,9 +27,11 @@ const readByNameQuery = `SELECT * FROM ${fullTableReference} where name = $1`;
 export class MigrationRepository {
   _tableName = fullTableReference;
   _db: Database;
+  _verbose: boolean;
 
-  constructor(db: Database) {
+  constructor(db: Database, verbose = false) {
     this._db = db;
+    this._verbose = verbose;
   }
 
   async getByName(migrationName: string): Promise<Core.DbMigration | null> {
@@ -68,10 +70,10 @@ export class MigrationRepository {
     const filename = migrationNameToFilename(name);
     const fullpath = path.join(process.cwd(), migrationFolder, filename);
 
-    console.log(`Applying migration ${name}`);
+    if (this._verbose) console.log(`Reading ${name} migration contents...`);
     const queryContent = (await fs.readFile(fullpath)).toString();
 
-    console.log(queryContent);
+    if (this._verbose) console.log(queryContent);
 
     await this._db.atomicQuery(queryContent);
     const migration = new Migration({
@@ -81,7 +83,7 @@ export class MigrationRepository {
     });
     migration.setHashByContent(queryContent);
 
-    console.log(`Saving migration ${name}`);
+    if (this._verbose) console.log(`Saving migration ${name}`);
     await this.insert(migration);
     return migration;
   }
