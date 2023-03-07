@@ -1,2 +1,2 @@
-insert into `auth`.`users`(`email`)
-values ("admin@realitystockwatch.com")
+insert into auth.users(id, email)
+values (gen_random_uuid(), 'admin@realitystockwatch.com')

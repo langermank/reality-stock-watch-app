@@ -9,15 +9,20 @@ const tableName = '_migration';
 const fullTableReference = `${schemaName}.${tableName}`;
 
 const migrationFolder = './app-domain/data-layer/migrations';
+
 const checkCoreSchemaQuery = `SELECT schema_name
 FROM information_schema.schemata
 WHERE schema_name = '${schemaName}';`;
+
 const checkMigrationTableQuery = `SELECT table_name
 FROM Information_schema.tables
 WHERE table_schema = '${schemaName}' and table_name= '${tableName}';`;
+
 const insertQuery = `INSERT INTO ${fullTableReference}(
   "name", "executedAt", "hash", "queryContent"
 ) VALUES ($1, $2, $3, $4) RETURNING *`;
+
+const readByNameQuery = `SELECT * FROM ${fullTableReference} where name = $1`;
 
 export class MigrationRepository {
   _tableName = fullTableReference;
@@ -28,9 +33,7 @@ export class MigrationRepository {
   }
 
   async getByName(migrationName: string): Promise<Core.DbMigration | null> {
-    const result = await this._db.query(
-      `select * from ${this._tableName} where name = ${migrationName}`,
-    );
+    const result = await this._db.query(readByNameQuery, migrationName);
 
     if (!result?.rows.length) return null;
 
@@ -84,12 +87,13 @@ export class MigrationRepository {
   }
 
   async insert(migration: Core.DbMigration): Promise<void> {
-    const result = await this._db.query(insertQuery, [
+    const result = await this._db.query(
+      insertQuery,
       migration.name,
       migration.executedAt,
       migration.hash,
       migration.queryContent,
-    ]);
+    );
 
     if (result === null) {
       throw new Error(`Error saving migration ${migration.name}`);

@@ -1,47 +1,47 @@
 --supabase tables for local tests--
-create schema if not exists "auth"
-  authorization postgres;
-comment on schema "auth"
-  is 'supabase auth schema replica';
+-- create schema if not exists "auth"
+--   authorization postgres;
+-- comment on schema "auth"
+--   is 'supabase auth schema replica';
 
-create table if not exists "auth"."users" (
-  instance_id uuid,
-  id uuid NOT NULL,
-  aud character varying(255) COLLATE pg_catalog."default",
-  role character varying(255) COLLATE pg_catalog."default",
-  email character varying(255) COLLATE pg_catalog."default",
-  encrypted_password character varying(255) COLLATE pg_catalog."default",
-  email_confirmed_at timestamp with time zone,
-  invited_at timestamp with time zone,
-  confirmation_token character varying(255) COLLATE pg_catalog."default",
-  confirmation_sent_at timestamp with time zone,
-  recovery_token character varying(255) COLLATE pg_catalog."default",
-  recovery_sent_at timestamp with time zone,
-  email_change_token_new character varying(255) COLLATE pg_catalog."default",
-  email_change character varying(255) COLLATE pg_catalog."default",
-  email_change_sent_at timestamp with time zone,
-  last_sign_in_at timestamp with time zone,
-  raw_app_meta_data jsonb,
-  raw_user_meta_data jsonb,
-  is_super_admin boolean,
-  created_at timestamp with time zone,
-  updated_at timestamp with time zone,
-  phone character varying(15) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
-  phone_confirmed_at timestamp with time zone,
-  phone_change character varying(15) COLLATE pg_catalog."default" DEFAULT ''::character varying,
-  phone_change_token character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
-  phone_change_sent_at timestamp with time zone,
-  confirmed_at timestamp with time zone GENERATED ALWAYS AS (LEAST(email_confirmed_at, phone_confirmed_at)) STORED,
-  email_change_token_current character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
-  email_change_confirm_status smallint DEFAULT 0,
-  banned_until timestamp with time zone,
-  reauthentication_token character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
-  reauthentication_sent_at timestamp with time zone,
-  CONSTRAINT users_pkey PRIMARY KEY (id),
-  CONSTRAINT users_email_key UNIQUE (email),
-  CONSTRAINT users_phone_key UNIQUE (phone),
-  CONSTRAINT users_email_change_confirm_status_check CHECK (email_change_confirm_status >= 0 AND email_change_confirm_status <= 2)
-);
+-- create table if not exists "auth"."users" (
+--   instance_id uuid,
+--   id uuid NOT NULL,
+--   aud character varying(255) COLLATE pg_catalog."default",
+--   role character varying(255) COLLATE pg_catalog."default",
+--   email character varying(255) COLLATE pg_catalog."default",
+--   encrypted_password character varying(255) COLLATE pg_catalog."default",
+--   email_confirmed_at timestamp with time zone,
+--   invited_at timestamp with time zone,
+--   confirmation_token character varying(255) COLLATE pg_catalog."default",
+--   confirmation_sent_at timestamp with time zone,
+--   recovery_token character varying(255) COLLATE pg_catalog."default",
+--   recovery_sent_at timestamp with time zone,
+--   email_change_token_new character varying(255) COLLATE pg_catalog."default",
+--   email_change character varying(255) COLLATE pg_catalog."default",
+--   email_change_sent_at timestamp with time zone,
+--   last_sign_in_at timestamp with time zone,
+--   raw_app_meta_data jsonb,
+--   raw_user_meta_data jsonb,
+--   is_super_admin boolean,
+--   created_at timestamp with time zone,
+--   updated_at timestamp with time zone,
+--   phone character varying(15) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+--   phone_confirmed_at timestamp with time zone,
+--   phone_change character varying(15) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+--   phone_change_token character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+--   phone_change_sent_at timestamp with time zone,
+--   confirmed_at timestamp with time zone GENERATED ALWAYS AS (LEAST(email_confirmed_at, phone_confirmed_at)) STORED,
+--   email_change_token_current character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+--   email_change_confirm_status smallint DEFAULT 0,
+--   banned_until timestamp with time zone,
+--   reauthentication_token character varying(255) COLLATE pg_catalog."default" DEFAULT ''::character varying,
+--   reauthentication_sent_at timestamp with time zone,
+--   CONSTRAINT users_pkey PRIMARY KEY (id),
+--   CONSTRAINT users_email_key UNIQUE (email),
+--   CONSTRAINT users_phone_key UNIQUE (phone),
+--   CONSTRAINT users_email_change_confirm_status_check CHECK (email_change_confirm_status >= 0 AND email_change_confirm_status <= 2)
+-- );
 
 -- core schema --
 create schema if not exists "core"

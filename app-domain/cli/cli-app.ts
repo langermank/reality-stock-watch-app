@@ -40,6 +40,7 @@ export class CliApp extends App {
     const argv = yargs.argv as Arguments;
 
     const path = this.getPathFromArgv(argv);
+    //const params = this.getParamsFromArgv(argv);
 
     try {
       await this._pathRouter.executeRoute(path);
@@ -52,5 +53,9 @@ export class CliApp extends App {
     if (argv.hasOwnProperty('path')) return argv.path as string;
 
     return argv._.at(0) as string;
+  }
+
+  getParamsFromArgv(argv: Arguments): Array<string | number> {
+    return argv._.slice(1);
   }
 }
