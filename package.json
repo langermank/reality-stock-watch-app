@@ -22,7 +22,7 @@
     "lint:fix": "stylelint --config ./stylelintrc \"**/*.css\" --fix"
   },
   "dependencies": {
-    "@krhkt/path-router": "^0.2.0",
+    "@krhkt/path-router": "^0.3.0",
     "@radix-ui/colors": "^0.1.8",
     "@radix-ui/react-dialog": "^1.0.2",
     "@radix-ui/react-dropdown-menu": "^2.0.1",
@@ -90,6 +90,6 @@
     "stylelint-config-standard": "^29.0.0"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   }
 }
