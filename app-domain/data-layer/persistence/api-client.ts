@@ -56,12 +56,14 @@ export class ApiClient {
     return data;
   }
 
-  async insert(resourceId: string, data: any) {
-    const { error } = await this._client?.from(resourceId).insert(data)!;
+  async save(resourceId: string, entity: any) {
+    if (!entity) return;
 
-    if (error) {
-      throw error;
-    }
+    const { error = null, data } = await this._client?.from(resourceId).upsert(entity).select()!;
+    if (error) return error;
+
+    Object.assign(entity, data);
+    return null;
   }
 
   _applyPagination(query: any, page: PageType) {

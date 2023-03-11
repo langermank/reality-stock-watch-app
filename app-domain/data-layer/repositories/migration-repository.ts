@@ -4,13 +4,17 @@ import type { Core } from '../entities/_types/core';
 import type { Database } from '../persistence/database';
 import { Migration, filenameToMigrationName, migrationNameToFilename } from '../entities/migration';
 
-const schemaName = 'core';
-const tableName = '_migration';
+const schemaName = 'public';
+const tableName = '_core_migrations';
 const fullTableReference = `${schemaName}.${tableName}`;
 
 const migrationFolder = './app-domain/data-layer/migrations';
+const droptableFiles = [
+  './app-domain/data-layer/sql-scripts/drop-all-tables_with-schemas.sql',
+  './app-domain/data-layer/sql-scripts/drop-all-tables_no-schemas.sql',
+];
 
-const checkCoreSchemaQuery = `SELECT schema_name
+const checkPublicSchemaQuery = `SELECT schema_name
 FROM information_schema.schemata
 WHERE schema_name = '${schemaName}';`;
 
@@ -44,7 +48,7 @@ export class MigrationRepository {
   }
 
   async hasInitialMigration(): Promise<boolean> {
-    const schemaResult = await this._db.query(checkCoreSchemaQuery);
+    const schemaResult = await this._db.query(checkPublicSchemaQuery);
     if (!schemaResult?.rows.length) return false;
 
     const tableResult = await this._db.query(checkMigrationTableQuery);
@@ -71,11 +75,8 @@ export class MigrationRepository {
     const fullpath = path.join(process.cwd(), migrationFolder, filename);
 
     if (this._verbose) console.log(`Reading ${name} migration contents...`);
-    const queryContent = (await fs.readFile(fullpath)).toString();
+    const queryContent = await this._executeSqlFile(fullpath);
 
-    if (this._verbose) console.log(queryContent);
-
-    await this._db.atomicQuery(queryContent);
     const migration = new Migration({
       name,
       executedAt: new Date(),
@@ -85,6 +86,7 @@ export class MigrationRepository {
 
     if (this._verbose) console.log(`Saving migration ${name}`);
     await this.insert(migration);
+
     return migration;
   }
 
@@ -103,5 +105,28 @@ export class MigrationRepository {
 
     const row = result.rows[0] as unknown as Core.DbMigration;
     migration.id = row.id;
+  }
+
+  async dropTables(): Promise<void> {
+    const filesToExecute = droptableFiles.map((filename) => path.join(process.cwd(), filename));
+
+    if (this._verbose) console.log('Dropping tables...');
+
+    for (const fullpath of filesToExecute) {
+      if (this._verbose) console.log(`Reading ${fullpath}...`);
+      await this._executeSqlFile(fullpath);
+    }
+
+    if (this._verbose) console.log('All table dropped successfully!');
+  }
+
+  async _executeSqlFile(fullpath: string) {
+    const queryContent = (await fs.readFile(fullpath)).toString();
+
+    if (this._verbose) console.log(queryContent);
+
+    await this._db.atomicQuery(queryContent);
+
+    return queryContent;
   }
 }
