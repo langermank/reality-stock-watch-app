@@ -1,50 +1,41 @@
 import React from "react";
-
-// interface Thingamajig {
-//   id: ID;
-//   text: string;
-// }
-
-// interface Props {
-//   propWhichIsArray: Thingamajig[];
-// }
+import type { PropsWithChildren } from "react";
+import type { ResponsivePropsType } from "../../../utils/responsive-variant";
+import { convertToResponsiveAttributes } from "../../../utils/responsive-variant";
 
 export type StackProps = {
-  children?: React.ReactNode;
   direction?: "inline" | "block";
   gap?: "none" | "condensed" | "normal" | "spacious";
   align?: "start" | "center" | "end" | "baseline";
   alignWrap?: "start" | "center" | "end" | "distribute" | "distributeEvenly";
   spread?: "start" | "center" | "end" | "distribute" | "distributeEvenly";
-  //   wrap?: "wrap" | "nowrap";
   wrap?: boolean;
-  //   responsiveVariant?: narrow: []
 };
 
-export type ResponsiveProps = {
-  narrow: StackProps[];
-};
+export type ResponsiveStackProps = PropsWithChildren<ResponsivePropsType<StackProps>>;
 
 export function Stack({
   children,
-  direction = "block",
+  direction,
   gap = "normal",
   align = "start",
   alignWrap = "start",
   spread = "start",
   wrap = false,
-}: StackProps) {
+}: ResponsiveStackProps) {
+  const dataAttributes = convertToResponsiveAttributes({
+    responsiveProps: {
+      direction,
+      gap,
+      align,
+      alignWrap,
+      spread,
+      wrap,
+    },
+  });
+
   return (
-    <div
-      className='Stack'
-      data-wrap={wrap ? "true" : undefined}
-      data-dir={direction}
-      data-gap={gap}
-      data-align={align}
-      data-align-wrap={alignWrap}
-      data-spread={spread}
-      data-responsive='one two'
-    >
+    <div className='Stack' {...dataAttributes}>
       {children}
     </div>
   );
