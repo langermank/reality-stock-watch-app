@@ -176,9 +176,13 @@
   /* layout wip */
   --gap-condensed: var(--size-4);
   --gap-normal: var(--size-8);
+  --gap-spacious: var(--size-16);
   --padding-condensed: var(--size-4);
   --padding-normal: var(--size-8);
   --padding-spacious: var(--size-16);
+  --stack-gap-condensed: var(--size-8);
+  --stack-gap-normal: var(--size-16);
+  --stack-gap-spacious: var(--size-24);
 
   /* overlays */
   --overlay-border-radius: var(--border-radius-large);
