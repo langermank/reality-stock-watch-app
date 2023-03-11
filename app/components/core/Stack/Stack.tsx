@@ -9,7 +9,7 @@ export type StackProps = {
   align?: "start" | "center" | "end" | "baseline";
   alignWrap?: "start" | "center" | "end" | "distribute" | "distributeEvenly";
   spread?: "start" | "center" | "end" | "distribute" | "distributeEvenly";
-  wrap?: boolean;
+  wrap?: "wrap" | "nowrap";
 };
 
 export type ResponsiveStackProps = PropsWithChildren<ResponsivePropsType<StackProps>>;
@@ -21,7 +21,7 @@ export function Stack({
   align = "start",
   alignWrap = "start",
   spread = "start",
-  wrap = false,
+  wrap = "wrap",
 }: ResponsiveStackProps) {
   const dataAttributes = convertToResponsiveAttributes({
     responsiveProps: {

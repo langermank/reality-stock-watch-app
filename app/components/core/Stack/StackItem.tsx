@@ -1,13 +1,23 @@
 import React from "react";
+import type { PropsWithChildren } from "react";
+import type { ResponsivePropsType } from "../../../utils/responsive-variant";
+import { convertToResponsiveAttributes } from "../../../utils/responsive-variant";
 
-export type StackProps = {
-  children?: React.ReactNode;
+export type StackItemProps = {
   modifier?: "expand" | "keepSize" | undefined;
 };
 
-export function Stack({ children, modifier }: StackProps) {
+export type ResponsiveStackProps = PropsWithChildren<ResponsivePropsType<StackItemProps>>;
+
+export function StackItem({ children, modifier }: ResponsiveStackProps) {
+  const dataAttributes = convertToResponsiveAttributes({
+    responsiveProps: {
+      modifier,
+    },
+  });
+
   return (
-    <div className='Stack-item' data-modifier={modifier}>
+    <div className='StackItem' {...dataAttributes}>
       {children}
     </div>
   );
