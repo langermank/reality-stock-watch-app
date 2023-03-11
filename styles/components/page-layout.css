@@ -1,0 +1,7 @@
+@layer components {
+  .PageLayout {
+    background-color: darkmagenta;
+    margin: 48px;
+    max-width: 1064px;
+  }
+}

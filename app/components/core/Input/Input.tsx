@@ -8,22 +8,23 @@ export type InputProps = {
   validationMessage?: string;
   disabled?: boolean;
   id: string;
-  size?: "default" | "small";
+  sizeVariant?: "default" | "small";
   state?: "warning" | "error" | "success";
   icon?: React.ReactNode;
   fullWidth?: boolean;
-};
+} & React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 
 export const Input = ({
   disabled,
   id,
   label,
-  size = "default",
+  sizeVariant = "default",
   icon,
   hint,
   validationMessage,
   state,
   fullWidth,
+  ...rest
 }: InputProps) => {
   const hintTextId = useMemo(() => guid("hint-text"), []);
   const validationId = useMemo(() => guid("validation-id"), []);
@@ -48,8 +49,9 @@ export const Input = ({
           className={icon ? "Input--icon Input" : "Input"}
           disabled={disabled}
           id={id}
-          data-size={size}
+          data-size={sizeVariant}
           aria-describedby={ariaDescribedBy || undefined}
+          {...rest}
         />
         {validationMessage && (
           <span id={validationId} className='Input-validation' data-state={state}>

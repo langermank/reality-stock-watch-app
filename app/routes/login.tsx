@@ -1,5 +1,6 @@
 import { Button } from "~/components/core/button/Button";
 import { Input } from "~/components/core/Input/Input";
+import { Stack } from "~/components/core/Stack/Stack";
 import type { MetaFunction } from "@remix-run/node";
 import { TwitterLogo, DiscordLogo, GoogleLogo, TwitchLogo } from "phosphor-react";
 
@@ -12,13 +13,16 @@ export const meta: MetaFunction = () => {
 
 export default function Login() {
   return (
-    <div>
+    <>
       <h2>Login</h2>
-      <Input label='Email' id='email' />
-      <Input label='Password' id='password' />
-      <Button variant='primary'>Login</Button>
+      <Stack>
+        <Input label='Email' id='email' />
+        <Input label='Password' id='password' type='password' />
+        <Button variant='primary'>Login</Button>
+      </Stack>
+
       <h3>SSO</h3>
-      <div>
+      <Stack>
         <Button variant='primaryGhost' iconSpacing='spacious' width='full' icon={<TwitchLogo />}>
           Twitch
         </Button>
@@ -31,7 +35,7 @@ export default function Login() {
         <Button variant='primaryGhost' iconSpacing='spacious' width='full' icon={<GoogleLogo />}>
           Google
         </Button>
-      </div>
-    </div>
+      </Stack>
+    </>
   );
 }

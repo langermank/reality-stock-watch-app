@@ -238,12 +238,3 @@
     list-style: none;
   }
 }
-
-/* #region [ Page ] */
-.PageLayout {
-  display: grid;
-  grid-template-columns: minmax(200px, 1fr) minmax(66%, 1fr);
-  gap: var(--grid-2x);
-}
-
-/* #endregion */

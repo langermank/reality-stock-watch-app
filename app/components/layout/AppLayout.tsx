@@ -22,9 +22,7 @@ const PageNotification: React.FC<PropsWithChildren> = ({ children }): JSX.Elemen
   <>{children}</>
 );
 const PageTitle: React.FC<PropsWithChildren> = ({ children }): JSX.Element => <>{children}</>;
-const PageContent: React.FC<PropsWithChildren> = ({ children }): JSX.Element => (
-  <div>{children}</div>
-);
+const PageContent: React.FC<PropsWithChildren> = ({ children }): JSX.Element => <>{children}</>;
 const FooterContent: React.FC<PropsWithChildren> = ({ children }): JSX.Element => (
   <div>{children}</div>
 );
