@@ -18,8 +18,8 @@ const isResponsiveRangeType = (candidate: string): candidate is ResponsiveRanges
 };
 
 export const convertToResponsiveAttributes = <T>({
-  responsiveProps = null,
-  props = null,
+  responsiveProps = {},
+  props = {},
 }: {
   responsiveProps?: any;
   props?: any;
