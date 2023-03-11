@@ -1,8 +1,6 @@
 --supabase tables for local tests--
 create schema if not exists "auth"
   authorization postgres;
-comment on schema "auth"
-  is 'supabase auth schema replica';
 
 create table if not exists "auth"."users" (
   instance_id uuid,
@@ -43,16 +41,14 @@ create table if not exists "auth"."users" (
   CONSTRAINT users_email_change_confirm_status_check CHECK (email_change_confirm_status >= 0 AND email_change_confirm_status <= 2)
 );
 
--- core schema --
-create schema if not exists "core"
+
+-- public schema
+create schema if not exists "public"
   authorization postgres;
-comment on schema "core"
-  is 'core contains all base entities of the domain';
 
-grant all on schema "core" to postgres;
 
--- core table --
-create table if not exists "core"."_migration" (
+-- core tables --
+create table if not exists "public"."_core_migrations" (
   "id" uuid not null default gen_random_uuid(),
   "executedAt" timestamptz default now(),
   "name" varchar(512) default null,
@@ -61,8 +57,7 @@ create table if not exists "core"."_migration" (
   PRIMARY KEY("id")
 );
 
-
-create table if not exists "core"."person" (
+create table if not exists "public"."core_persons" (
   "id" uuid NOT NULL default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -77,13 +72,13 @@ create table if not exists "core"."person" (
     FOREIGN KEY("userId") REFERENCES "auth"."users"("id")
 );
 create index if not exists 
-  idx_cp_firstName_search ON "core"."person"("firstName" text_pattern_ops);
+  idx_cp_firstName_search ON "public"."core_persons"("firstName" text_pattern_ops);
 create index if not exists
-  idx_cp_lastName_search ON "core"."person"("lastName" text_pattern_ops);
+  idx_cp_lastName_search ON "public"."core_persons"("lastName" text_pattern_ops);
 create index if not exists
-  idx_cp_userId ON "core"."person"("userId");
+  idx_cp_userId ON "public"."core_persons"("userId");
 
-create table if not exists "core"."publicProfile" (
+create table if not exists "public"."core_public_profiles" (
   "id" uuid NOT NULL default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -93,20 +88,12 @@ create table if not exists "core"."publicProfile" (
   "ownerId" uuid default null,
   "rUserId" uuid default null,
   CONSTRAINT fk_cpp_cp_ownerId
-    FOREIGN KEY ("ownerId") REFERENCES "core"."person"("id"),
+    FOREIGN KEY ("ownerId") REFERENCES "public"."core_persons"("id"),
   PRIMARY KEY("id")
 );
 
--- show schema --
-create schema if not exists "show"
-  authorization postgres;
-comment on schema "show"
-  is 'reality shows related meta information';
-
-grant all on schema "show" to postgres;
-
 -- show tables --
-create table if not exists "show"."realityShow" (
+create table if not exists "public"."reality_shows" (
   "id" uuid NOT NULL default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -119,9 +106,9 @@ create table if not exists "show"."realityShow" (
   PRIMARY KEY ("id")
 );
 create index if not exists
-  idx_show_name_search on "show"."realityShow"("name" text_pattern_ops);
+  idx_show_name_search on "public"."reality_shows"("name" text_pattern_ops);
 
-create table if not exists "show"."realityShowSeries" (
+create table if not exists "public"."reality_show_series" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -131,13 +118,13 @@ create table if not exists "show"."realityShowSeries" (
   "streamingNetworks" text default null,
   "realityShowId" uuid not null,
   CONSTRAINT fk_rss_rs_realityShowId
-    FOREIGN KEY ("realityShowId") REFERENCES "show"."realityShow"("id"),
+    FOREIGN KEY ("realityShowId") REFERENCES "public"."reality_shows"("id"),
   PRIMARY KEY ("id")
 );
 create index if not exists
-  idx_realityShowSeries_name_search on "show"."realityShowSeries"("name" text_pattern_ops);
+  idx_realityShowSeries_name_search on "public"."reality_show_series"("name" text_pattern_ops);
 
-create table if not exists "show"."realityShowSeason" (
+create table if not exists "public"."reality_show_seasons" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -149,11 +136,11 @@ create table if not exists "show"."realityShowSeason" (
   "streamingNetworks" text default null,
   "realityShowSeriesId" uuid not null,
   CONSTRAINT fk_srss_srss_realityShowSeriesId
-    FOREIGN KEY ("realityShowSeriesId") REFERENCES "show"."realityShowSeries"("id"),
+    FOREIGN KEY ("realityShowSeriesId") REFERENCES "public"."reality_show_series"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "show"."participant" (
+create table if not exists "public"."reality_show_participants" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -163,13 +150,13 @@ create table if not exists "show"."participant" (
   "realityShowSeasonId" uuid not null,
   "personId" uuid not null,
   CONSTRAINT fk_sp_srss_realityShowSeasonId
-    FOREIGN KEY ("realityShowSeasonId") REFERENCES "show"."realityShowSeason"("id"),
+    FOREIGN KEY ("realityShowSeasonId") REFERENCES "public"."reality_show_seasons"("id"),
   CONSTRAINT fk_sp_cp_personId
-    FOREIGN KEY ("personId") REFERENCES "core"."person"("id"),
+    FOREIGN KEY ("personId") REFERENCES "public"."core_persons"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "show"."realityShowSeasonEvent" (
+create table if not exists "public"."reality_show_season_events" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -180,11 +167,11 @@ create table if not exists "show"."realityShowSeasonEvent" (
   "metadata" jsonb default null,
   "realityShowSeasonId" uuid not null,
   CONSTRAINT fk_srsse_srss_realityShowSeasonId
-    FOREIGN KEY ("realityShowSeasonId") REFERENCES "show"."realityShowSeason"("id"),
+    FOREIGN KEY ("realityShowSeasonId") REFERENCES "public"."reality_show_seasons"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "show"."realityShowSeasonEventParticipant" (
+create table if not exists "public"."reality_show_season_event_participants" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -195,21 +182,15 @@ create table if not exists "show"."realityShowSeasonEventParticipant" (
   "realityShowSeasonEventId" uuid not null,
   "participantId" uuid not null,
   CONSTRAINT fk_srssep_srsse_realityShowSeasonEventId
-    FOREIGN KEY ("realityShowSeasonEventId") REFERENCES "show"."realityShowSeasonEvent"("id"),
+    FOREIGN KEY ("realityShowSeasonEventId") REFERENCES "public"."reality_show_season_events"("id"),
   CONSTRAINT fk_srssep_sp_participantId
-    FOREIGN KEY ("participantId") REFERENCES "show"."participant"("id"),
+    FOREIGN KEY ("participantId") REFERENCES "public"."reality_show_participants"("id"),
   PRIMARY KEY ("id")
 );
 
--- game schema --
-create schema if not exists "game"
-  authorization postgres;
-comment on schema "game"
-  is 'game defines how a game cycle works for a show, but it does not include a market by default';
-grant all on schema "game" to postgres;
  
 -- game tables --
-create table if not exists "game"."game" (
+create table if not exists "public"."games" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -217,11 +198,11 @@ create table if not exists "game"."game" (
   "title" varchar(256) default null,
   "realityShowSeriesId" uuid not null,
   CONSTRAINT fk_gg_srss_realityShowSeriesId 
-    FOREIGN KEY ("realityShowSeriesId") REFERENCES "show"."realityShowSeries"("id"),
+    FOREIGN KEY ("realityShowSeriesId") REFERENCES "public"."reality_show_series"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "game"."gameSeason" (
+create table if not exists "public"."game_seasons" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -231,13 +212,13 @@ create table if not exists "game"."gameSeason" (
   "gameId" uuid not null,
   "realityShowSeasonId" uuid not null,
   CONSTRAINT fk_ggs_gg_gameId
-    FOREIGN KEY ("gameId") REFERENCES "game"."game"("id"),
+    FOREIGN KEY ("gameId") REFERENCES "public"."games"("id"),
   CONSTRAINT fk_ggs_srss_realityShowSeasonId
-    FOREIGN KEY ("realityShowSeasonId") REFERENCES "show"."realityShowSeason"("id"),
+    FOREIGN KEY ("realityShowSeasonId") REFERENCES "public"."reality_show_seasons"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "game"."gameSeasonCycle" (
+create table if not exists "public"."game_season_cycles" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -246,11 +227,11 @@ create table if not exists "game"."gameSeasonCycle" (
   "endDate" timestamptz default null,
   "gameSeasonId" uuid not null,
   CONSTRAINT fk_ggsc_ggs_gameSeasonId
-    FOREIGN KEY ("gameSeasonId") REFERENCES "game"."gameSeason"("id"),
+    FOREIGN KEY ("gameSeasonId") REFERENCES "public"."game_seasons"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "game"."gameSeasonPlayer" (
+create table if not exists "public"."game_season_players" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -258,13 +239,13 @@ create table if not exists "game"."gameSeasonPlayer" (
   "gameSeasonId" uuid not null,
   "personId" uuid not null,
   CONSTRAINT fk_ggsp_ggs_gameSeasonId
-    FOREIGN KEY ("gameSeasonId") REFERENCES "game"."gameSeason"("id"),
+    FOREIGN KEY ("gameSeasonId") REFERENCES "public"."game_seasons"("id"),
   CONSTRAINT fk_ggsp_cp_personId
-    FOREIGN KEY ("personId") REFERENCES "core"."person"("id"),
+    FOREIGN KEY ("personId") REFERENCES "public"."core_persons"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "game"."gameSeasonCyclePlayerRating" (
+create table if not exists "public"."game_season_cycle_player_ratings" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -274,13 +255,13 @@ create table if not exists "game"."gameSeasonCyclePlayerRating" (
   "playerId" uuid not null,
   "gameSeasonCycleId" uuid not null,
   CONSTRAINT fk_ggscpr_ggsp_playerId
-    FOREIGN KEY ("playerId") REFERENCES "game"."gameSeasonPlayer"("id"),
+    FOREIGN KEY ("playerId") REFERENCES "public"."game_season_players"("id"),
   CONSTRAINT fk_ggscpr_ggsc_gameSeasonCycleId
-    FOREIGN KEY ("gameSeasonCycleId") REFERENCES "game"."gameSeasonCycle"("id"),
+    FOREIGN KEY ("gameSeasonCycleId") REFERENCES "public"."game_season_cycles"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "game"."playerRating" (
+create table if not exists "public"."game_player_ratings" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -290,15 +271,15 @@ create table if not exists "game"."playerRating" (
   "gameSeasonCyclePlayerRatingId" uuid not null,
   "previousRatingId" uuid default null,
   CONSTRAINT fk_gpr_sp_participantId
-    FOREIGN KEY ("participantId") REFERENCES "show"."participant"("id"),
+    FOREIGN KEY ("participantId") REFERENCES "public"."reality_show_participants"("id"),
   CONSTRAINT fk_gpr_ggscpr_gameSeasonCyclePlayerRatingId
-    FOREIGN KEY ("gameSeasonCyclePlayerRatingId") REFERENCES "game"."gameSeasonCyclePlayerRating"("id"),
+    FOREIGN KEY ("gameSeasonCyclePlayerRatingId") REFERENCES "public"."game_season_cycle_player_ratings"("id"),
   CONSTRAINT fk_gpr_gpr_previousRatingId
-    FOREIGN KEY ("previousRatingId") REFERENCES "game"."playerRating"("id"),
+    FOREIGN KEY ("previousRatingId") REFERENCES "public"."game_player_ratings"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "game"."participantRating" (
+create table if not exists "public"."game_participant_ratings" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -308,13 +289,13 @@ create table if not exists "game"."participantRating" (
   "gameSeasonCycleId" uuid default null,
   "previousRatingId" uuid default null,
   CONSTRAINT fk_gpr_sp_participantId
-    FOREIGN KEY ("participantId") REFERENCES "show"."participant"("id"),
+    FOREIGN KEY ("participantId") REFERENCES "public"."reality_show_participants"("id"),
   CONSTRAINT fk_gpr_gpr_previousRatingId
-    FOREIGN KEY ("previousRatingId") REFERENCES "game"."participantRating"("id"),
+    FOREIGN KEY ("previousRatingId") REFERENCES "public"."game_participant_ratings"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "game"."panelMember" (
+create table if not exists "public"."game_panel_member" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -323,13 +304,13 @@ create table if not exists "game"."panelMember" (
   "personId" uuid not null,
   "gameSeasonCycleId" uuid not null,
   CONSTRAINT fk_gpm_cp_personId
-    FOREIGN KEY ("personId") REFERENCES "core"."person"("id"),
+    FOREIGN KEY ("personId") REFERENCES "public"."core_persons"("id"),
   CONSTRAINT fk_gpm_ggsc_gameSeasonCycleId
-    FOREIGN KEY ("gameSeasonCycleId") REFERENCES "game"."gameSeasonCycle"("id"),
+    FOREIGN KEY ("gameSeasonCycleId") REFERENCES "public"."game_season_cycles"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "game"."panelMemberRating" (
+create table if not exists "public"."game_panel_member_ratings" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -349,7 +330,7 @@ comment on schema "gameMarket"
 grant all on schema "gameMarket" to postgres;
 
 -- gameMarket tables --
-create table if not exists "gameMarket"."gameSeasonMarket" (
+create table if not exists "public"."game_market_seasons" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -358,11 +339,11 @@ create table if not exists "gameMarket"."gameSeasonMarket" (
   "endDate" timestamptz default null,
   "gameSeasonId" uuid not null,
   CONSTRAINT fk_gmgsm_ggs_gameSeasonId
-    FOREIGN KEY ("gameSeasonId") REFERENCES "game"."gameSeason"("id"),
+    FOREIGN KEY ("gameSeasonId") REFERENCES "public"."game_seasons"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "gameMarket"."gameSeasonMarketCycle" (
+create table if not exists "public"."game_market_season_cycles" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -372,13 +353,13 @@ create table if not exists "gameMarket"."gameSeasonMarketCycle" (
   "gameSeasonMarketId" uuid not null,
   "previousGameSeasonMarketCycleId" uuid null,
   CONSTRAINT fk_gmgsmc_gmgsm_gameSeasonMarketId
-    FOREIGN KEY ("gameSeasonMarketId") REFERENCES "gameMarket"."gameSeasonMarket"("id"),
+    FOREIGN KEY ("gameSeasonMarketId") REFERENCES "public"."game_market_seasons"("id"),
   CONSTRAINT fk_gmgsmc_gmgsmc_previousGameSeasonMarketCycleId
-    FOREIGN KEY ("gameSeasonMarketId") REFERENCES "gameMarket"."gameSeasonMarketCycle"("id"),
+    FOREIGN KEY ("gameSeasonMarketId") REFERENCES "public"."game_market_season_cycles"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "gameMarket"."playerBankAccount" (
+create table if not exists "public"."game_market_player_bank_accounts" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -387,13 +368,13 @@ create table if not exists "gameMarket"."playerBankAccount" (
   "playerId" uuid not null,
   "gameSeasonMarketId" uuid not null,
   CONSTRAINT fk_gmpba_ggsp_playerId
-    FOREIGN KEY ("playerId") REFERENCES "game"."gameSeasonPlayer"("id"),
+    FOREIGN KEY ("playerId") REFERENCES "public"."game_season_players"("id"),
   CONSTRAINT fk_gmpba_gmgsm_gameSeasonMarketId
-    FOREIGN KEY ("gameSeasonMarketId") REFERENCES "gameMarket"."gameSeasonMarket"("id"),
+    FOREIGN KEY ("gameSeasonMarketId") REFERENCES "public"."game_market_seasons"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "gameMarket"."stock" (
+create table if not exists "public"."game_market_stocks" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -402,13 +383,13 @@ create table if not exists "gameMarket"."stock" (
   "participantId" uuid not null,
   "gameSeasonMarketId" uuid not null,
   CONSTRAINT fk_gms_sp_participantId
-    FOREIGN KEY ("participantId") REFERENCES "show"."participant"("id"),
+    FOREIGN KEY ("participantId") REFERENCES "public"."reality_show_participants"("id"),
   CONSTRAINT fk_gms_gmgsm_gameSeasonMarketId
-    FOREIGN KEY ("gameSeasonMarketId") REFERENCES "gameMarket"."gameSeasonMarket"("id"),
+    FOREIGN KEY ("gameSeasonMarketId") REFERENCES "public"."game_market_seasons"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "gameMarket"."stockSnapshot" (
+create table if not exists "public"."game_market_stock_snapshots" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -418,13 +399,13 @@ create table if not exists "gameMarket"."stockSnapshot" (
   "rParticipantId" uuid not null,
   "stockId" uuid not null,
   CONSTRAINT fk_gmss_sp_participantId
-    FOREIGN KEY ("rParticipantId") REFERENCES "show"."participant"("id"),
+    FOREIGN KEY ("rParticipantId") REFERENCES "public"."reality_show_participants"("id"),
   CONSTRAINT fk_gmss_gmgsmc_gameSeasonMarketCycleId
-    FOREIGN KEY ("stockId") REFERENCES "gameMarket"."stock"("id"),
+    FOREIGN KEY ("stockId") REFERENCES "public"."game_market_stocks"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "gameMarket"."stockOwnership" (
+create table if not exists "public"."game_market_stock_ownerships" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -433,13 +414,13 @@ create table if not exists "gameMarket"."stockOwnership" (
   "stockId" uuid not null,
   "playerBankAccountId" uuid not null,
   CONSTRAINT fk_gmso_gms_stockId
-    FOREIGN KEY ("stockId") REFERENCES "gameMarket"."stock"("id"),
+    FOREIGN KEY ("stockId") REFERENCES "public"."game_market_stocks"("id"),
   CONSTRAINT fk_gmso_gmpba_playerBankAccountId
-    FOREIGN KEY ("playerBankAccountId") REFERENCES "gameMarket"."playerBankAccount"("id"),
+    FOREIGN KEY ("playerBankAccountId") REFERENCES "public"."game_market_player_bank_accounts"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "gameMarket"."stockTransaction" (
+create table if not exists "public"."game_market_stock_transactions" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -450,13 +431,13 @@ create table if not exists "gameMarket"."stockTransaction" (
   "stockId" uuid not null,
   "stockOwnershipId" uuid not null,
   CONSTRAINT fk_gmst_gms_stockId
-    FOREIGN KEY ("stockId") REFERENCES "gameMarket"."stock"("id"),
+    FOREIGN KEY ("stockId") REFERENCES "public"."game_market_stocks"("id"),
   CONSTRAINT fk_gmst_gmso_stockOwnershipId
-    FOREIGN KEY ("stockOwnershipId") REFERENCES "gameMarket"."stockOwnership"("id"),
+    FOREIGN KEY ("stockOwnershipId") REFERENCES "public"."game_market_stock_ownerships"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "gameMarket"."leaderboardPlayerRankSnapshot" (
+create table if not exists "public"."game_market_leaderboard_player_snapshots" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -466,13 +447,13 @@ create table if not exists "gameMarket"."leaderboardPlayerRankSnapshot" (
   "gameSeasonMarketCycleId" uuid not null,
   "gameSeasonPlayerId" uuid not null,
   CONSTRAINT fk_gmlpr_gmgsm_gameSeasonMarketId
-    FOREIGN KEY ("gameSeasonMarketCycleId") REFERENCES "gameMarket"."gameSeasonMarketCycle"("id"),
+    FOREIGN KEY ("gameSeasonMarketCycleId") REFERENCES "public"."game_market_season_cycles"("id"),
   CONSTRAINT fk_gmlpr_ggsp_gameSeasonPlayerId
-    FOREIGN KEY ("gameSeasonPlayerId") REFERENCES "game"."gameSeasonPlayer"("id"),
+    FOREIGN KEY ("gameSeasonPlayerId") REFERENCES "public"."game_season_players"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "gameMarket"."leaderboardBadge" (
+create table if not exists "public"."game_market_leaderboard_badges" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -483,11 +464,11 @@ create table if not exists "gameMarket"."leaderboardBadge" (
   "lowerPositionRange" integer not null,
   "gameSeasonMarketId" uuid not null,
   CONSTRAINT fk_gmlb_gmgsm_gameSeasonMakerId
-    FOREIGN KEY ("gameSeasonMarketId") REFERENCES "gameMarket"."gameSeasonMarket"("id"),
+    FOREIGN KEY ("gameSeasonMarketId") REFERENCES "public"."game_market_seasons"("id"),
   PRIMARY KEY ("id")
 );
 
-create table if not exists "gameMarket"."leaderboardBadgePlayer" (
+create table if not exists "public"."game_market_leaderboard_badge_players" (
   "id" uuid not null default gen_random_uuid(),
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
@@ -496,10 +477,10 @@ create table if not exists "gameMarket"."leaderboardBadgePlayer" (
   "leaderboardPlayerRankSnapshotId" uuid null,
   "playerId" uuid not null,
   CONSTRAINT fk_gmlbp_gmlb_leaderboardBadgeId
-    FOREIGN KEY ("leaderboardBadgeId") REFERENCES "gameMarket"."leaderboardBadge"("id"),
+    FOREIGN KEY ("leaderboardBadgeId") REFERENCES "public"."game_market_leaderboard_badges"("id"),
   CONSTRAINT fk_gmlbp_gmlprs_learderboardPlayerRankId
-    FOREIGN KEY ("leaderboardPlayerRankSnapshotId") REFERENCES "gameMarket"."leaderboardPlayerRankSnapshot"("id"),
+    FOREIGN KEY ("leaderboardPlayerRankSnapshotId") REFERENCES "public"."game_market_leaderboard_player_snapshots"("id"),
   CONSTRAINT fk_gmlbp_gp_playerId
-    FOREIGN KEY ("playerId") REFERENCES "game"."gameSeasonPlayer"("id"),
+    FOREIGN KEY ("playerId") REFERENCES "public"."game_season_players"("id"),
   PRIMARY KEY ("id")
 );

@@ -1,36 +1,45 @@
-/// <reference path="../entities/_types/core.d.ts" />
-import * as path from "path";
 import * as fs from "fs/promises";
+import * as path from "path";
+import type { Core } from "../entities/_types/core";
 import type { Database } from "../persistence/database";
 import { Migration, filenameToMigrationName, migrationNameToFilename } from "../entities/migration";
 
-const schemaName = "core";
-const tableName = "_migration";
+const schemaName = "public";
+const tableName = "_core_migrations";
 const fullTableReference = `${schemaName}.${tableName}`;
 
 const migrationFolder = "./app-domain/data-layer/migrations";
-const checkCoreSchemaQuery = `SELECT schema_name
+const droptableFiles = [
+  "./app-domain/data-layer/sql-scripts/drop-all-tables_with-schemas.sql",
+  "./app-domain/data-layer/sql-scripts/drop-all-tables_no-schemas.sql",
+];
+
+const checkPublicSchemaQuery = `SELECT schema_name
 FROM information_schema.schemata
 WHERE schema_name = '${schemaName}';`;
+
 const checkMigrationTableQuery = `SELECT table_name
 FROM Information_schema.tables
 WHERE table_schema = '${schemaName}' and table_name= '${tableName}';`;
+
 const insertQuery = `INSERT INTO ${fullTableReference}(
   "name", "executedAt", "hash", "queryContent"
 ) VALUES ($1, $2, $3, $4) RETURNING *`;
 
+const readByNameQuery = `SELECT * FROM ${fullTableReference} where name = $1`;
+
 export class MigrationRepository {
   _tableName = fullTableReference;
   _db: Database;
+  _verbose: boolean;
 
-  constructor(db: Database) {
+  constructor(db: Database, verbose = false) {
     this._db = db;
+    this._verbose = verbose;
   }
 
   async getByName(migrationName: string): Promise<Core.DbMigration | null> {
-    const result = await this._db.query(
-      `select * from ${this._tableName} where name = ${migrationName}`
-    );
+    const result = await this._db.query(readByNameQuery, migrationName);
 
     if (!result?.rows.length) return null;
 
@@ -39,7 +48,7 @@ export class MigrationRepository {
   }
 
   async hasInitialMigration(): Promise<boolean> {
-    const schemaResult = await this._db.query(checkCoreSchemaQuery);
+    const schemaResult = await this._db.query(checkPublicSchemaQuery);
     if (!schemaResult?.rows.length) return false;
 
     const tableResult = await this._db.query(checkMigrationTableQuery);
@@ -65,12 +74,9 @@ export class MigrationRepository {
     const filename = migrationNameToFilename(name);
     const fullpath = path.join(process.cwd(), migrationFolder, filename);
 
-    console.log(`Applying migration ${name}`);
-    const queryContent = (await fs.readFile(fullpath)).toString();
+    if (this._verbose) console.log(`Reading ${name} migration contents...`);
+    const queryContent = await this._executeSqlFile(fullpath);
 
-    console.log(queryContent);
-
-    await this._db.atomicQuery(queryContent);
     const migration = new Migration({
       name,
       executedAt: new Date(),
@@ -78,18 +84,20 @@ export class MigrationRepository {
     });
     migration.setHashByContent(queryContent);
 
-    console.log(`Saving migration ${name}`);
+    if (this._verbose) console.log(`Saving migration ${name}`);
     await this.insert(migration);
+
     return migration;
   }
 
   async insert(migration: Core.DbMigration): Promise<void> {
-    const result = await this._db.query(insertQuery, [
+    const result = await this._db.query(
+      insertQuery,
       migration.name,
       migration.executedAt,
       migration.hash,
-      migration.queryContent,
-    ]);
+      migration.queryContent
+    );
 
     if (result === null) {
       throw new Error(`Error saving migration ${migration.name}`);
@@ -97,5 +105,28 @@ export class MigrationRepository {
 
     const row = result.rows[0] as unknown as Core.DbMigration;
     migration.id = row.id;
+  }
+
+  async dropTables(): Promise<void> {
+    const filesToExecute = droptableFiles.map((filename) => path.join(process.cwd(), filename));
+
+    if (this._verbose) console.log("Dropping tables...");
+
+    for (const fullpath of filesToExecute) {
+      if (this._verbose) console.log(`Reading ${fullpath}...`);
+      await this._executeSqlFile(fullpath);
+    }
+
+    if (this._verbose) console.log("All table dropped successfully!");
+  }
+
+  async _executeSqlFile(fullpath: string) {
+    const queryContent = (await fs.readFile(fullpath)).toString();
+
+    if (this._verbose) console.log(queryContent);
+
+    await this._db.atomicQuery(queryContent);
+
+    return queryContent;
   }
 }

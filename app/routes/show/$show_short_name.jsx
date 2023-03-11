@@ -1,5 +1,5 @@
 // import seasons from "~/data/season.json";
-// import supabase from "~/utils/supabase";
+//import supabase from "~/utils/supabase";
 import { useLoaderData, Link, Outlet, useLocation } from "@remix-run/react";
 
 // show_short_name matches file path, change this if actual data changes

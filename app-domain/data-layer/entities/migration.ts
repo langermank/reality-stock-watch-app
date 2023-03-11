@@ -1,4 +1,4 @@
-/// <reference path="./_types/core.d.ts" />
+import type { Core } from "./_types/core";
 import * as crypto from "crypto";
 
 const defaultExtension = ".sql";

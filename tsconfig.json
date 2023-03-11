@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "app/components/Header.tsx"],
+  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules/*"],
   "compilerOptions": {
     "strict": true,
@@ -8,7 +8,7 @@
     "watch": true,
     "sourceMap": true,
     "target": "ES2019",
-    "module": "CommonJS",
+    "module": "ESNext",
     "isolatedModules": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
