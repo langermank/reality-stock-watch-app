@@ -1,0 +1,311 @@
+@layer components {
+  .Stack {
+    --Stack-gap-whenRegular: var(--stack-gap-normal);
+    --Stack-gap-whenNarrow: var(--stack-gap-normal);
+    --Stack-gap-whenWide: var(--Stack-gap-whenRegular);
+    --Stack-divider-color: var(--color-border-default);
+
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+    align-content: flex-start;
+    gap: var(--Stack-gap-whenRegular);
+  }
+
+  @media (--md-n-below) {
+    .Stack {
+      gap: var(--Stack-gap-whenNarrow);
+    }
+  }
+
+  @media (--xl-n-above) {
+    .Stack {
+      gap: var(--Stack-gap-whenWide);
+    }
+  }
+
+  .Stack-item {
+    flex: 0 1 auto;
+    min-inline-size: 0;
+  }
+
+  @media (--md-n-below) {
+    [data-direction-narrow="inline"] {
+      flex-flow: row;
+    }
+
+    [data-direction-narrow="block"] {
+      flex-flow: column;
+    }
+
+    [data-gap-narrow="none"] {
+      --Stack-gap-whenNarrow: 0;
+    }
+
+    [data-gap-narrow="condensed"] {
+      --Stack-gap-whenNarrow: var(--stack-gap-condensed);
+    }
+
+    [data-gap-narrow="normal"] {
+      --Stack-gap-whenNarrow: var(--stack-gap-normal);
+    }
+
+    [data-align-narrow="start"] {
+      align-items: flex-start;
+    }
+
+    [data-align-narrow="center"] {
+      align-items: center;
+    }
+
+    [data-align-narrow="end"] {
+      align-items: flex-end;
+    }
+
+    [data-align-narrow="baseline"] {
+      align-items: baseline;
+    }
+
+    [data-alignWrap-narrow="start"] {
+      align-content: flex-start;
+    }
+
+    [data-alignWrap-narrow="center"] {
+      align-content: center;
+    }
+
+    [data-alignWrap-narrow="end"] {
+      align-content: flex-end;
+    }
+
+    [data-alignWrap-narrow="distribute"] {
+      align-content: space-between;
+    }
+
+    [data-alignWrap-narrow="distributeEvenly"] {
+      align-content: space-evenly;
+    }
+
+    [data-spread-narrow="start"] {
+      justify-content: flex-start;
+    }
+
+    [data-spread-narrow="center"] {
+      justify-content: center;
+    }
+
+    [data-spread-narrow="end"] {
+      justify-content: flex-end;
+    }
+
+    [data-spread-narrow="distribute"] {
+      justify-content: space-between;
+    }
+
+    [data-spread-narrow="distributeEvenly"] {
+      justify-content: space-evenly;
+    }
+
+    [data-wrap-narrow="wrap"] {
+      flex-wrap: wrap;
+    }
+
+    [data-wrap-narrow="noWrap"] {
+      flex-wrap: nowrap;
+    }
+
+    [data-modifier-narrow="expand"] {
+      flex-grow: 1;
+    }
+
+    [data-modifier-narrow="keepSize"] {
+      flex-shrink: 0;
+    }
+  }
+  @media (--md-n-above) {
+    [data-direction-regular="inline"] {
+      flex-flow: row;
+    }
+
+    [data-direction-regular="block"] {
+      flex-flow: column;
+    }
+
+    [data-gap-regular="none"] {
+      --Stack-gap-whenRegular: 0;
+    }
+
+    [data-gap-regular="condensed"] {
+      --Stack-gap-whenRegular: var(--stack-gap-condensed);
+    }
+
+    [data-gap-regular="normal"] {
+      --Stack-gap-whenRegular: var(--stack-gap-normal);
+    }
+
+    [data-align-regular="start"] {
+      align-items: flex-start;
+    }
+
+    [data-align-regular="center"] {
+      align-items: center;
+    }
+
+    [data-align-regular="end"] {
+      align-items: flex-end;
+    }
+
+    [data-align-regular="baseline"] {
+      align-items: baseline;
+    }
+
+    [data-alignWrap-regular="start"] {
+      align-content: flex-start;
+    }
+
+    [data-alignWrap-regular="center"] {
+      align-content: center;
+    }
+
+    [data-alignWrap-regular="end"] {
+      align-content: flex-end;
+    }
+
+    [data-alignWrap-regular="distribute"] {
+      align-content: space-between;
+    }
+
+    [data-alignWrap-regular="distributeEvenly"] {
+      align-content: space-evenly;
+    }
+
+    [data-spread-regular="start"] {
+      justify-content: flex-start;
+    }
+
+    [data-spread-regular="center"] {
+      justify-content: center;
+    }
+
+    [data-spread-regular="end"] {
+      justify-content: flex-end;
+    }
+
+    [data-spread-regular="distribute"] {
+      justify-content: space-between;
+    }
+
+    [data-spread-regular="distributeEvenly"] {
+      justify-content: space-evenly;
+    }
+
+    [data-wrap-regular="wrap"] {
+      flex-wrap: wrap;
+    }
+
+    [data-wrap-regular="noWrap"] {
+      flex-wrap: nowrap;
+    }
+
+    [data-modifier-regular="expand"] {
+      flex-grow: 1;
+    }
+
+    [data-modifier-regular="keepSize"] {
+      flex-shrink: 0;
+    }
+  }
+  @media (--xl-n-above) {
+    [data-direction-wide="inline"] {
+      flex-flow: row;
+    }
+
+    [data-direction-wide="block"] {
+      flex-flow: column;
+    }
+
+    [data-gap-wide="none"] {
+      --Stack-gap-whenWide: 0;
+    }
+
+    [data-gap-wide="condensed"] {
+      --Stack-gap-whenWide: var(--stack-gap-condensed);
+    }
+
+    [data-gap-wide="normal"] {
+      --Stack-gap-whenWide: var(--stack-gap-normal);
+    }
+
+    [data-align-wide="start"] {
+      align-items: flex-start;
+    }
+
+    [data-align-wide="center"] {
+      align-items: center;
+    }
+
+    [data-align-wide="end"] {
+      align-items: flex-end;
+    }
+
+    [data-align-wide="baseline"] {
+      align-items: baseline;
+    }
+
+    [data-alignWrap-wide="start"] {
+      align-content: flex-start;
+    }
+
+    [data-alignWrap-wide="center"] {
+      align-content: center;
+    }
+
+    [data-alignWrap-wide="end"] {
+      align-content: flex-end;
+    }
+
+    [data-alignWrap-wide="distribute"] {
+      align-content: space-between;
+    }
+
+    [data-alignWrap-wide="distributeEvenly"] {
+      align-content: space-evenly;
+    }
+
+    [data-spread-wide="start"] {
+      justify-content: flex-start;
+    }
+
+    [data-spread-wide="center"] {
+      justify-content: center;
+    }
+
+    [data-spread-wide="end"] {
+      justify-content: flex-end;
+    }
+
+    [data-spread-wide="distribute"] {
+      justify-content: space-between;
+    }
+
+    [data-spread-wide="distributeEvenly"] {
+      justify-content: space-evenly;
+    }
+
+    [data-wrap-wide="wrap"] {
+      flex-wrap: wrap;
+    }
+
+    [data-wrap-wide="noWrap"] {
+      flex-wrap: nowrap;
+    }
+
+    [data-modifier-wide="expand"] {
+      flex-grow: 1;
+    }
+
+    [data-modifier-wide="keepSize"] {
+      flex-shrink: 0;
+    }
+  }
+}
