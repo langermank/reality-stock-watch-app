@@ -10,7 +10,8 @@
       "name": "Cli",
       "program": "${workspaceFolder}/app-domain/cli/main.ts",
       "preLaunchTask": "tsc: build - tsconfig-cli.json",
-      "outFiles": ["${workspaceFolder}/_dist/**/*.js"]
+      //"args": ["infra:migration:applyAll"],
+      "outFiles": ["${workspaceFolder}/_clidist/**/*.js"]
     }
   ]
 }

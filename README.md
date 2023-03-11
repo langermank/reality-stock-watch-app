@@ -32,3 +32,14 @@ npm run dev
 Open up [http://localhost:3000](http://localhost:3000) and you should be ready to go!
 
 If you're used to using the `vercel dev` command provided by [Vercel CLI](https://vercel.com/cli) instead, you can also use that, but it's not needed.
+
+
+## Dependencies 
+
+This is the list of dependency, what they provide, and link to their documentation:
+
+- **dotenv**:
+- **yargs**:
+- **prompts**:
+- **color**: 
+- **path-router**: 

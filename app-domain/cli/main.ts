@@ -1,33 +1,25 @@
 import { CliApp } from "./cli-app";
-import { AppConfigManager } from "../app-components/app-config-manager";
-import { Database } from "../data-layer/persistence/database";
-import { MigrationRepository } from "../data-layer/repositories/migration-repository";
+import { AppConfigManager, TargetEnvironments } from "../app-components/app-config-manager";
 
 (async () => {
-  const configManager = new AppConfigManager("local-dev");
-  configManager.load();
+  console.log("booting cli app...");
 
-  //console.log(JSON.stringify(configManager));
-
-  const db = new Database(configManager.dbConfig!);
-  await db.connect();
-  const migrationRepository = new MigrationRepository(db);
-  const migrationsToApply = await migrationRepository.findNotAppliedMigration();
-
-  for (const migration of migrationsToApply) {
-    await migrationRepository.applyMigrationByName(migration);
+  let targetEnvironment = TargetEnvironments.development;
+  if (process.env.ENVIRONMENT) {
+    if (Object.values(TargetEnvironments).includes(process.env.ENVIRONMENT)) {
+      targetEnvironment = process.env.ENVIRONMENT!;
+    } else {
+      console.warn(
+        `ENVIRONMENT value invalid: '${process.env.ENVIRONMENT}': falling back to ${targetEnvironment}`
+      );
+    }
   }
 
-  return;
-  //await db.connect();
+  const configManager = new AppConfigManager(targetEnvironment);
+  configManager.load();
 
-  //  const result = await db.checkInitialMigration();
-  //  console.log(result);
-  //
-  //  await db.close();
-  //  return;
-  //  const app = new CliApp(configManager);
-  //
-  //  await app.boot();
-  //  await app.run();
+  const app = new CliApp(configManager);
+  await app.run();
+
+  process.exit(0);
 })();

@@ -3,6 +3,7 @@
 export namespace Show {
   export interface RealityShow extends Core.EntityRecord {
     name: string;
+    slug: string;
     description: ?string;
     genre: ?string;
     firstAiredDate: ?Date;
@@ -11,6 +12,7 @@ export namespace Show {
 
   export interface RealityShowSeries extends Core.EntityRecord {
     name: string;
+    slug: string;
     description: ?string;
     streamingNetworks: ?string;
     realityShowId: Core.Uuid;
@@ -18,6 +20,7 @@ export namespace Show {
 
   export interface RealityShowSeason extends Core.EntityRecord {
     name: string;
+    slug: string;
     seasonNumber: ?string;
     startDate: ?Date;
     endDate: ?Date;
