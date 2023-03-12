@@ -1,9 +1,12 @@
+import { Outlet } from "@remix-run/react";
 import PageLayout from "../components/PageLayout";
 
-export default function Game() {
+export default function Index() {
   return (
     <PageLayout>
-      <h3>Games</h3>
+      <h3>Games - Main page</h3>
+
+      <Outlet />
     </PageLayout>
   );
 }
