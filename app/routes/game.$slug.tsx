@@ -14,15 +14,19 @@ export const loader = async ({ params }: LoaderArgs) => {
   };
 };
 
-export default function Game() {
+export default function GameSeason() {
   const params = useParams();
   const { data } = useLoaderData<typeof loader>();
 
   return (
-    <PageLayout>
+    <div>
+      <br />
+      <br />
+      <br />
+      <br />
       {params.slug}
       <h3>Game season</h3>
       <div>{data?.slug}</div>
-    </PageLayout>
+    </div>
   );
 }
