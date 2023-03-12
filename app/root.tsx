@@ -18,7 +18,7 @@ import { Button } from "./components/core/button/Button";
 import { Heading } from "./components/core/Heading/Heading";
 import { Sidebar } from "phosphor-react";
 import Sidepane from "./components/Sidepane";
-import PageLayout from "./components/PageLayout";
+import { PageLayout } from "./components/PageLayout";
 import React from "react";
 
 //#region [ Context functions ]
