@@ -37,7 +37,8 @@ export class ApiClient {
   }
 
   async readSingle(resourceId: string, uuid: string) {
-    const result = await this._client?.from(resourceId).select().match({ uuid }).single();
+    const result = await this._client?.from(resourceId).select().match({ id: uuid }).single();
+    console.log("api-result", result);
     if (!result) return null;
 
     const { data } = result;

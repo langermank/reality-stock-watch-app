@@ -1,12 +1,28 @@
+import type { LoaderArgs } from "@remix-run/node";
 import PageLayout from "../components/PageLayout";
-import { useParams } from "@remix-run/react";
+import { useParams, useLoaderData } from "@remix-run/react";
+import { getApp } from "../services/app";
+
+export const loader = async ({ params }: LoaderArgs) => {
+  const app = await getApp();
+  const store = await app.getStore();
+
+  const season = await store.showSeasons.fetchByUuid("04d8d1a3-d75c-4dd6-ab31-2c01e65911b1");
+  console.log(season);
+  return {
+    data: season,
+  };
+};
 
 export default function Game() {
   const params = useParams();
+  const { data } = useLoaderData<typeof loader>();
+
   return (
     <PageLayout>
       {params.slug}
-      <h3>About</h3>
+      <h3>Game season</h3>
+      <div>{data?.slug}</div>
     </PageLayout>
   );
 }
