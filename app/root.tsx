@@ -19,6 +19,7 @@ import { Heading } from "./components/core/Heading/Heading";
 import { Sidebar } from "phosphor-react";
 import Sidepane from "./components/Sidepane";
 import React from "react";
+import { AppLayoutPublic } from "./components/layout/AppLayoutPublic";
 
 //#region [ Context functions ]
 // functions to provide specific pages with configuration over
@@ -120,8 +121,35 @@ export function Layout({ children }) {
   let [panelState, setpanelState] = React.useState(false);
   return (
     <>
-      <AppLayout panelCollapsed={panelState}>
-        <AppLayout.Logo>Stockwatch</AppLayout.Logo>
+      <AppLayoutPublic>
+        <AppLayoutPublic.Logo>Stockwatch</AppLayoutPublic.Logo>
+        <AppLayoutPublic.LoginButton>
+          <Button size='small' variant='primary'>
+            Login or signup
+          </Button>
+        </AppLayoutPublic.LoginButton>
+        <AppLayoutPublic.Nav>
+          <ul>
+            <li>
+              <a href=''>Games</a>
+            </li>
+            <li>
+              <a href=''>Leaderboard</a>
+            </li>
+            <li>
+              <a href=''>Contact</a>
+            </li>
+          </ul>
+        </AppLayoutPublic.Nav>
+        <AppLayoutPublic.PageContent>
+          <div>{children}</div>
+        </AppLayoutPublic.PageContent>
+        <AppLayoutPublic.FooterContent>
+          <Footer />
+        </AppLayoutPublic.FooterContent>
+      </AppLayoutPublic>
+      {/* <AppLayout panelCollapsed={panelState}> */}
+      {/* <AppLayout.Logo>Stockwatch</AppLayout.Logo>
         <AppLayout.Toggle>
           <Button
             iconOnly
@@ -136,11 +164,11 @@ export function Layout({ children }) {
           <Heading as='h1' size='display'>
             Dashboard
           </Heading>
-        </AppLayout.PageTitle>
-        {/* <AppLayout.PageNotification>
+        </AppLayout.PageTitle> */}
+      {/* <AppLayout.PageNotification>
           <Card variant='neutral'>The market opens in 5 hours!</Card>
         </AppLayout.PageNotification> */}
-        <AppLayout.Nav>
+      {/* <AppLayout.Nav>
           <Sidepane />
         </AppLayout.Nav>
         <AppLayout.PageContent>
@@ -148,8 +176,8 @@ export function Layout({ children }) {
         </AppLayout.PageContent>
         <AppLayout.FooterContent>
           <Footer />
-        </AppLayout.FooterContent>
-      </AppLayout>
+        </AppLayout.FooterContent> */}
+      {/* </AppLayout> */}
     </>
   );
 }

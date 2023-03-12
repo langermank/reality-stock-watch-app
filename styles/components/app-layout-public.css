@@ -1,0 +1,59 @@
+.AppLayoutPublic-header--wrap {
+  display: grid;
+  grid-template-columns: max-content minmax(0, auto) max-content;
+  align-items: center;
+  padding-inline: var(--padding-spacious);
+  max-inline-size: var(--media-xl-rem);
+  width: 100%;
+  margin-inline: auto;
+}
+
+.AppLayoutPublic-header {
+  grid-area: header;
+  background: var(--bg-2);
+  display: grid;
+}
+
+.AppLayoutPublic-header--logo {
+  display: var(--logo-display);
+  padding-inline-start: var(--padding-spacious);
+}
+
+.AppLayoutPublic-header--nav {
+  place-self: center;
+
+  & ul {
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap-spacious);
+    align-items: center;
+  }
+}
+
+.AppLayoutPublic-content {
+  grid-area: content;
+  grid-column: 1 / -1;
+  overflow: auto;
+  display: grid;
+  max-inline-size: var(--media-xl-rem);
+  width: 100%;
+  margin-inline: auto;
+}
+
+main {
+  overflow: auto;
+  padding: var(--padding-spacious);
+  height: 100vh;
+}
+
+.AppLayoutPublic {
+  --header-height: var(--size-64);
+
+  display: grid;
+  grid-template-rows: var(--header-height) auto;
+  grid-template-areas:
+    "header"
+    "content";
+  height: 100vh;
+  overflow-x: hidden;
+}

@@ -150,6 +150,17 @@
   --size-96: 6rem;
   --size-112: 7rem;
   --size-128: 8rem;
+  --media-xxs-rem: 240px;
+  --media-xs-rem: 360px;
+  --media-sm-rem: 480px;
+  --media-md-rem: 768px;
+
+  /* 1024px */
+  --media-lg-rem: 64rem;
+
+  /* 1440px */
+  --media-xl-rem: 90rem;
+  --media-xxl-rem: 1920px;
 
   /* border radius */
   --border-radius-default: var(--size-4);
@@ -236,6 +247,11 @@
 
   li {
     list-style: none;
+  }
+
+  a {
+    color: var(--text-default);
+    text-decoration: none;
   }
 }
 
