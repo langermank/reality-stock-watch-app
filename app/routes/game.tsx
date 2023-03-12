@@ -1,9 +1,9 @@
 import PageLayout from "../components/PageLayout";
 
-export default function About() {
+export default function Game() {
   return (
     <PageLayout>
-      <h3>About</h3>
+      <h3>Games</h3>
     </PageLayout>
   );
 }
