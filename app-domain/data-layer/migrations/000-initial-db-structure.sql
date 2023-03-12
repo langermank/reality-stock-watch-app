@@ -99,10 +99,12 @@ create table if not exists "public"."reality_shows" (
   "updatedAt" timestamptz default null,
   "deletedAt" timestamptz default null,
   "name" varchar(1024) not null,
+  "slug" varchar(512) default null,
   "description" text default null,
   "genre" varchar(256) default null,
   "firstAiredDate"  date default null,
   "createdBy" text default null,
+  CONSTRAINT uq_rs_slug_key UNIQUE ("slug"),
   PRIMARY KEY ("id")
 );
 create index if not exists
@@ -114,11 +116,13 @@ create table if not exists "public"."reality_show_series" (
   "updatedAt" timestamptz default null,
   "deletedAt" timestamptz default null,
   "name" varchar(1024) not null,
+  "slug" varchar(512) default null,
   "description" text default null,
   "streamingNetworks" text default null,
   "realityShowId" uuid not null,
   CONSTRAINT fk_rss_rs_realityShowId
     FOREIGN KEY ("realityShowId") REFERENCES "public"."reality_shows"("id"),
+  CONSTRAINT uq_rsses_slug_key UNIQUE ("slug"),
   PRIMARY KEY ("id")
 );
 create index if not exists
@@ -130,6 +134,7 @@ create table if not exists "public"."reality_show_seasons" (
   "updatedAt" timestamptz default null,
   "deletedAt" timestamptz default null,
   "name" varchar(1024) not null,
+  "slug" varchar(512) default null,
   "seasonNumber" varchar(256) default null,
   "startDate" date default null,
   "endDate" date default null,
@@ -137,6 +142,7 @@ create table if not exists "public"."reality_show_seasons" (
   "realityShowSeriesId" uuid not null,
   CONSTRAINT fk_srss_srss_realityShowSeriesId
     FOREIGN KEY ("realityShowSeriesId") REFERENCES "public"."reality_show_series"("id"),
+  CONSTRAINT uq_rssea_slug_key UNIQUE ("slug"),
   PRIMARY KEY ("id")
 );
 
@@ -196,14 +202,17 @@ create table if not exists "public"."games" (
   "updatedAt" timestamptz default null,
   "deletedAt" timestamptz default null,
   "title" varchar(256) default null,
+  "slug" varchar(512) not null,
   "realityShowSeriesId" uuid not null,
   CONSTRAINT fk_gg_srss_realityShowSeriesId 
     FOREIGN KEY ("realityShowSeriesId") REFERENCES "public"."reality_show_series"("id"),
+  CONSTRAINT uq_g_slug_key UNIQUE ("slug"),
   PRIMARY KEY ("id")
 );
 
 create table if not exists "public"."game_seasons" (
   "id" uuid not null default gen_random_uuid(),
+  "slug" varchar(512) not null,
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
   "deletedAt" timestamptz default null,
@@ -215,11 +224,13 @@ create table if not exists "public"."game_seasons" (
     FOREIGN KEY ("gameId") REFERENCES "public"."games"("id"),
   CONSTRAINT fk_ggs_srss_realityShowSeasonId
     FOREIGN KEY ("realityShowSeasonId") REFERENCES "public"."reality_show_seasons"("id"),
+  CONSTRAINT uq_gs_slug_key UNIQUE ("slug"),
   PRIMARY KEY ("id")
 );
 
 create table if not exists "public"."game_season_cycles" (
   "id" uuid not null default gen_random_uuid(),
+  "slug" varchar(512) not null,
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
   "deletedAt" timestamptz default null,
@@ -228,6 +239,7 @@ create table if not exists "public"."game_season_cycles" (
   "gameSeasonId" uuid not null,
   CONSTRAINT fk_ggsc_ggs_gameSeasonId
     FOREIGN KEY ("gameSeasonId") REFERENCES "public"."game_seasons"("id"),
+  CONSTRAINT uq_gsc_slug_key UNIQUE ("slug"),
   PRIMARY KEY ("id")
 );
 
@@ -376,6 +388,7 @@ create table if not exists "public"."game_market_player_bank_accounts" (
 
 create table if not exists "public"."game_market_stocks" (
   "id" uuid not null default gen_random_uuid(),
+  "slug" varchar(512) not null,
   "createdAt" timestamptz default now(),
   "updatedAt" timestamptz default null,
   "deletedAt" timestamptz default null,
@@ -386,6 +399,7 @@ create table if not exists "public"."game_market_stocks" (
     FOREIGN KEY ("participantId") REFERENCES "public"."reality_show_participants"("id"),
   CONSTRAINT fk_gms_gmgsm_gameSeasonMarketId
     FOREIGN KEY ("gameSeasonMarketId") REFERENCES "public"."game_market_seasons"("id"),
+  CONSTRAINT uq_gms_slug_key UNIQUE ("slug"),
   PRIMARY KEY ("id")
 );
 

@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import type { SupabaseAuthClient } from "@supabase/supabase-js/dist/module/lib/SupabaseAuthClient";
 import { createClient } from "@supabase/supabase-js";
 
@@ -56,14 +56,17 @@ export class ApiClient {
     return data;
   }
 
-  async save(resourceId: string, entity: any) {
-    if (!entity) return;
+  async save(
+    resourceId: string,
+    entity: any
+  ): Promise<{ data: any | null; error: PostgrestError | null }> {
+    if (!entity) return { data: null, error: null };
 
     const { error = null, data } = await this._client?.from(resourceId).upsert(entity).select()!;
-    if (error) return error;
+    if (error) return { data: null, error };
 
-    Object.assign(entity, data);
-    return null;
+    if (!data?.length) return { data: null, error: null };
+    return { data: data[0], error: null };
   }
 
   _applyPagination(query: any, page: PageType) {

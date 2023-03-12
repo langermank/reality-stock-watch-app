@@ -1,12 +1,14 @@
-/// <reference path="./core.d.ts" />
+import type { Core } from "./core";
 
 export namespace Game {
   export interface Game extends Core.EntityRecord {
     title: ?string;
+    slug: ?string;
     realityShowSeriesId: Core.Uuid;
   }
 
   export interface GameSeason extends Core.EntityRecord {
+    slug: ?string;
     startDate: ?Date;
     endDate: ?Date;
     gameId: Core.Uuid;
@@ -14,6 +16,7 @@ export namespace Game {
   }
 
   export interface GameSeasonCycle extends Core.EntityRecord {
+    slug: ?string;
     startDate: ?Date;
     endDate: ?Date;
     gameSeasonId: Core.Uuid;

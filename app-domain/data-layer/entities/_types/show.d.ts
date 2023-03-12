@@ -1,9 +1,9 @@
-/// <reference path="./core.d.ts" />
+import type { Core } from "./core";
 
 export namespace Show {
   export interface RealityShow extends Core.EntityRecord {
     name: string;
-    slug: string;
+    slug: ?string;
     description: ?string;
     genre: ?string;
     firstAiredDate: ?Date;
@@ -12,27 +12,27 @@ export namespace Show {
 
   export interface RealityShowSeries extends Core.EntityRecord {
     name: string;
-    slug: string;
+    slug: ?string;
     description: ?string;
     streamingNetworks: ?string;
-    realityShowId: Core.Uuid;
+    realityShowId: ?Core.Uuid;
   }
 
   export interface RealityShowSeason extends Core.EntityRecord {
     name: string;
-    slug: string;
+    slug: ?string;
     seasonNumber: ?string;
     startDate: ?Date;
     endDate: ?Date;
     streamingNetworks: ?string;
-    realityShowSeriesId: Core.Uuid;
+    realityShowSeriesId: ?Core.Uuid;
   }
 
   export interface Participant extends Core.EntityRecord {
     ingressDate: ?Date;
     exitDate: ?Date;
-    realityShowSeasonId: Core.Uuid;
-    personId: Core.Uuid;
+    realityShowSeasonId: ?Core.Uuid;
+    personId: ?Core.Uuid;
   }
 
   export interface RealityShowSeasonEvent extends Core.EntityRecord {
@@ -40,14 +40,14 @@ export namespace Show {
     type: string;
     description: ?string;
     metadata: ?string;
-    realityShowSeasonId: Core.Uuid;
+    realityShowSeasonId: ?Core.Uuid;
   }
 
   export interface RealityShowSeasonEventParticipant extends Core.EntityRecord {
     role: ?string;
     description: ?string;
     metadata: ?string;
-    realityShowSeasonEventId: Core.Uuid;
-    participantId: Core.Uuid;
+    realityShowSeasonEventId: ?Core.Uuid;
+    participantId: ?Core.Uuid;
   }
 }

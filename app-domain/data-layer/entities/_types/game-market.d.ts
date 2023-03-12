@@ -1,4 +1,4 @@
-/// <reference path="./core.d.ts" />
+import type { Core } from "./core";
 
 export namespace GameMarket {
   export interface GameSeasonMarket extends Core.EntityRecord {
