@@ -1,7 +1,7 @@
 import React from "react";
 import type { PropsWithChildren } from "react";
-import { Button } from "../core/button/Button";
-import { Sidebar } from "phosphor-react";
+// import { Button } from "../core/button/Button";
+// import { Sidebar } from "phosphor-react";
 
 type AppLayoutProps = PropsWithChildren<{
   panelCollapsed?: boolean;
@@ -30,7 +30,15 @@ const FooterContent: React.FC<PropsWithChildren> = ({ children }): JSX.Element =
 );
 
 export function AppLayout({ children, panelCollapsed }: AppLayoutProps) {
-  const slots = {
+  const slots: {
+    nav: React.ReactNode | null;
+    logo: React.ReactNode | null;
+    toggle: React.ReactNode | null;
+    pageNotification: React.ReactNode | null;
+    pageTitle: React.ReactNode | null;
+    pageContent: React.ReactNode | null;
+    footerContent: React.ReactNode | null;
+  } = {
     nav: null,
     logo: null,
     toggle: null,
