@@ -1,11 +1,11 @@
 import type { LoaderArgs } from "@remix-run/node";
 import PageLayout from "../components/PageLayout";
 import { useParams, useLoaderData } from "@remix-run/react";
-import { getApp } from "../services/app";
+import { getAppDomain } from "../services/app";
 
 export const loader = async ({ params }: LoaderArgs) => {
-  const app = await getApp();
-  const store = await app.getStore();
+  const appDomain = await getAppDomain();
+  const store = await appDomain.getStore();
 
   const season = await store.showSeasons.fetchByUuid("04d8d1a3-d75c-4dd6-ab31-2c01e65911b1");
   console.log(season);

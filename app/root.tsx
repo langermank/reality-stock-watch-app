@@ -19,6 +19,7 @@ import { Heading } from "./components/core/Heading/Heading";
 import { Sidebar } from "phosphor-react";
 import Sidepane from "./components/Sidepane";
 import React from "react";
+import { AppDocument } from "./components/AppDocument";
 
 //#region [ Context functions ]
 // functions to provide specific pages with configuration over
@@ -60,7 +61,7 @@ export const links = () => [
 ];
 export const title = (() => {
   let titleText = "";
-  return (value) => {
+  return (value: string | undefined = "") => {
     if (!value) return value;
     titleText = value;
   };
@@ -79,12 +80,19 @@ export const loader = () => {
 //#region [ App Components]
 export default function App() {
   return (
-    <Document titleText='Reality Stock Watch App'>
+    <AppDocument>
       <Layout>
         <Outlet />
       </Layout>
-    </Document>
+    </AppDocument>
   );
+  // return (
+  //   <Document titleText='Reality Stock Watch App'>
+  //     <Layout>
+  //       <Outlet />
+  //     </Layout>
+  //   </Document>
+  // );
 }
 
 export function Document({ children, titleText }) {
