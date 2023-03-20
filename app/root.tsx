@@ -1,25 +1,12 @@
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLoaderData,
-} from "@remix-run/react";
-import globalStylesUrl from "./styles/global.css";
+import { Outlet } from "@remix-run/react";
+import { AppDocument } from "./components/AppDocument";
+import { MainLayout } from "./components/layout/MainLayout";
+// styles
+import globalStylesUrl from "../styles/global.css";
 import reset from "./styles/reset.css";
 import radixDark from "./styles/radix-dark.css";
 import radixLight from "./styles/radix-light.css";
 import Fonts from "./styles/fonts.css";
-import Footer from "./components/Footer";
-import { AppLayout } from "./components/layout/AppLayout";
-import { Button } from "./components/core/button/Button";
-import { Heading } from "./components/core/Heading/Heading";
-import { Sidebar } from "phosphor-react";
-import Sidepane from "./components/Sidepane";
-import React from "react";
-import { AppDocument } from "./components/AppDocument";
 
 //#region [ Context functions ]
 // functions to provide specific pages with configuration over
@@ -59,13 +46,6 @@ export const links = () => [
   { rel: "stylesheet", href: radixLight },
   { rel: "stylesheet", href: Fonts },
 ];
-export const title = (() => {
-  let titleText = "";
-  return (value: string | undefined = "") => {
-    if (!value) return value;
-    titleText = value;
-  };
-})();
 //#endregion
 
 export const loader = () => {
@@ -81,98 +61,9 @@ export const loader = () => {
 export default function App() {
   return (
     <AppDocument>
-      <Layout>
+      <MainLayout>
         <Outlet />
-      </Layout>
+      </MainLayout>
     </AppDocument>
   );
-  // return (
-  //   <Document titleText='Reality Stock Watch App'>
-  //     <Layout>
-  //       <Outlet />
-  //     </Layout>
-  //   </Document>
-  // );
 }
-
-export function Document({ children, titleText }) {
-  const { env } = useLoaderData();
-  return (
-    <html lang='en' data-theme='dark'>
-      <head>
-        <Links />
-
-        <title>{titleText ? titleText : title()}</title>
-
-        <Meta />
-      </head>
-
-      <body>
-        {children}
-
-        <ScrollRestoration />
-        <Scripts />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.env = ${JSON.stringify(env)}`,
-          }}
-        />
-        {process.env.NODE_ENV === "development" ? <LiveReload /> : null}
-      </body>
-    </html>
-  );
-}
-
-export function Layout({ children }) {
-  let [open, setOpen] = React.useState(false);
-  let [panelState, setpanelState] = React.useState(false);
-  return (
-    <>
-      <AppLayout panelCollapsed={panelState}>
-        <AppLayout.Logo>Stockwatch</AppLayout.Logo>
-        <AppLayout.Toggle>
-          <Button
-            iconOnly
-            icon={<Sidebar />}
-            size='small'
-            variant='muted'
-            // set panel state to expanded or collapsed
-            onClick={() => setpanelState(!panelState)}
-          ></Button>
-        </AppLayout.Toggle>
-        <AppLayout.PageTitle>
-          <Heading as='h1' size='display'>
-            Dashboard
-          </Heading>
-        </AppLayout.PageTitle>
-        {/* <AppLayout.PageNotification>
-          <Card variant='neutral'>The market opens in 5 hours!</Card>
-        </AppLayout.PageNotification> */}
-        <AppLayout.Nav>
-          <Sidepane />
-        </AppLayout.Nav>
-        <AppLayout.PageContent>
-          <div>{children}</div>
-        </AppLayout.PageContent>
-        <AppLayout.FooterContent>
-          <Footer />
-        </AppLayout.FooterContent>
-      </AppLayout>
-    </>
-  );
-}
-
-export function ErrorBoundary({ error }) {
-  console.error(error);
-
-  return (
-    <>
-      <Document title='Error'>
-        <h1>Error</h1>
-
-        <p>{error.message}</p>
-      </Document>
-    </>
-  );
-}
-//#endregion

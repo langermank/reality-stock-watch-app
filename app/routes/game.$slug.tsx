@@ -1,5 +1,5 @@
 import type { LoaderArgs } from "@remix-run/node";
-import PageLayout from "../components/PageLayout";
+import PageLayout from "../components/layout/PageLayout";
 import { useParams, useLoaderData } from "@remix-run/react";
 import { getAppDomain } from "../services/app";
 
@@ -20,9 +20,6 @@ export default function GameSeason() {
 
   return (
     <div>
-      <br />
-      <br />
-      <br />
       <br />
       {params.slug}
       <h3>Game season</h3>

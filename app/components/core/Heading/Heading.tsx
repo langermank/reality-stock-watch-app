@@ -1,4 +1,5 @@
-import React, { PropsWithChildren, forwardRef, type Ref } from "react";
+import type { PropsWithChildren } from "react";
+import React, { forwardRef, type Ref } from "react";
 
 type BaseProps<T> = {
   className?: string;
@@ -26,14 +27,14 @@ export const classMap = {
   h6: HeadingSizes[5],
 };
 
-type HeadingTags = BaseProps<HTMLHeadingElement> & {
+type HeadingTagsType = BaseProps<HTMLHeadingElement> & {
   as?: typeof HeadingTags[number];
   size?: typeof HeadingSizes[number];
 } & React.HTMLAttributes<HTMLHeadingElement>;
 
 export type HeadingProps = {
   className?: string;
-} & HeadingTags;
+} & HeadingTagsType;
 
 export const Heading = forwardRef(
   (

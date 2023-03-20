@@ -12,11 +12,12 @@
     "build:cli": "tsc --project ./tsconfig-cli.json",
     "storybook": "start-storybook -p 6006",
     "cli": "tsc --project ./tsconfig-cli.json && node ./_clidist/app-domain/cli/main.js",
-    "dev": "concurrently \"npm run dev:css\" \"npm run dev:remix\"",
+    "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
     "dev:remix": "node -r dotenv/config node_modules/.bin/remix dev",
     "dev:css": "postcss styles/global.css --dir app/styles/ --watch",
     "dev:storybook": "concurrently \"npm run storybook\" \"npm run dev:css\"",
     "dev:setup": "tsc --project ./tsconfig-cli.json && node ./_clidist/app-domain/cli/dev-setup.js",
+    "start": "echo \"Error: netlify setup not complete\"",
     "clean": "rimraf build public/build _clidist",
     "lint": "stylelint --config ./stylelintrc \"**/*.css\"",
     "lint:fix": "stylelint --config ./stylelintrc \"**/*.css\" --fix"

@@ -1,5 +1,5 @@
 export namespace Auth {
-  export interface Users {
+  export interface User {
     instance_id: string;
     id: string;
     aud: string;

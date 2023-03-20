@@ -24,11 +24,7 @@ export function AppDocument({ children }: PropsWithChildren) {
         <ScrollRestoration />
         <Scripts />
 
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.env = ${JSON.stringify(env)}`,
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: `window.env = ${JSON.stringify(env)}` }} />
         {process.env.NODE_ENV === "development" ? <LiveReload /> : null}
       </body>
     </html>
