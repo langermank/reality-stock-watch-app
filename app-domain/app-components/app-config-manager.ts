@@ -17,6 +17,11 @@ export type EnvFileType = {
   PG_PSWD: string;
   SB_REST_ENDPOINT: string;
   SB_SERVICE_SECRET: string;
+  REMIX_SESSION_SECRET: string;
+};
+
+export type WebConfigType = {
+  sessionMasterSecret: string;
 };
 
 type TargetEnvironmentKeys = keyof typeof TargetEnvironments;
@@ -27,6 +32,7 @@ export class AppConfigManager {
   _envFilePath: string | undefined;
   _dbConfig: DbConfigType | undefined;
   _apiClientConfig: ApiClientConfigType | undefined;
+  _webConfig: WebConfigType | undefined;
 
   get dbConfig() {
     return this._dbConfig;
@@ -66,6 +72,10 @@ export class AppConfigManager {
     this._apiClientConfig = {
       endpoint: config.SB_REST_ENDPOINT,
       secretKey: config.SB_SERVICE_SECRET,
+    };
+
+    this._webConfig = {
+      sessionMasterSecret: config.REMIX_SESSION_SECRET,
     };
   }
 }

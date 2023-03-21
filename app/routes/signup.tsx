@@ -34,11 +34,13 @@ export default function Login() {
 
   return (
     <>
-      <div>login page</div>
+      <div>Sign up</div>
       <span>{errorData && errorData.message}</span>
       <Form method='post'>
         <input name='username' type='text' />
+        <br />
         <input name='password' type='password' />
+        <br />
         <button type='submit'>Sign in</button>
       </Form>
     </>

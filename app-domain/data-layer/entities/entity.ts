@@ -5,4 +5,8 @@ export class EntityRecord implements Core.EntityRecord {
   createdAt: Date | null = null;
   updatedAt: Date | null = null;
   deletedAt: Date | null = null;
+
+  isNew() {
+    return this.id === null || !this.id.trim();
+  }
 }
