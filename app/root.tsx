@@ -2,7 +2,7 @@ import { Outlet } from "@remix-run/react";
 import { AppDocument } from "./components/AppDocument";
 import { MainLayout } from "./components/layout/MainLayout";
 // styles
-import globalStylesUrl from "../styles/global.css";
+import globalStylesUrl from "./styles/global.css";
 import reset from "./styles/reset.css";
 import radixDark from "./styles/radix-dark.css";
 import radixLight from "./styles/radix-light.css";
