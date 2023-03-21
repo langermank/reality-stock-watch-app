@@ -1,13 +1,10 @@
-import { RealityShowRepository } from '../data-layer/repositories/reality-show.repository';
-import type { ApiClient } from '../data-layer/persistence/api-client';
+import type { App } from "../app";
 
 export class RealityShowService {
-  _api: ApiClient;
-  _repository: RealityShowRepository;
+  _app: App;
 
-  constructor(api: ApiClient) {
-    this._api = api;
-    this._repository = new RealityShowRepository(api);
+  constructor(app: App) {
+    this._app = app;
   }
 
   async findByUuid(uuid: string) {
@@ -15,6 +12,6 @@ export class RealityShowService {
 
     // TODO: check permissions
 
-    return await this._repository.fetchByUuid(uuid);
+    return await this._app.store.shows.fetchByUuid(uuid);
   }
 }

@@ -1,7 +1,6 @@
 import crypto from "crypto";
 import type { SessionStorage } from "@remix-run/node";
 import { createCookieSessionStorage } from "@remix-run/node";
-import { getAppDomain } from "./app";
 
 export type SessionData = {
   username: string;
@@ -9,12 +8,9 @@ export type SessionData = {
 };
 
 let sessionStorage: SessionStorage<SessionData, SessionData> | null = null;
-
-export const getSessionStorage = async () => {
+export const getSessionStorage = async (sessionMasterSecret: string | undefined) => {
   if (!sessionStorage) {
-    const appDomain = await getAppDomain();
-
-    let sessionSecret = appDomain.getWebConfig()?.sessionMasterSecret;
+    let sessionSecret = sessionMasterSecret;
     if (!sessionSecret) {
       console.warn("No session secret was configured. Generating a random secret");
       console.warn("If in prod, this can invalidate users current sessions");

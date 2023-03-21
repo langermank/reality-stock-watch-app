@@ -3,6 +3,7 @@ import {
   AppConfigManager,
   TargetEnvironments,
 } from "../../app-domain/app-components/app-config-manager";
+import { getSessionStorage } from "./session-storage";
 
 // fetching target environment
 let targetEnvironment = TargetEnvironments.development;
@@ -22,6 +23,17 @@ configManager.load();
 
 const appInstance = new App(configManager);
 
+let app: App | null = null;
 export const getAppDomain = async () => {
-  return await appInstance.boot();
+  if (app) return app;
+
+  app = await appInstance.boot();
+  const { getSession } = await getSessionStorage(app.getWebConfig()?.sessionMasterSecret);
+
+  const session = await getSession();
+  const userToken = session.get("token") || "";
+  const username = session.get("username") || "";
+  app.setUserAuth(username, userToken);
+
+  return app;
 };

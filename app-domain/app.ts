@@ -43,4 +43,8 @@ export class App {
   getWebConfig() {
     return this.config?._webConfig;
   }
+
+  setUserAuth(username: string, userToken: string) {
+    // TODO: check if this is actually necessary by loging in two different users and checking how remix deals with it
+  }
 }
