@@ -1,3 +1,4 @@
+import { EntityRecord } from "../entities/entity";
 import type { ApiClient } from "../persistence/api-client";
 
 const nonPersistentPropertyPrefix = "_";
@@ -17,6 +18,12 @@ export class BaseRepository<T> {
   }
 
   async save(entity: Partial<T>) {
+    if (entity instanceof EntityRecord) {
+      if (!entity.isNew()) {
+        entity.updatedAt = new Date(Date.now());
+      }
+    }
+
     const entityPayload = this._entityToJson(entity);
 
     const { data, error } = await this._apiClient.save(this._resourceName, entityPayload);
