@@ -1,5 +1,5 @@
 import type { LoaderArgs } from "@remix-run/node";
-import PageLayout from "../components/PageLayout";
+import { PageLayout } from "../components/layout/PageLayout";
 import { useParams, useLoaderData } from "@remix-run/react";
 import { getApp } from "../services/app";
 

@@ -16,6 +16,7 @@ import Footer from "./components/Footer";
 import { AppLayout } from "./components/layout/AppLayout";
 import { Button } from "./components/core/button/Button";
 import { Heading } from "./components/core/Heading/Heading";
+import { PageLayout } from "./components/layout/PageLayout";
 import { Sidebar } from "phosphor-react";
 import Sidepane from "./components/Sidepane";
 import React from "react";
@@ -143,9 +144,7 @@ export function Layout({ children }) {
         <AppLayout.Nav>
           <Sidepane />
         </AppLayout.Nav>
-        <AppLayout.PageContent>
-          <div>{children}</div>
-        </AppLayout.PageContent>
+        <AppLayout.PageContent>{children}</AppLayout.PageContent>
         <AppLayout.FooterContent>
           <Footer />
         </AppLayout.FooterContent>

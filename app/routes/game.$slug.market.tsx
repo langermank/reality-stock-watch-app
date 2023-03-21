@@ -1,4 +1,4 @@
-import PageLayout from "../components/PageLayout";
+import { PageLayout } from "../components/layout/PageLayout";
 import { useParams } from "@remix-run/react";
 
 export default function Market() {
