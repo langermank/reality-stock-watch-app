@@ -1,46 +1,94 @@
-import type { SessionData } from './session-storage';
+import type { SessionData } from "./session-storage";
+import type { Session } from "@remix-run/server-runtime";
 
-import { Authenticator, AuthorizationError } from 'remix-auth';
-import { FormStrategy } from 'remix-auth-form';
-import { getApp } from './app';
-import { sessionStorage } from './session-storage';
+import type { AuthenticateOptions } from "remix-auth";
+import { Authenticator, AuthorizationError } from "remix-auth";
+import { FormStrategy } from "remix-auth-form";
+import { getAppDomain } from "./app";
+import { getSessionStorage } from "./session-storage";
 
-export type LoginType = 'password' | 'authProvider';
+export type LoginType = "password" | "authProvider";
+export type AuthenticatorDataType = SessionData | Error | null;
 
-export const webAuth = new Authenticator<SessionData | Error | null>(sessionStorage, {
-  sessionKey: 'authToken',
-  sessionErrorKey: 'authError',
-});
+class WebAuthenticator {
+  auth: Authenticator<SessionData | Error | null>;
 
-webAuth.use(
-  new FormStrategy(async ({ form }) => {
-    let loginType = form.get('loginType');
-    if (!loginType) loginType = 'password';
+  constructor(sessionStorage: Awaited<ReturnType<typeof getSessionStorage>>) {
+    this.auth = new Authenticator(sessionStorage);
+  }
 
-    if (loginType === 'password') {
-      const username = form.get('username');
-      if (!username) throw new AuthorizationError('username required');
+  _createAuthenticator(sessionStorage: Awaited<ReturnType<typeof getSessionStorage>>) {
+    this.auth = new Authenticator(sessionStorage, {
+      sessionKey: "authToken",
+      sessionErrorKey: "authError",
+    });
+  }
 
-      const password = form.get('password');
-      if (!password) throw new AuthorizationError('password required');
+  authenticate(
+    strategy: string,
+    request: Request,
+    options?: Pick<
+      AuthenticateOptions,
+      "successRedirect" | "failureRedirect" | "throwOnError" | "context"
+    >
+  ): Promise<AuthenticatorDataType> {
+    return this.auth.authenticate(strategy, request, options);
+  }
 
-      const appDomain = await getApp();
-      const token = await appDomain.authenticator.login(username.toString(), password.toString());
-      console.log('token', token);
+  logout(
+    request: Request | Session,
+    options: {
+      redirectTo: string;
+    }
+  ): Promise<never> {
+    return this.auth.logout(request, options);
+  }
 
-      if (!token) throw new AuthorizationError('credentials invalid');
+  singup() {}
+}
+
+let webAuth: Authenticator<AuthenticatorDataType> | null = null;
+export const getWebAuth = async () => {
+  if (webAuth) return webAuth;
+
+  const appDomain = await getAppDomain();
+  const sessionStorage = await getSessionStorage(appDomain.getWebConfig()?.sessionMasterSecret);
+
+  webAuth = new Authenticator<AuthenticatorDataType>(sessionStorage, {
+    sessionKey: "authToken",
+    sessionErrorKey: "authError",
+  });
+
+  webAuth.use(
+    new FormStrategy(async ({ form }) => {
+      let loginType = form.get("loginType");
+      if (!loginType) loginType = "password";
+
+      if (loginType === "password") {
+        const username = form.get("username");
+        if (!username) throw new AuthorizationError("username required");
+
+        const password = form.get("password");
+        if (!password) throw new AuthorizationError("password required");
+
+        const token = await appDomain.authenticator.login(username.toString(), password.toString());
+
+        if (!token) throw new AuthorizationError("credentials invalid");
+
+        return {
+          username: username.toString(),
+          token: token,
+        };
+      }
+
+      //todo: auth providers
 
       return {
-        username: username.toString(),
-        token: 'dummy-data',
-      };
-    }
+        username: "",
+        token: "",
+      } as SessionData;
+    })
+  );
 
-    //todo: auth providers
-
-    return {
-      username: '',
-      token: '',
-    } as SessionData;
-  }),
-);
+  return webAuth;
+};

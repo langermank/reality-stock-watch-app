@@ -16,6 +16,8 @@ interface MenuButtonProps<T> extends AriaMenuProps<T> {
   iconOnly?: boolean;
   iconPosition?: "left" | "right";
   iconSpacing?: "default" | "spacious";
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export function MenuButton<T extends object>(props: MenuButtonProps<T>) {

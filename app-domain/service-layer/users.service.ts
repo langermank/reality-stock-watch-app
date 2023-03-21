@@ -1,10 +1,13 @@
-import type { ApiClient } from '../data-layer/persistence/api-client';
+import type { ApiClient } from "../data-layer/persistence/api-client";
+import type { App } from "../app";
 
-export class UsersService {
+export class UserService {
+  _app: App;
   _api: ApiClient;
 
-  constructor(api: ApiClient) {
-    this._api = api;
+  constructor(app: App) {
+    this._app = app;
+    this._api = app.apiClient;
   }
 
   async signUp(login: string, password: string) {

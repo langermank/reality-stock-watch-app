@@ -14,3 +14,4 @@ node_modules
 /api/index.js.map
 app/styles
 /_clidist/
+/storybook-static/

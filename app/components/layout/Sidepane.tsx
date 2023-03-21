@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "@remix-run/react";
 import seasons from "~/data/season.json";
-import { Button } from "./core/button/Button";
-import { NavList } from "./core/NavList/NavList";
+import { Button } from "../core/button/Button";
+import { NavList } from "../core/NavList/NavList";
 import {
   Diamond,
   Coin,
@@ -14,43 +14,50 @@ import {
   UserCircle,
   Gear,
 } from "phosphor-react";
-import { MenuNavLink } from "./core/NavList/NavLink";
-import { MenuButton } from "./core/DropdownMenu/DropdownMenu";
+import { MenuNavLink } from "../core/NavList/NavLink";
+import { MenuButton } from "../core/DropdownMenu/DropdownMenu";
 import { Item } from "@react-stately/collections";
 
-export const loader = ({ params: { short_name } }) => {
-  const season = seasons.find((c) => c.short_name === short_name);
+//export const loader = ({ params: { short_name } }) => {
+//  const season = seasons.find((c) => c.short_name === short_name);
+//
+//  return { season };
+//};
 
-  return { season };
-};
-
-export default function Sidepane() {
+export function Sidepane() {
   let [open, setOpen] = useState(false);
-  let [panelState, setpanelState] = React.useState(false);
+  let [panelState, setpanelState] = useState(false);
   return (
     <>
       <NavList>
-        <MenuNavLink to='/' icon={<Diamond />}>
+        <MenuNavLink to='/game' icon={<Diamond />}>
           Games
         </MenuNavLink>
+
+        <MenuNavLink to='/user/dashboard' icon={<House />}>
+          Dashboard
+        </MenuNavLink>
+
         <MenuNavLink to='/' icon={<Coin />}>
           Market
         </MenuNavLink>
-        <MenuNavLink to='/' icon={<House />}>
-          Dashboard
-        </MenuNavLink>
+
         <MenuNavLink to='/' icon={<ClipboardText />}>
           Survey
         </MenuNavLink>
+
         <MenuNavLink to='/' icon={<ChartPie />}>
           Projections
         </MenuNavLink>
+
         <MenuNavLink to='/' icon={<Medal />}>
           Leaderboard
         </MenuNavLink>
+
         <MenuNavLink to='/' icon={<Lock />}>
           Admin
         </MenuNavLink>
+
         <MenuButton
           isOpen={open}
           onOpenChange={setOpen}
