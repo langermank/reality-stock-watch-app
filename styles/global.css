@@ -150,6 +150,10 @@
   --size-96: 6rem;
   --size-112: 7rem;
   --size-128: 8rem;
+  --size-220: 13.75rem;
+  --size-256: 16rem;
+  --size-280: 17.5rem;
+  --size-368: 23rem;
 
   /* container */
   --container-xxs-240: 15rem;

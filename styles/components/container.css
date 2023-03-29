@@ -1,0 +1,15 @@
+@layer components {
+  .Container-sm {
+    &[data-width="sm"] {
+      max-width: var(--container-sm-480);
+    }
+
+    &[data-width="md"] {
+      max-width: var(--container-md-768);
+    }
+
+    &[data-width="lg"] {
+      max-width: var(--container-lg-1024);
+    }
+  }
+}

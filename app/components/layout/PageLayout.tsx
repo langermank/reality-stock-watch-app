@@ -1,24 +1,22 @@
 import React from "react";
 
 export type PageLayoutProps = {
-  containerWidth?: "sm" | "md" | "lg" | "xl";
-  containerAlign?: "left" | "center" | "right";
+  containerAlign?: "center";
+  containerCol?: "single" | "split";
   children?: React.ReactNode;
 };
 
 export function PageLayout({
-  containerWidth = "md",
   containerAlign = "center",
+  containerCol = "single",
   children,
 }: PageLayoutProps) {
   return (
     <div className='PageLayout'>
-      <div
-        className='PageLayout-content'
-        data-container-align={containerAlign}
-        // data-container-width={containerWidth}
-      >
-        <div className='PageLayout-container'>{children}</div>
+      <div className='PageLayout-content' data-container-align={containerAlign}>
+        <div className='PageLayout-container' data-container-col={containerCol}>
+          {children}
+        </div>
       </div>
     </div>
   );
