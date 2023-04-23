@@ -150,6 +150,19 @@
   --size-96: 6rem;
   --size-112: 7rem;
   --size-128: 8rem;
+  --size-220: 13.75rem;
+  --size-256: 16rem;
+  --size-280: 17.5rem;
+  --size-368: 23rem;
+
+  /* container */
+  --container-xxs-240: 15rem;
+  --container-xs-360: 22.5rem;
+  --container-sm-480: 30rem;
+  --container-md-768: 48rem;
+  --container-lg-1024: 64rem;
+  --container-xl-1440: 90rem;
+  --container-xxl-1920: 120rem;
 
   /* border radius */
   --border-radius-default: var(--size-4);
@@ -238,12 +251,3 @@
     list-style: none;
   }
 }
-
-/* #region [ Page ] */
-.PageLayout {
-  display: grid;
-  grid-template-columns: minmax(200px, 1fr) minmax(66%, 1fr);
-  gap: var(--grid-2x);
-}
-
-/* #endregion */

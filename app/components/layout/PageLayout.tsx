@@ -1,19 +1,25 @@
-import type { PropsWithChildren } from "react";
+import React from "react";
 
-type PageLayoutProps = {
-  hideSidebar?: boolean;
+export type PageLayoutProps = {
+  containerAlign?: "center";
+  containerCol?: "single" | "split";
+  children?: React.ReactNode;
 };
 
-export default function PageLayout({ children, hideSidebar }: PropsWithChildren<PageLayoutProps>) {
+export function PageLayout({
+  containerAlign = "center",
+  containerCol = "single",
+  children,
+}: PageLayoutProps) {
   return (
-    <div className='PageLayout LayoutContent-inner-content-wrapper'>
-      {/*!hideSidebar ? (
-        <div className='PageLayout-side-column'>
-          <Sidepane />
+    <div className='PageLayout'>
+      <div className='PageLayout-content' data-container-align={containerAlign}>
+        <div className='PageLayout-container' data-container-col={containerCol}>
+          {children}
         </div>
-      ) : null*/}
-
-      <div className='PageLayout-main-content'>{children}</div>
+      </div>
     </div>
   );
 }
+
+PageLayout.displayName = "PageLayout";
