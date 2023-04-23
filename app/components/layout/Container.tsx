@@ -1,11 +1,11 @@
 import React from "react";
 
 export type ContainerProps = {
-  width?: "sm" | "md" | "lg";
+  width?: "small" | "medium" | "large";
   children?: React.ReactNode;
 };
 
-export function Container({ width = "md", children }: ContainerProps) {
+export function Container({ width = "medium", children }: ContainerProps) {
   return (
     <div className='Container' data-width={width}>
       {children}

@@ -1,14 +1,14 @@
 @layer components {
   .Container-sm {
-    &[data-width="sm"] {
+    &[data-width="small"] {
       max-width: var(--container-sm-480);
     }
 
-    &[data-width="md"] {
+    &[data-width="medium"] {
       max-width: var(--container-md-768);
     }
 
-    &[data-width="lg"] {
+    &[data-width="large"] {
       max-width: var(--container-lg-1024);
     }
   }
