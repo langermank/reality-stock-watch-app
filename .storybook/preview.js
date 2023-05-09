@@ -15,7 +15,7 @@ export const parameters = {
   'data-theme-toggle': {
     default: 'dark',
   },
-  layout: 'fullscreen',
+  layout: 'padded',
   // darkMode: {
   //   // Override the default dark theme
   //   dark: { ...themes.dark, appBg: 'black' },

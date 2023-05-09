@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Warning, WarningOctagon, CircleWavyCheck } from "phosphor-react";
 import { guid } from "../../../utils/uuid-generator";
+import clsx from "clsx";
 
 export type InputProps = {
   label: string;
@@ -12,6 +13,7 @@ export type InputProps = {
   state?: "warning" | "error" | "success";
   icon?: React.ReactNode;
   fullWidth?: boolean;
+  visuallyHideLabel?: boolean;
 };
 
 export const Input = ({
@@ -24,6 +26,7 @@ export const Input = ({
   validationMessage,
   state,
   fullWidth,
+  visuallyHideLabel,
 }: InputProps) => {
   const hintTextId = useMemo(() => guid("hint-text"), []);
   const validationId = useMemo(() => guid("validation-id"), []);
@@ -33,7 +36,7 @@ export const Input = ({
   return (
     <div className='InputLayout' data-fullWidth={fullWidth ? "true" : undefined}>
       <span className='InputLabelWrap'>
-        <label htmlFor={id} className='Input-label'>
+        <label htmlFor={id} className={clsx("Input-label", visuallyHideLabel && "visuallyHidden")}>
           {label}
         </label>
         {hint && (

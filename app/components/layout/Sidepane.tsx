@@ -38,7 +38,7 @@ export function Sidepane() {
           Dashboard
         </MenuNavLink>
 
-        <MenuNavLink to='/' icon={<Coin />}>
+        <MenuNavLink to='/user/market' icon={<Coin />}>
           Market
         </MenuNavLink>
 

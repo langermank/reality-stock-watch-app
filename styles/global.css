@@ -1,7 +1,7 @@
 @import-glob "./components/**/*.css";
 @import-glob "./open-props/**/*.css";
 
-@layer reset, base, components;
+@layer reset, base, components, compositions;
 
 /* @media (prefers-color-scheme: dark) {
   :root { */
@@ -9,6 +9,7 @@
   /* base */
   --bg-1: var(--slate1);
   --bg-2: var(--slate2);
+  --bg-3: var(--slate3);
   --bg-inverse: var(--slate11);
   --bg-link: var(--text-link);
   --bg-overlay: var(--bg-2);
@@ -234,6 +235,8 @@
   html,
   body {
     font-family: var(--font-family-regular);
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+      monospace;
     color: var(--text-default);
     background: var(--bg-1);
   }
@@ -249,5 +252,9 @@
 
   li {
     list-style: none;
+  }
+
+  .visuallyHidden {
+    @mixin visuallyHidden;
   }
 }
