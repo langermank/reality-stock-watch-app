@@ -1,0 +1,31 @@
+@layer components {
+  .Text {
+    line-height: var(--text-lineHeight-default);
+    font-weight: var(--text-weight-regular);
+    color: var(--text-default);
+
+    /* size options */
+
+    &[data-size="large"] {
+      font-size: var(--text-size-body-large);
+    }
+
+    &[data-size="medium"] {
+      font-size: var(--text-size-body-medium);
+    }
+
+    &[data-size="small"] {
+      font-size: var(--text-size-body-small);
+    }
+
+    /* weight options */
+
+    &[data-weight="regular"] {
+      font-weight: var(--text-weight-regular);
+    }
+
+    &[data-weight="semibold"] {
+      font-weight: var(--text-weight-semibold);
+    }
+  }
+}

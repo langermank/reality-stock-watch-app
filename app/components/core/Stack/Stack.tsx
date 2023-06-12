@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import type { PropsWithChildren } from "react";
 import type { ResponsivePropsType } from "../../../utils/responsive-variant";
 import { convertToResponsiveAttributes } from "../../../utils/responsive-variant";
@@ -10,6 +11,7 @@ export type StackProps = {
   alignWrap?: "start" | "center" | "end" | "distribute" | "distributeEvenly";
   spread?: "start" | "center" | "end" | "distribute" | "distributeEvenly";
   wrap?: "wrap" | "nowrap";
+  className?: string;
 };
 
 export type ResponsiveStackProps = PropsWithChildren<ResponsivePropsType<StackProps>>;
@@ -22,6 +24,7 @@ export function Stack({
   alignWrap = "start",
   spread = "start",
   wrap = "wrap",
+  className,
 }: ResponsiveStackProps) {
   const dataAttributes = convertToResponsiveAttributes({
     responsiveProps: {
@@ -35,7 +38,7 @@ export function Stack({
   });
 
   return (
-    <div className='Stack' {...dataAttributes}>
+    <div className={clsx("Stack", className)} {...dataAttributes}>
       {children}
     </div>
   );

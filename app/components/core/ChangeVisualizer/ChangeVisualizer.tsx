@@ -4,9 +4,14 @@ import { ArrowSquareUp, ArrowSquareDown, DiceOne } from "phosphor-react";
 export type ChangeVisualizerProps = {
   changeState?: "increase" | "decrease" | "nochange";
   label?: string;
+  size?: "small" | "medium";
 };
 
-export function ChangeVisualizer({ label, changeState = "nochange" }: ChangeVisualizerProps) {
+export function ChangeVisualizer({
+  label,
+  changeState = "nochange",
+  size = "medium",
+}: ChangeVisualizerProps) {
   const icon = () => {
     if (changeState === "increase") {
       return <ArrowSquareUp weight='fill' />;
@@ -17,9 +22,9 @@ export function ChangeVisualizer({ label, changeState = "nochange" }: ChangeVisu
     }
   };
   return (
-    <div className='ChangeVisualizer' data-state={changeState}>
+    <div className='ChangeVisualizer' data-state={changeState} data-size={size}>
       {icon()}
-      {label && <p className='ChangeVisualizer-label'>{label}</p>}
+      {label && <p>{label}</p>}
     </div>
   );
 }

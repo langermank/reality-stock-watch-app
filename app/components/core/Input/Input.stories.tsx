@@ -19,3 +19,11 @@ export const WithIcon: ComponentStory<typeof Input> = (args) => <Input {...args}
 WithIcon.args = {
   icon: <MagnifyingGlass />,
 };
+
+export const AllLabels: ComponentStory<typeof Input> = (args) => <Input {...args} />;
+AllLabels.args = {
+  icon: <MagnifyingGlass />,
+  label: "Label",
+  hint: "Hint",
+  validationMessage: "Validation message",
+};

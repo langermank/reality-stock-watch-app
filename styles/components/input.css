@@ -1,5 +1,5 @@
 .InputLayout {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   gap: var(--size-4);
 
@@ -52,8 +52,6 @@
 .Input,
 .Select {
   @mixin Field;
-
-  width: 100%;
   height: var(--control-medium-height);
   font-size: var(--control-medium-fontSize);
   border-radius: var(--control-borderRadius);
@@ -79,8 +77,6 @@
 
 .InputWrap {
   position: relative;
-  display: grid;
-  gap: var(--size-4);
 
   & .IconWrap {
     position: absolute;

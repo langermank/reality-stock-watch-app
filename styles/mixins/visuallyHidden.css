@@ -1,6 +1,11 @@
 @define-mixin visuallyHidden {
-  font-size: 0;
-  height: 1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: auto;
+  margin: 0;
   overflow: hidden;
-  display: block;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
 }
