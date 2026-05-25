@@ -30,8 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files — .env.local is committed (local Supabase keys are identical on every machine)
+.env.production*
+.env.staging*
 
 # claude local overrides
 .claude/settings.local.json
