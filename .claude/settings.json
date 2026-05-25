@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "prompt=$(jq -r '.tool_input.prompt // \"\"'); echo \"$prompt\" | grep -qiE 'build|implement|create|start|scaffold|work on|write' && echo \"$prompt\" | grep -qiE 'component|page|ui|feature|overlay|modal|nav|layout|screen|frontend|design' && echo '{\"systemMessage\": \"Reminder: search Mobbin for design patterns before implementing this UI. Use mcp__mobbin__search_screens with relevant search terms (e.g. trade overlay, portfolio list, leaderboard row).\"}' || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\": \"Before ending: did this session include any architectural decisions, new conventions, infrastructure discoveries, or hard rules? If yes, update CLAUDE.md now.\"}'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

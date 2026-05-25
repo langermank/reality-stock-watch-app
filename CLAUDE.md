@@ -27,6 +27,7 @@ See `docs/tech-stack.md` for full decisions and rationale.
 | `docs/tech-stack.md` | Stack decisions and constraints |
 | `docs/design/conceptual-model.md` | All objects, relationships, states, vocabulary |
 | `docs/design/interaction-flow-*.md` | Breadboarded user flows |
+| `docs/dev-environment.md` | Environment setup, migration workflow, fake season |
 
 ---
 
