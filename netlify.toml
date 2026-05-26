@@ -5,15 +5,14 @@
 [build.environment]
   NODE_VERSION = "20"
   PNPM_VERSION = "11"
-  # Fill these in once Supabase project is created (Settings → API):
-  NEXT_PUBLIC_SUPABASE_URL = "https://your-project.supabase.co"
-  NEXT_PUBLIC_SUPABASE_ANON_KEY = "your-anon-key"
-  # NEXT_PUBLIC_ vars and VAPID public key are safe to commit —
-  # Supabase anon key is intentionally public, protected by RLS not key secrecy.
-  VAPID_PUBLIC_KEY = "BHsCqtQHYqmQdxJU0T_VMhFvtKzUPW34T5Z3Sgm99MNi28eunccBKoC9xyFSSz4mGEDXVimrMABIXNU2-Wqk71M"
 
-# Only two secrets go in Netlify dashboard (Site → Environment variables).
-# No scoping needed — one Supabase project serves all deploy contexts for now.
+# All environment variables are set in the Netlify dashboard, scoped by deploy context:
+#   Production → production Supabase project
+#   Deploy Previews + Branch deploys → staging Supabase project
 #
-#   SUPABASE_SERVICE_ROLE_KEY   ← Supabase project → Settings → API → service_role key
-#   VAPID_PRIVATE_KEY           ← IM8wJUz4IFttp6XE6VpxezFfGwbP69XRPC2XYvOpZaE
+# Required vars:
+#   NEXT_PUBLIC_SUPABASE_URL
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY
+#   SUPABASE_SERVICE_ROLE_KEY
+#   VAPID_PUBLIC_KEY
+#   VAPID_PRIVATE_KEY
