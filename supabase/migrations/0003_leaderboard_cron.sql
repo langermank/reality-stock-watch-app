@@ -1,3 +1,6 @@
+-- pg_cron must be enabled in Supabase dashboard: Database → Extensions → pg_cron
+-- (Cannot be installed via migration — requires superuser. Enable manually before pushing.)
+
 -- ============================================================
 -- Reality Stock Watch — Leaderboard net_worth pg_cron refresh
 -- Issue #35
