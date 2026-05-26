@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 type Mode = "sign_in" | "sign_up";
@@ -13,6 +14,7 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [checkEmail, setCheckEmail] = useState(false);
 
+  const router = useRouter();
   const supabase = createClient();
 
   async function handleOAuth(provider: "google" | "apple") {
@@ -40,7 +42,7 @@ export function LoginForm() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        // Middleware + layout handle redirect
+        router.push("/market");
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Something went wrong");
