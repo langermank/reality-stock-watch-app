@@ -41,6 +41,23 @@ pnpm typecheck    # type check
 
 ---
 
+## Agent workflow
+
+**UI work**
+- Before implementing UI work involving a component, page, screen, overlay, modal, nav, layout, frontend feature, or visual design, search Mobbin for relevant screen-level patterns when Mobbin tooling is available.
+- Use screen-level search terms, such as "trade confirmation", "asset list", "portfolio overview", "leaderboard", "trading modal", or "onboarding".
+- Prioritize references from Base, Wise, Cash App, Origin, Coinbase, Coinbase Wallet, Monarch, and Kraken.
+- Summarize the useful pattern takeaways before coding, then implement in this app's design language rather than copying another product.
+
+**Branch, commit, and push**
+- For implementation chunks, create or switch to a feature branch before editing when practical. Use the `codex/` prefix by default unless a different branch naming pattern is already in use.
+- Keep changes grouped into coherent, reviewable commits. Commit after each completed chunk that builds, passes relevant checks, and leaves the repo in a usable state.
+- Push the branch after committing so non-technical collaborators do not need to manage git manually.
+- Do not commit or push for pure research, review, planning, or spec discussion unless files were changed.
+- Do not include unrelated user changes in a commit. If the worktree already has unrelated edits, leave them alone and commit only the files touched for the current task.
+
+---
+
 ## Hard rules
 
 **Pricing**
