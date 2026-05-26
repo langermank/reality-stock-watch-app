@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"systemMessage\": \"Before ending: did this session include any architectural decisions, new conventions, infrastructure discoveries, or hard rules? If yes, update CLAUDE.md now.\"}'",
+            "command": "echo '{\"systemMessage\": \"Before ending this session: (1) update CLAUDE.md current status section to reflect what was built and what is next, (2) commit and push the update. Do this now, not later.\"}'",
             "timeout": 5
           }
         ]
