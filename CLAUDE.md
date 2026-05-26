@@ -6,6 +6,38 @@
 
 ---
 
+## Current status
+
+**Phase 1 complete.** Next up: Phase 2 backend.
+
+| Phase | Status | GitHub issues |
+|-------|--------|---------------|
+| Phase 1: Foundation | ✅ Done | #29 #30 #31 #32 |
+| Phase 2: Backend | 🔜 Next | #33 #34 #35 #36 |
+| Phase 3: Feature UI | Not started | #37 #38 #39 #40 #41 |
+| Phase 4: Admin | Not started | #42 #43 #44 |
+
+**Phase 1 what's built:**
+- Next.js 16 + TypeScript + Tailwind + pnpm scaffolded
+- Supabase SSR client (browser + server), auth middleware
+- Auth: Google OAuth, Apple OAuth, email/password — login page + `/auth/callback`
+- Route groups: `(auth)` for login, `(app)` for authenticated pages with bottom nav
+- Stub pages for Market, Portfolio, Survey, Leaderboard
+- Logged-out homepage
+- `supabase/migrations/0001_initial_schema.sql` — full schema, enums, RLS, indexes, triggers
+- PWA manifest, serwist + Base UI + web-push installed
+- `.env.local` committed (local Supabase deterministic keys — works on any machine)
+
+**Phase 2 what to build next:**
+- `place_trade` Postgres security-definer RPC (issue #33) — the core trade transaction
+- Price derivation utilities + Supabase Realtime subscription (issue #34)
+- Leaderboard net_worth pg_cron refresh (issue #35)
+- Push notification infrastructure (issue #36)
+
+**To start a session:** read this file, check the open GitHub issues for the current phase, read the relevant `docs/` files before touching any feature area.
+
+---
+
 ## Stack
 
 - **Next.js 14+ (App Router)** + TypeScript
