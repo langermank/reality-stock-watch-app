@@ -56,6 +56,23 @@ See `docs/tech-stack.md` for full decisions and rationale.
 
 ---
 
+## Design research (Mobbin)
+
+Before implementing any UI, search Mobbin for patterns. Prioritize these apps (in order):
+
+1. Base
+2. Wise
+3. Cash App
+4. Origin
+5. Coinbase
+6. Coinbase Wallet
+7. Monarch
+8. Kraken
+
+Search with screen-level terms (e.g. "trade confirmation", "asset list", "portfolio overview") not generic terms.
+
+---
+
 ## PR conventions
 
 - Always include `Closes #<issue-number>` (with full link if possible) in the PR body so GitHub auto-closes the issue on merge

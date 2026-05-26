@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "prompt=$(jq -r '.tool_input.prompt // \"\"'); echo \"$prompt\" | grep -qiE 'build|implement|create|start|scaffold|work on|write' && echo \"$prompt\" | grep -qiE 'component|page|ui|feature|overlay|modal|nav|layout|screen|frontend|design' && echo '{\"systemMessage\": \"Reminder: search Mobbin for design patterns before implementing this UI. Use mcp__mobbin__search_screens with relevant search terms (e.g. trade overlay, portfolio list, leaderboard row).\"}' || true",
+            "command": "prompt=$(jq -r '.tool_input.prompt // \"\"'); echo \"$prompt\" | grep -qiE 'build|implement|create|start|scaffold|work on|write' && echo \"$prompt\" | grep -qiE 'component|page|ui|feature|overlay|modal|nav|layout|screen|frontend|design' && echo '{\"systemMessage\": \"Reminder: search Mobbin for design patterns before implementing this UI. Use mcp__mobbin__search_screens with screen-level terms (e.g. trade confirmation, asset list, portfolio overview). Prioritize these apps: Base, Wise, Cash App, Origin, Coinbase, Coinbase Wallet, Monarch, Kraken.\"}' || true",
             "timeout": 5
           }
         ]
