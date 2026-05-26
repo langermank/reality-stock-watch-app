@@ -36,6 +36,7 @@ yarn-error.log*
 
 # claude local overrides
 .claude/settings.local.json
+.claude/worktrees/
 
 # vercel
 .vercel
