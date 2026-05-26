@@ -40,7 +40,7 @@ export default async function HomePage() {
       </main>
 
       <footer className="p-6 text-center text-xs text-neutral-600">
-        For the RHAP community
+        For the RHAP community · Season coming soon
       </footer>
     </div>
   );
