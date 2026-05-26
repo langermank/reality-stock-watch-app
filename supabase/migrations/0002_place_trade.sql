@@ -259,14 +259,15 @@ BEGIN
       RETURN jsonb_build_object('ok', false, 'error', 'no_holding');
     END IF;
 
-    -- 10b. Binary search: find n such that proceeds(n) ≈ v_effective_D
+    -- 10b. Binary search: find n such that gross_proceeds(n) ≈ p_dollar_amount.
+    --   Fee is deducted from gross proceeds after the search (see step 10e).
     --   When selling n shares, supply drops from S to S-n and T to T-n.
     --   proceeds(n) = n * base_price
     --                 + K * [2*(S - T)*(sqrt(T) - sqrt(T-n))
     --                 + (2/3)*(T^1.5 - (T-n)^1.5)]
     --   (mirror image of buy cost with decreasing supply)
     v_lo := 0;
-    v_hi := LEAST(v_holding.shares_held, v_effective_D / v_season.base_price * 2 + 1);
+    v_hi := LEAST(v_holding.shares_held, p_dollar_amount / v_season.base_price * 2 + 1);
 
     -- Clamp to shares owned
     IF v_hi > v_holding.shares_held THEN
@@ -285,12 +286,12 @@ BEGIN
             + (2.0/3.0) * (power(v_T, 1.5) - power(v_T - v_mid, 1.5))
           );
 
-      IF ABS(v_cost_mid - v_effective_D) < TOL THEN
+      IF ABS(v_cost_mid - p_dollar_amount) < TOL THEN
         v_shares := v_mid;
         EXIT;
       END IF;
 
-      IF v_cost_mid < v_effective_D THEN
+      IF v_cost_mid < p_dollar_amount THEN
         v_lo := v_mid;
       ELSE
         v_hi := v_mid;
