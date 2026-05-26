@@ -5,17 +5,15 @@
 [build.environment]
   NODE_VERSION = "20"
   PNPM_VERSION = "11"
+  # Fill these in once Supabase project is created (Settings → API):
+  NEXT_PUBLIC_SUPABASE_URL = "https://your-project.supabase.co"
+  NEXT_PUBLIC_SUPABASE_ANON_KEY = "your-anon-key"
+  # NEXT_PUBLIC_ vars and VAPID public key are safe to commit —
+  # Supabase anon key is intentionally public, protected by RLS not key secrecy.
+  VAPID_PUBLIC_KEY = "BHsCqtQHYqmQdxJU0T_VMhFvtKzUPW34T5Z3Sgm99MNi28eunccBKoC9xyFSSz4mGEDXVimrMABIXNU2-Wqk71M"
 
-# Preview deploys (every PR) use staging Supabase — set in Netlify dashboard:
-#   NEXT_PUBLIC_SUPABASE_URL        → staging project URL
-#   NEXT_PUBLIC_SUPABASE_ANON_KEY   → staging anon key
-#   SUPABASE_SERVICE_ROLE_KEY       → staging service role key
-#   VAPID_PUBLIC_KEY                → same as production
-#   VAPID_PRIVATE_KEY               → same as production
-
-# Production (main branch) uses production Supabase — set in Netlify dashboard:
-#   NEXT_PUBLIC_SUPABASE_URL        → production project URL
-#   NEXT_PUBLIC_SUPABASE_ANON_KEY   → production anon key
-#   SUPABASE_SERVICE_ROLE_KEY       → production service role key
-#   VAPID_PUBLIC_KEY                → same as staging
-#   VAPID_PRIVATE_KEY               → same as staging
+# Only two secrets go in Netlify dashboard (Site → Environment variables).
+# No scoping needed — one Supabase project serves all deploy contexts for now.
+#
+#   SUPABASE_SERVICE_ROLE_KEY   ← Supabase project → Settings → API → service_role key
+#   VAPID_PRIVATE_KEY           ← IM8wJUz4IFttp6XE6VpxezFfGwbP69XRPC2XYvOpZaE
