@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { derivePrice, sellProceeds, type PricingParams } from "@/lib/pricing";
 import { useContestantPrices } from "@/hooks/useContestantPrices";
+import { useTradeOverlay } from "@/components/trade/TradeProvider";
 import type { MarketContestant, MarketSeason } from "../MarketClient";
 
 type Holding = {
@@ -111,6 +112,7 @@ export default function ContestantDetailClient({
   trades: Trade[];
   allContestants: SlimContestant[];
 }) {
+  const { openTrade } = useTradeOverlay();
   const basePrice = parseFloat(season.base_price);
 
   const pricingParams = useMemo<PricingParams>(
@@ -323,25 +325,26 @@ export default function ContestantDetailClient({
         )}
       </div>
 
-      {/* Sticky CTAs — wired up in #38 */}
+      {/* Sticky CTAs */}
       {!isPreSeason && (
         <div className="fixed bottom-16 inset-x-0 z-10 border-t border-neutral-800 bg-neutral-950/95 px-4 py-3 backdrop-blur-sm">
           <div className="mx-auto flex max-w-3xl gap-3">
             <button
               type="button"
-              disabled
-              className="flex-1 cursor-not-allowed rounded-lg bg-emerald-600 py-3 text-sm font-semibold text-white opacity-50"
+              onClick={() => openTrade({ contestantId: contestant.id, side: "buy" })}
+              className="flex-1 rounded-lg bg-emerald-600 py-3 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
             >
               Buy
             </button>
             <button
               type="button"
-              disabled
+              disabled={sharesHeld <= 0}
+              onClick={() => openTrade({ contestantId: contestant.id, side: "sell" })}
               className={[
-                "flex-1 cursor-not-allowed rounded-lg py-3 text-sm font-semibold",
+                "flex-1 rounded-lg py-3 text-sm font-semibold transition-colors",
                 sharesHeld > 0
-                  ? "bg-neutral-700 text-neutral-100 opacity-50"
-                  : "bg-neutral-800 text-neutral-500",
+                  ? "bg-rose-600 text-white hover:bg-rose-500"
+                  : "cursor-not-allowed bg-neutral-800 text-neutral-600",
               ].join(" ")}
             >
               Sell

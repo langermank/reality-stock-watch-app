@@ -125,3 +125,76 @@ export function sellProceeds(
   const fee = grossProceeds * feeRate;
   return { proceeds: grossProceeds - fee, fee };
 }
+
+/**
+ * Gross proceeds (before fee) from selling `n` shares.
+ * This is the value the place_trade RPC matches against `p_dollar_amount`
+ * in sell mode — the fee is deducted afterward.
+ */
+export function grossSellProceeds(
+  n: number,
+  contestantShares: number,
+  totalAllShares: number,
+  params: PricingParams
+): number {
+  const { kConstant, basePrice, minSupplyFloor } = params;
+  const S = contestantShares;
+  const T = Math.max(totalAllShares, minSupplyFloor);
+  return (
+    n * basePrice +
+    kConstant *
+      (2 * (S - T) * (Math.sqrt(T) - Math.sqrt(T - n)) +
+        (2 / 3) * (Math.pow(T, 1.5) - Math.pow(T - n, 1.5)))
+  );
+}
+
+/**
+ * Solve for shares to sell given a target gross proceeds amount (binary search).
+ * Mirrors `sharesForDollars` but for the sell side. The dollar amount represents
+ * gross proceeds (matching the RPC); fee is deducted from proceeds afterward.
+ * @param grossDollars - target gross proceeds entered by user
+ * @param sharesOwned - upper bound; result is clamped to the holding
+ * @param feeRate - default 0.02
+ * @returns shares to sell, gross proceeds at that share count, fee, net proceeds
+ */
+export function sharesForProceeds(
+  grossDollars: number,
+  contestantShares: number,
+  totalAllShares: number,
+  params: PricingParams,
+  sharesOwned: number,
+  feeRate = 0.02
+): { shares: number; gross: number; fee: number; net: number } {
+  const TOLERANCE = 0.00001;
+  const MAX_ITER = 50;
+
+  let lo = 0;
+  let hi = sharesOwned;
+
+  // If the full holding is worth less than requested, sell everything.
+  const maxGross = grossSellProceeds(sharesOwned, contestantShares, totalAllShares, params);
+  if (grossDollars >= maxGross) {
+    const fee = maxGross * feeRate;
+    return { shares: sharesOwned, gross: maxGross, fee, net: maxGross - fee };
+  }
+
+  let shares = 0;
+  for (let i = 0; i < MAX_ITER; i++) {
+    const mid = (lo + hi) / 2;
+    const gross = grossSellProceeds(mid, contestantShares, totalAllShares, params);
+    if (Math.abs(gross - grossDollars) < TOLERANCE) {
+      shares = mid;
+      break;
+    }
+    if (gross < grossDollars) {
+      lo = mid;
+    } else {
+      hi = mid;
+    }
+    shares = mid;
+  }
+
+  const gross = grossSellProceeds(shares, contestantShares, totalAllShares, params);
+  const fee = gross * feeRate;
+  return { shares, gross, fee, net: gross - fee };
+}
