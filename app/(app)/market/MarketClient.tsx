@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { derivePrice, type PricingParams } from "@/lib/pricing";
 import { useContestantPrices } from "@/hooks/useContestantPrices";
 import type { ContestantStatus, SeasonStatus } from "@/lib/supabase/types";
@@ -144,6 +145,7 @@ export function MarketClient({
   const { prices, isLoading } = useContestantPrices(season.id, pricingParams);
   const priceMap = season.status === "active" && prices.size > 0 ? prices : initialPrices;
   const isPreSeason = season.status === "pre_season";
+  const router = useRouter();
 
   return (
     <div className="mx-auto flex min-h-full max-w-3xl flex-col px-4 py-6">
@@ -206,6 +208,7 @@ export function MarketClient({
                 <li key={contestant.id}>
                   <button
                     type="button"
+                    onClick={() => router.push(`/market/${contestant.id}`)}
                     className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500"
                   >
                     <span className="flex min-w-0 items-center gap-3">
