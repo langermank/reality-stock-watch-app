@@ -53,6 +53,7 @@ See `docs/tech-stack.md` for full decisions and rationale.
 | `docs/design/conceptual-model.md` | All objects, relationships, states, vocabulary |
 | `docs/design/interaction-flow-*.md` | Breadboarded user flows |
 | `docs/dev-environment.md` | Environment setup, migration workflow, fake season |
+| `docs/migrations.md` | How schema changes ship (CLI `db push` only) + drift-recovery runbook — read before applying any migration |
 
 ---
 
@@ -126,6 +127,7 @@ pnpm typecheck    # type check
 - `total_shares_outstanding` per contestant is the single source of truth for pricing — update atomically with every trade
 - Trade queue not implemented in beta — optimistic locking only. Schema must not change when queue is added later.
 - Supabase row-level security should be enabled from day one
+- Schema changes ship via Supabase CLI `db push` only (git is the source of truth). The Supabase MCP tools are read-only for us — `execute_sql`/`list_migrations` to inspect, never `apply_migration` to ship. See `docs/migrations.md`.
 
 ---
 
