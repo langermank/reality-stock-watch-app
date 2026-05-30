@@ -143,7 +143,9 @@ export default function ContestantDetailClient({
     );
   }, [allContestants, pricingParams]);
 
-  const { prices } = useContestantPrices(season.id, pricingParams);
+  // Pass server supply so the hook re-seeds after router.refresh() (e.g. post-trade)
+  // instead of showing a stale realtime price.
+  const { prices } = useContestantPrices(season.id, pricingParams, allContestants);
   const priceMap = prices.size > 0 ? prices : initialPrices;
 
   const currentPrice =
