@@ -142,7 +142,21 @@ export function MarketClient({
     () => buildInitialPrices(contestants, pricingParams),
     [contestants, pricingParams]
   );
-  const { prices, isLoading } = useContestantPrices(season.id, pricingParams);
+  // Server supply snapshot so the hook re-seeds when the list re-renders with
+  // fresh data (e.g. after a trade) rather than holding a stale realtime price.
+  const supplySnapshot = useMemo(
+    () =>
+      contestants.map((c) => ({
+        id: c.id,
+        total_shares_outstanding: c.total_shares_outstanding,
+      })),
+    [contestants]
+  );
+  const { prices, isLoading } = useContestantPrices(
+    season.id,
+    pricingParams,
+    supplySnapshot
+  );
   const priceMap = season.status === "active" && prices.size > 0 ? prices : initialPrices;
   const isPreSeason = season.status === "pre_season";
   const router = useRouter();
