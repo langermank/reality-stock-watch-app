@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { derivePrice, type PricingParams } from "@/lib/pricing";
 import type { Database } from "@/lib/supabase/types";
@@ -10,6 +10,12 @@ type ContestantRow = Database["public"]["Tables"]["contestants"]["Row"];
 type PriceEntry = {
   sharesOutstanding: number;
   price: number;
+};
+
+/** Minimal supply shape the hook needs to seed/derive prices. */
+export type SupplySnapshot = {
+  id: string;
+  total_shares_outstanding: string;
 };
 
 type UseContestantPricesResult = {
@@ -33,43 +39,100 @@ function computePrices(
   return result;
 }
 
+function mapFromSnapshot(snapshot: SupplySnapshot[]): Map<string, number> {
+  return new Map(snapshot.map((c) => [c.id, parseFloat(c.total_shares_outstanding)]));
+}
+
 /**
  * Subscribes to contestant Realtime updates and derives prices locally.
+ *
+ * Pass `initialSupply` (the server-rendered supply for the page) so the hook
+ * seeds from authoritative server data and RE-SEEDS whenever that data changes
+ * — e.g. after a trade calls `router.refresh()` and the server re-renders with
+ * updated `total_shares_outstanding`. Without this, the hook would cling to its
+ * own realtime map and show a stale price if the realtime broadcast was missed.
+ * Realtime updates still layer on top of the seeded data.
+ *
+ * When `initialSupply` is omitted the hook falls back to fetching the supply
+ * itself once on mount (legacy behavior).
+ *
  * @param seasonId - filters contestants to this season
  * @param pricingParams - season constants (k_constant, base_price, minSupplyFloor)
+ * @param initialSupply - server-provided supply snapshot for seeding + re-sync
  */
 export function useContestantPrices(
   seasonId: string,
-  pricingParams: PricingParams
+  pricingParams: PricingParams,
+  initialSupply?: SupplySnapshot[]
 ): UseContestantPricesResult {
-  const [prices, setPrices] = useState<Map<string, PriceEntry>>(new Map());
-  const [isLoading, setIsLoading] = useState(true);
+  // Stable signature of the server snapshot so we only re-seed when the data
+  // actually changes — not on every render (server passes a fresh array each time).
+  const initialSig = useMemo(
+    () =>
+      initialSupply
+        ? initialSupply
+            .map((c) => `${c.id}:${c.total_shares_outstanding}`)
+            .sort()
+            .join("|")
+        : null,
+    [initialSupply]
+  );
 
+  // Authoritative supply, shared between the re-seed and realtime effects so a
+  // re-seed never clobbers live updates and vice-versa.
+  const sharesMapRef = useRef<Map<string, number>>(
+    initialSupply ? mapFromSnapshot(initialSupply) : new Map()
+  );
+
+  const [prices, setPrices] = useState<Map<string, PriceEntry>>(() =>
+    initialSupply ? computePrices(sharesMapRef.current, pricingParams) : new Map()
+  );
+  const [isLoading, setIsLoading] = useState(!initialSupply);
+
+  // Re-seed from the server snapshot whenever it changes (post-`router.refresh`).
   useEffect(() => {
-    if (!seasonId) return;
+    if (initialSig === null) return; // no server data → fall back to self-fetch
+    sharesMapRef.current = mapFromSnapshot(initialSupply ?? []);
+    setPrices(computePrices(sharesMapRef.current, pricingParams));
+    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialSig, pricingParams]);
+
+  // Fallback: fetch supply once on mount when no server snapshot was provided.
+  useEffect(() => {
+    if (initialSig !== null || !seasonId) return;
 
     const supabase = createClient();
-    // sharesMap is a stable ref so the realtime handler can close over it
-    const sharesMap = new Map<string, number>();
+    let cancelled = false;
 
-    async function loadInitial() {
+    (async () => {
       const { data, error } = await supabase
         .from("contestants")
         .select("id, total_shares_outstanding")
         .eq("season_id", seasonId);
 
-      if (error || !data) return;
+      if (cancelled || error || !data) return;
 
+      const map = new Map<string, number>();
       for (const row of data as Pick<ContestantRow, "id" | "total_shares_outstanding">[]) {
-        sharesMap.set(row.id, parseFloat(row.total_shares_outstanding));
+        map.set(row.id, parseFloat(row.total_shares_outstanding));
       }
-
-      setPrices(computePrices(sharesMap, pricingParams));
+      sharesMapRef.current = map;
+      setPrices(computePrices(map, pricingParams));
       setIsLoading(false);
-    }
+    })();
 
-    loadInitial();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seasonId, initialSig, pricingParams]);
 
+  // Realtime subscription layers live updates onto the seeded supply.
+  useEffect(() => {
+    if (!seasonId) return;
+
+    const supabase = createClient();
     const channel = supabase
       .channel(`contestant-prices-${seasonId}`)
       .on(
@@ -83,8 +146,8 @@ export function useContestantPrices(
         (payload) => {
           const row = payload.new as Pick<ContestantRow, "id" | "total_shares_outstanding">;
           if (!row?.id) return;
-          sharesMap.set(row.id, parseFloat(row.total_shares_outstanding));
-          setPrices(computePrices(sharesMap, pricingParams));
+          sharesMapRef.current.set(row.id, parseFloat(row.total_shares_outstanding));
+          setPrices(computePrices(sharesMapRef.current, pricingParams));
         }
       )
       .subscribe();
