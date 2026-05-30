@@ -11,6 +11,14 @@ on:
     paths:
       - "supabase/migrations/**"
       - ".github/workflows/db-push.yml"
+  # Manual trigger for validating the secrets end-to-end in a clean env.
+  # Leave dry_run = true to authenticate + list pending migrations without applying.
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "List migrations without applying (credential check only)"
+        type: boolean
+        default: true
 
 # Never let two pushes race on the same database.
 concurrency:
@@ -38,4 +46,10 @@ jobs:
         run: supabase link --project-ref "$PROD_PROJECT_REF"
 
       - name: Apply pending migrations
-        run: supabase db push
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo "Dry run — authenticating and listing pending migrations only."
+            supabase db push --dry-run
+          else
+            supabase db push
+          fi

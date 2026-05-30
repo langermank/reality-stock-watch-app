@@ -56,6 +56,8 @@ write migration → push to staging → verify → push to production
 
    The prod project ref (`avakcpjthtrmeswgjlxz`) is hardcoded in the workflow — it isn't a secret.
 
+   To verify the secrets work end-to-end, trigger the workflow manually (Actions → *Deploy DB migrations (production)* → *Run workflow*) with **dry run = true**. It authenticates in a clean environment and lists pending migrations without applying anything — a successful run confirms both secrets. Note: a local `supabase db push --dry-run` is *not* a sufficient check, because the CLI authenticates with your cached access token and never exercises the DB password.
+
 5. **Verify** with a read-only check (MCP `execute_sql` or `supabase db query --linked`), e.g.:
 
    ```sql
