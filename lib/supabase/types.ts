@@ -211,6 +211,29 @@ export type Database = {
         };
         Update: never;
       };
+      survey_aggregate_rankings: {
+        Row: {
+          survey_id: string;
+          contestant_id: string;
+          rank: number;
+          score: string;
+        };
+        Insert: Database["public"]["Tables"]["survey_aggregate_rankings"]["Row"];
+        Update: Partial<Database["public"]["Tables"]["survey_aggregate_rankings"]["Row"]>;
+      };
+      survey_reveal_state: {
+        Row: {
+          season_id: string;
+          selected_survey_id: string | null;
+          reveal_count: number;
+          updated_at: string;
+        };
+        Insert: Omit<Database["public"]["Tables"]["survey_reveal_state"]["Row"], "reveal_count" | "updated_at"> & {
+          reveal_count?: number;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["survey_reveal_state"]["Insert"]>;
+      };
       push_subscriptions: {
         Row: {
           id: string;
