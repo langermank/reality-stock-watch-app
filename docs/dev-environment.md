@@ -31,7 +31,9 @@ supabase/
   seed.sql
 ```
 
-Migrations run in order: local → staging → production. The Supabase dashboard is read-only for schema on staging and prod. This prevents drift between environments.
+Migrations run in order: local → staging → production, applied with `supabase db push` (the CLI is the source of truth — the Supabase MCP tools are read-only for us, never `apply_migration`). The Supabase dashboard is read-only for schema on staging and prod. This prevents drift between environments.
+
+See **`docs/migrations.md`** for the full apply workflow, project refs, and the runbook for reconciling drifted migration history.
 
 ---
 
