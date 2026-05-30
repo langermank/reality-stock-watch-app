@@ -15,6 +15,7 @@
 // whole route is admin-only, that is the correct, simplest model here.
 
 import { useEffect, useMemo, useState } from "react";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 import { BroadcastChart } from "./BroadcastChart";
 import { buildBroadcastState } from "./rankings";
@@ -27,29 +28,45 @@ export function BroadcastLive({ initial }: { initial: RevealData }) {
 
   useEffect(() => {
     const supabase = createClient();
-    const channel = supabase
-      .channel(`reveal-state-${initial.season.id}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "survey_reveal_state",
-          filter: `season_id=eq.${initial.season.id}`,
-        },
-        (payload) => {
-          const row = payload.new as {
-            reveal_count?: number;
-            selected_survey_id?: string | null;
-          };
-          if (typeof row.reveal_count === "number") setRevealCount(row.reveal_count);
-          if (row.selected_survey_id) setSelectedWeekId(row.selected_survey_id);
-        },
-      )
-      .subscribe();
+    let channel: RealtimeChannel | null = null;
+    let active = true;
+
+    (async () => {
+      // survey_reveal_state is admin-only (RLS). Realtime enforces RLS against
+      // the socket's token, so the broadcast socket must carry the producer's
+      // JWT or it receives no change events at all. Authenticate before joining.
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!active) return;
+      await supabase.realtime.setAuth(session?.access_token ?? null);
+      if (!active) return;
+
+      channel = supabase
+        .channel(`reveal-state-${initial.season.id}`)
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "survey_reveal_state",
+            filter: `season_id=eq.${initial.season.id}`,
+          },
+          (payload) => {
+            const row = payload.new as {
+              reveal_count?: number;
+              selected_survey_id?: string | null;
+            };
+            if (typeof row.reveal_count === "number") setRevealCount(row.reveal_count);
+            if (row.selected_survey_id) setSelectedWeekId(row.selected_survey_id);
+          },
+        )
+        .subscribe();
+    })();
 
     return () => {
-      supabase.removeChannel(channel);
+      active = false;
+      if (channel) supabase.removeChannel(channel);
     };
   }, [initial.season.id]);
 
