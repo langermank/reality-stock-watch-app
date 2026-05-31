@@ -133,6 +133,14 @@ graph LR
 - [x] Push notification triggers — survey live, results published, reminder 1 hour before close
 - [x] Anonymous public link after close — "Survey closed" message, no redirect
 - [x] Anonymous experience — fully standalone, no app nav or chrome
-- [ ] **Survey question types** — TBD from conceptual model. Must resolve before building survey form.
-- [ ] **Most recent results on "no active survey" state** — keep the last published graph visible between surveys for continued engagement. Confirm this is the right default.
-- [ ] **Anonymous → Sign up handoff** — when anonymous user taps "Create an account" from confirmation, do they carry their submission with them (retroactively tied to account) or is it permanently anonymous? Affects data model.
+- [x] **Survey question types** — `ranking`, `multiple_choice`, `single_choice` (enum in `0001_initial_schema.sql`). All three implemented in `components/survey/{Ranking,Choice}.tsx`.
+- [x] **Most recent results on "no active survey" state** — decided NOT to show. Empty-state-only ("No survey right now — check back soon"). #41 ships this behavior.
+- [x] **Anonymous → Sign up handoff** — decision: carry over (anonymous response becomes tied to the new user on signup). Implementation deferred — needs a signed cookie binding the anonymous response to the upcoming session + an onboarding hook to consume it. Tracked as a follow-up.
+
+## Shipped
+
+Implemented in #41 (PR #76). See:
+- Logged-in route: `app/(app)/survey/page.tsx` + `components/survey/SurveyView.tsx`
+- Anonymous route: `app/survey/[id]/public/{page,layout}.tsx`
+- Server actions: `lib/survey/actions.ts` (logged-in via RLS; anonymous via service-role client)
+- Data loader: `lib/survey/source.ts` (`getSurveyPageState` returns a discriminated union over the 5 states)

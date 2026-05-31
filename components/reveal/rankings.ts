@@ -1,4 +1,4 @@
-// Ranking + reveal math for the broadcast chart (issue #65a).
+// Ranking + reveal math for the broadcast chart.
 //
 // Ported from `big-brother-season-data-vis/src/lib/rankings.ts`, behavior-
 // preserving, with two adaptations for Reality Stock Watch:
@@ -7,10 +7,6 @@
 //      contestant who appears in week N-1 but not week N is treated as removed
 //      between those weeks. This replaces the original's `eliminatedWeek`
 //      checks in `calculateMovement` / `getActiveContestantsForWeek`.
-//
-// NOTE: This is a local, presentational port so the component runs in isolation.
-// The frozen canonical port lives in `lib/reveal/rankings.ts` (issue #65b) and
-// is locked with parity tests there; this copy is reconciled at integration.
 
 import type {
   Contestant,

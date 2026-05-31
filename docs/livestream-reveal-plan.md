@@ -2,6 +2,8 @@
 
 *Drafted 2026-05-30. Source repo: `big-brother-season-data-vis` (forked). Resolved via grilling session.*
 
+> **Status: shipped 2026-05-31.** All sub-issues merged (#62, #63, #64, #65, #66 → PRs #67, #68, #69, #72, #75). This doc remains as the design record. Current code: `lib/admin.ts`, `app/admin/{layout,page,stream,reveal}/`, `components/reveal/`, `hooks/useRevealState.ts`, `lib/reveal/{source,actions,aggregate}.ts`, `supabase/migrations/0006_livestream_reveal.sql`. UX parity with the original `StreamVisualization.tsx` is high (geometry/lines/dots/leaderboard/stats faithful; visual styling redesigned for broadcast; week-click navigation intentionally not exposed since only the producer changes the on-air week via the control panel).
+
 ---
 
 ## What this is

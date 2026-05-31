@@ -1,4 +1,4 @@
-// Deterministic per-contestant color palette (issue #65a).
+// Deterministic per-contestant color palette.
 //
 // Our `contestants` table has no `color` column (the original data-vis repo
 // did). We derive a stable, vivid color from the contestant id so the same

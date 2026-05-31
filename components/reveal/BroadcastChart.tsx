@@ -1,16 +1,17 @@
 "use client";
 
-// Broadcast trajectory chart (issue #65a) — PURE presentational component.
+// Broadcast trajectory chart — pure presentational component.
 //
 // Ported from `big-brother-season-data-vis/src/components/StreamVisualization.tsx`.
-// The SVG geometry/logic is kept faithful; the styling is redesigned for
-// OBS/livestream capture (decision #8): near-black backdrop, oversized type,
-// thick strokes, large avatars — tuned to stay legible on a big screen and
-// survive stream-encoder compression.
+// SVG geometry kept faithful (lines, dots, hover, leaderboard sidebar, stat
+// cards). Styling redesigned for OBS/livestream capture: near-black backdrop,
+// oversized type, thick strokes, large avatars — tuned to stay legible on a
+// big screen and survive stream-encoder compression.
 //
-// It fetches NOTHING. It receives a fully reveal-gated `BroadcastState` plus the
-// selected week and a contestant->color map. Issue #65b feeds it real data over
-// Supabase Realtime; this component is unchanged by that.
+// Fetches nothing. Receives a fully reveal-gated `BroadcastState`, the selected
+// week id, and a contestant→color map. `BroadcastLive` (chrome-less view at
+// /admin/stream) and `RevealConsole` (producer panel at /admin/reveal) both
+// feed it; their Realtime subscriptions are what make reveals animate in live.
 
 import { useMemo, useState, type CSSProperties } from "react";
 import type { BroadcastState, WeekRanking } from "./types";
