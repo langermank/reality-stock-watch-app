@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { claimAnonymousSurveyResponse } from "@/lib/survey/claim";
 
 type Mode = "sign_in" | "sign_up";
 
@@ -42,6 +43,14 @@ export function LoginForm() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        // Carry over an anonymous survey submission to this account if the
+        // cookie is around (#80). Email+password sign-in skips /auth/callback,
+        // so the claim has to fire here. Best-effort; failures don't block sign-in.
+        try {
+          await claimAnonymousSurveyResponse();
+        } catch {
+          /* swallow */
+        }
         router.push("/market");
       }
     } catch (err: unknown) {
