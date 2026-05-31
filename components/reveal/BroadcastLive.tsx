@@ -1,74 +1,30 @@
 "use client";
 
-// Live wrapper around the presentational BroadcastChart (issue #65).
+// Live wrapper around the presentational BroadcastChart — the chrome-less
+// broadcast view the producer captures with OBS (issue #65).
 //
-// The producer captures THIS window in OBS. The server hands us the season's
-// rankings once; we hold the reveal pointer (selected week + reveal count) in
-// state and subscribe to `survey_reveal_state` over Supabase Realtime. When the
-// producer advances the reveal from the control panel (#66), the row changes,
-// we bump the count, and `buildBroadcastState` re-gates — the next entry
-// animates in live. No polling, no refetch.
+// Reveal-pointer subscription lives in useRevealState (shared with #66's
+// producer console). The producer's clicks fan out to every subscriber via
+// Supabase Realtime; this surface re-gates and the next entry animates in
+// without a reload.
 //
-// Spoiler note: every entry is present client-side, but the chart only ever
-// DRAWS revealed ones (unrevealed render as "• • •" placeholders by design).
-// Since the audience sees the OBS video — never this network payload — and the
-// whole route is admin-only, that is the correct, simplest model here.
+// Spoiler note: every entry is present client-side, but the chart only DRAWS
+// revealed ones (unrevealed render as "• • •" placeholders by design). Since
+// the audience sees the OBS video — never this network payload — and the route
+// is admin-only, that is the correct, simplest model here.
 
-import { useEffect, useMemo, useState } from "react";
-import type { RealtimeChannel } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/client";
+import { useMemo } from "react";
 import { BroadcastChart } from "./BroadcastChart";
 import { buildBroadcastState } from "./rankings";
 import { buildColorMap } from "./colors";
+import { useRevealState } from "@/hooks/useRevealState";
 import type { RevealData } from "@/lib/reveal/source";
 
 export function BroadcastLive({ initial }: { initial: RevealData }) {
-  const [revealCount, setRevealCount] = useState(initial.revealCount);
-  const [selectedWeekId, setSelectedWeekId] = useState(initial.selectedWeekId);
-
-  useEffect(() => {
-    const supabase = createClient();
-    let channel: RealtimeChannel | null = null;
-    let active = true;
-
-    (async () => {
-      // survey_reveal_state is admin-only (RLS). Realtime enforces RLS against
-      // the socket's token, so the broadcast socket must carry the producer's
-      // JWT or it receives no change events at all. Authenticate before joining.
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!active) return;
-      await supabase.realtime.setAuth(session?.access_token ?? null);
-      if (!active) return;
-
-      channel = supabase
-        .channel(`reveal-state-${initial.season.id}`)
-        .on(
-          "postgres_changes",
-          {
-            event: "*",
-            schema: "public",
-            table: "survey_reveal_state",
-            filter: `season_id=eq.${initial.season.id}`,
-          },
-          (payload) => {
-            const row = payload.new as {
-              reveal_count?: number;
-              selected_survey_id?: string | null;
-            };
-            if (typeof row.reveal_count === "number") setRevealCount(row.reveal_count);
-            if (row.selected_survey_id) setSelectedWeekId(row.selected_survey_id);
-          },
-        )
-        .subscribe();
-    })();
-
-    return () => {
-      active = false;
-      if (channel) supabase.removeChannel(channel);
-    };
-  }, [initial.season.id]);
+  const { selectedWeekId, revealCount } = useRevealState(initial.season.id, {
+    selectedWeekId: initial.selectedWeekId,
+    revealCount: initial.revealCount,
+  });
 
   const colorOf = useMemo(() => {
     const map = buildColorMap(initial.contestants.map((contestant) => contestant.id));
