@@ -1,16 +1,13 @@
-// Presentational (view) types for the broadcast trajectory chart.
+// View types for the broadcast trajectory chart + reveal console.
 //
-// As of #65 these are the CANONICAL reveal view types: the data seam
-// (`lib/reveal/source.ts`) adapts raw DB rows into them, and the chart +
-// live wrapper render them directly. They remain distinct from the FROZEN,
-// parity-locked port in `lib/reveal/{types,rankings}.ts` (playerId-based, with
-// `eliminatedWeek`) — that layer documents the original's exact behavior and is
-// not used at runtime. Fully unifying the two is deferred; they intentionally
-// differ (contestantId + presence-based eviction here). The shapes mirror the
-// original `big-brother-season-data-vis` domain types, adapted to RSW:
+// Adapted from `big-brother-season-data-vis`'s `domain.ts` to Reality Stock
+// Watch:
 //   - `Player.color`          -> derived from id (no color column here)
 //   - `Player.imageUrl`       -> `Contestant.photoUrl` (our `photo_url`)
 //   - `Player.eliminatedWeek` -> dropped; eviction is derived from presence
+//
+// The data seam (`lib/reveal/source.ts`) emits these shapes; the chart, live
+// wrapper, and producer console consume them.
 
 export type ContestantStatus = "active" | "evicted" | "jury" | "winner";
 

@@ -8,24 +8,36 @@
 
 ## Current status
 
-**Phase 2 complete.** Next up: Phase 3 feature UI.
+**Phases 1–3 complete, plus the full livestream reveal feature.** Next up: Phase 4 admin (season setup / contestant management / survey builder).
 
 | Phase | Status | GitHub issues |
 |-------|--------|---------------|
 | Phase 1: Foundation | ✅ Done | #29 #30 #31 #32 |
 | Phase 2: Backend | ✅ Done | #33 #34 #35 #36 |
-| Phase 3: Feature UI | 🔜 Next | #37 #38 #39 #40 #41 |
-| Phase 4: Admin | Not started | #42 #43 #44 |
+| Phase 3: Feature UI | ✅ Done | #37 #38 #39 #40 #41 |
+| Livestream Reveal | ✅ Done | #61 #62 #63 #64 #65 #66 |
+| Phase 4: Admin | 🔜 Next | #42 #43 #44 |
 
-**Phase 2 what's built:**
+**Backend (Phase 2):**
 - `supabase/migrations/0002_place_trade.sql` — atomic trade RPC (binary search bonding curve, FOR UPDATE locking, pending→filled/failed state)
 - `lib/pricing.ts` — pure TS bonding curve math (derivePrice, buyCost, sharesForDollars, sellProceeds)
 - `hooks/useContestantPrices.ts` — Supabase Realtime subscription, derives prices client-side
 - `supabase/migrations/0003_leaderboard_cron.sql` — pg_cron net_worth refresh every 60s
 - `lib/push.ts` + `lib/supabase/service.ts` — Web Push VAPID infrastructure
-- `app/api/push/subscribe/route.ts` — POST/DELETE to manage push subscriptions
-- `app/api/push/send/route.ts` — internal endpoint to send notifications
-- All migrations applied to staging + prod
+- `app/api/push/{subscribe,send}/route.ts` — POST/DELETE subscriptions; internal send endpoint
+
+**Feature UI (Phase 3):**
+- Market, Portfolio, Contestant detail, Leaderboard, Survey — all live under `app/(app)/`
+- Survey page (#41): 5-state route + 3 question types + anonymous public link at `/survey/[id]/public` + push-permission prompt. See `docs/design/interaction-flow-survey.md`.
+
+**Livestream Reveal:**
+- Admin gate (`app/admin/layout.tsx` via `lib/admin.ts`) + reveal schema (`supabase/migrations/0006_livestream_reveal.sql`)
+- Frozen reveal math + Borda aggregation + data seam (`components/reveal/rankings.ts`, `lib/reveal/aggregate.ts`, `lib/reveal/source.ts`)
+- Broadcast view (`app/admin/stream`, OBS-captured) + Producer console (`app/admin/reveal`) + shared `hooks/useRevealState.ts` (Realtime, RLS-aware)
+- See `docs/livestream-reveal-plan.md`.
+
+**Ops:**
+- DB migrations apply via CI on merge to `main` (`.github/workflows/db-push.yml`). See `docs/migrations.md`.
 
 **To start a session:** read this file, check the open GitHub issues for the current phase, read the relevant `docs/` files before touching any feature area.
 
