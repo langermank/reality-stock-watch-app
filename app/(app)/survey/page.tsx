@@ -1,8 +1,20 @@
-export default function SurveyPage() {
-  return (
-    <div className="p-4">
-      <h1 className="text-xl font-semibold">Survey</h1>
-      <p className="mt-2 text-neutral-400 text-sm">No active survey right now — check back soon.</p>
-    </div>
-  );
+// Logged-in survey page (issue #41). State-driven single route.
+
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { getSurveyPageState } from "@/lib/survey/source";
+import { SurveyView } from "@/components/survey/SurveyView";
+
+// Survey + response state changes frequently; never statically cache.
+export const dynamic = "force-dynamic";
+
+export default async function SurveyPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+
+  const state = await getSurveyPageState(user.id);
+  return <SurveyView state={state} />;
 }
