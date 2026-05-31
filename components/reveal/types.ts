@@ -1,10 +1,13 @@
-// Presentational types for the broadcast trajectory chart (issue #65a).
+// Presentational (view) types for the broadcast trajectory chart.
 //
-// These are LOCAL to the chart component so it runs in isolation against mock
-// data. They intentionally do NOT live in `lib/reveal/` — a parallel agent owns
-// that path (issue #65b). Some duplication is expected; it gets reconciled at
-// integration. The shapes mirror the original `big-brother-season-data-vis`
-// domain types, adapted to Reality Stock Watch:
+// As of #65 these are the CANONICAL reveal view types: the data seam
+// (`lib/reveal/source.ts`) adapts raw DB rows into them, and the chart +
+// live wrapper render them directly. They remain distinct from the FROZEN,
+// parity-locked port in `lib/reveal/{types,rankings}.ts` (playerId-based, with
+// `eliminatedWeek`) — that layer documents the original's exact behavior and is
+// not used at runtime. Fully unifying the two is deferred; they intentionally
+// differ (contestantId + presence-based eviction here). The shapes mirror the
+// original `big-brother-season-data-vis` domain types, adapted to RSW:
 //   - `Player.color`          -> derived from id (no color column here)
 //   - `Player.imageUrl`       -> `Contestant.photoUrl` (our `photo_url`)
 //   - `Player.eliminatedWeek` -> dropped; eviction is derived from presence
