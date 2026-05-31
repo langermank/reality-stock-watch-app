@@ -8,6 +8,8 @@
 // survey-open and the user's load is simply absent).
 
 import { createClient } from "@/lib/supabase/server";
+import { serviceClient } from "@/lib/supabase/service";
+import { aggregateResponses, type QuestionResults } from "./results";
 
 export type QuestionType = "ranking" | "multiple_choice" | "single_choice";
 
@@ -52,6 +54,7 @@ export type SurveyPageState =
       survey: SurveyMeta;
       questions: SurveyQuestion[];
       answers: Record<string, unknown> | null;
+      results: QuestionResults[];
     };
 
 type SurveyRow = {
@@ -176,7 +179,18 @@ export async function getSurveyPageState(userId: string): Promise<SurveyPageStat
     return { kind: "closed-pending", survey: meta, questions, answers };
   }
   if (survey.status === "results_published") {
-    return { kind: "results-published", survey: meta, questions, answers };
+    // Aggregate every response (incl. anonymous) into per-question results.
+    // Service client because survey_responses RLS limits each user to their
+    // own row — but published results are a community view, by definition.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: allRows } = await (serviceClient.from("survey_responses") as any)
+      .select("answers")
+      .eq("survey_id", survey.id);
+    const answersList = ((allRows as { answers: Record<string, unknown> }[] | null) ?? []).map(
+      (row) => row.answers,
+    );
+    const results = aggregateResponses(questions, answersList);
+    return { kind: "results-published", survey: meta, questions, answers, results };
   }
   return { kind: "no-active" }; // draft — treat as none
 }

@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { SurveyForm } from "./SurveyForm";
 import { YourPicks } from "./YourPicks";
 import { PushPrompt } from "./PushPrompt";
+import { ResultsView } from "./results/ResultsView";
 import { submitResponse } from "@/lib/survey/actions";
 import type { SurveyMeta, SurveyPageState, SurveyQuestion } from "@/lib/survey/source";
 
@@ -150,17 +151,14 @@ export function SurveyView({ state }: { state: SurveyPageState }) {
   return (
     <Card>
       <SurveyHeader title={state.survey.title} weekNumber={state.survey.weekNumber} />
-      <div className="mb-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-        <p className="text-sm font-bold uppercase tracking-widest text-neutral-500">
-          Results
-        </p>
-        <p className="mt-2 text-sm text-neutral-400">
-          A full results chart is coming soon. Until then, your submitted picks
-          are below.
-        </p>
-      </div>
+      <p className="mb-4 text-xs font-bold uppercase tracking-widest text-neutral-500">
+        Results
+      </p>
+      <ResultsView results={state.results} />
       {state.answers && (
-        <YourPicks questions={state.questions} answers={state.answers} />
+        <div className="mt-6">
+          <YourPicks questions={state.questions} answers={state.answers} />
+        </div>
       )}
     </Card>
   );
