@@ -25,6 +25,17 @@ export default function AdminHomePage() {
         </li>
         <li>
           <Link
+            href="/admin/surveys"
+            className="block rounded-lg border border-neutral-200 bg-white p-4 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-900"
+          >
+            <span className="block font-semibold">Surveys</span>
+            <span className="mt-1 block text-neutral-500">
+              Create drafts, publish, close, publish results. One active at a time.
+            </span>
+          </Link>
+        </li>
+        <li>
+          <Link
             href="/admin/reveal"
             className="block rounded-lg border border-neutral-200 bg-white p-4 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-900"
           >
