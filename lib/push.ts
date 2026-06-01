@@ -73,3 +73,20 @@ export async function sendToUser(
     subscriptions.map((sub) => sendPushNotification(sub, payload))
   );
 }
+
+/**
+ * Broadcast a push notification to every subscribed user. Best-effort: each
+ * subscription send is independent (Promise.allSettled), so a single dead
+ * subscription doesn't block the rest. Callers don't need to handle errors —
+ * dead subscriptions self-clean inside sendPushNotification.
+ */
+export async function sendToAll(payload: PushPayload): Promise<void> {
+  const { data: subscriptions, error } = await serviceClient
+    .from("push_subscriptions")
+    .select("endpoint, p256dh, auth_key");
+  if (error) throw error;
+  if (!subscriptions?.length) return;
+  await Promise.allSettled(
+    subscriptions.map((sub) => sendPushNotification(sub, payload))
+  );
+}
