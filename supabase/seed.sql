@@ -251,59 +251,120 @@ INSERT INTO surveys (id, season_id, title, week_number, status, closes_at, publi
 -- SURVEY QUESTIONS
 -- ============================================================
 
+-- Question UUIDs are pinned explicitly so seed responses can reference them.
+-- (The form keys answers by question.id; the seed mirrors that.)
+
 -- Week 3 (active)
-INSERT INTO survey_questions (survey_id, text, type, display_order, options, uses_contestants) VALUES
-  ('00000005-0000-0000-0000-000000000002',
+INSERT INTO survey_questions (id, survey_id, text, type, display_order, options, uses_contestants) VALUES
+  ('00000006-0000-0000-0000-000000000301', '00000005-0000-0000-0000-000000000002',
    'Rank the houseguests from best to worst game this week.',
    'ranking', 1, null, true),
 
-  ('00000005-0000-0000-0000-000000000002',
+  ('00000006-0000-0000-0000-000000000302', '00000005-0000-0000-0000-000000000002',
    'Which competition did you enjoy watching most?',
    'single_choice', 2,
    '["HOH Competition", "Veto Competition", "Have-Not Competition"]', false);
 
--- Week 1 (results_published)
-INSERT INTO survey_questions (survey_id, text, type, display_order, options, uses_contestants) VALUES
-  ('00000005-0000-0000-0000-000000000004',
+-- Week 1 (results_published) — exercises all three chart types in #79.
+INSERT INTO survey_questions (id, survey_id, text, type, display_order, options, uses_contestants) VALUES
+  ('00000006-0000-0000-0000-000000000101', '00000005-0000-0000-0000-000000000004',
    'Who was your favourite houseguest based on first impressions?',
    'single_choice', 1, null, true),
 
-  ('00000005-0000-0000-0000-000000000004',
+  ('00000006-0000-0000-0000-000000000102', '00000005-0000-0000-0000-000000000004',
    'How do you feel about the cast overall?',
    'single_choice', 2,
-   '["Love it", "It''s okay", "Disappointed"]', false);
+   '["Love it", "It''s okay", "Disappointed"]', false),
+
+  ('00000006-0000-0000-0000-000000000103', '00000005-0000-0000-0000-000000000004',
+   'What stands out about this cast? (Pick all that apply)',
+   'multiple_choice', 3,
+   '["Strategy", "Drama", "Comp threats", "Underdogs", "Returning players"]', false),
+
+  ('00000006-0000-0000-0000-000000000104', '00000005-0000-0000-0000-000000000004',
+   'Rank your top picks to win.',
+   'ranking', 4, null, true);
 
 
 -- ============================================================
 -- SURVEY RESPONSES
+--
+-- Answers are keyed by question UUID — matches what the form produces.
+-- Contestant references use the FULL name from `contestants.name` so
+-- aggregation lines up cleanly with form-submitted responses.
 -- ============================================================
 
 -- Week 3 active survey: two logged-in responses
 INSERT INTO survey_responses (survey_id, user_id, answers, is_anonymous, submitted_at) VALUES
   ('00000005-0000-0000-0000-000000000002', 'bbbbbbbb-0000-0000-0000-000000000002',
-   '{"1":["Janelle","Ian","Tyler","Angela","Nicole A","Memphis","Kaysar","Da''Vonne","Derek","Enzo"],"2":"HOH Competition"}',
+   '{
+     "00000006-0000-0000-0000-000000000301": ["Janelle Pierzina","Ian Terry","Tyler Crispen","Angela Rummans","Nicole Anthony","Memphis Garrett","Kaysar Ridha","Da''Vonne Rogers","Derek Xiao"],
+     "00000006-0000-0000-0000-000000000302": "HOH Competition"
+   }',
    false, now() - interval '2 hours'),
 
   ('00000005-0000-0000-0000-000000000002', 'cccccccc-0000-0000-0000-000000000003',
-   '{"1":["Angela","Tyler","Ian","Janelle","Nicole A","Memphis","Derek","Kaysar","Da''Vonne","Enzo"],"2":"Veto Competition"}',
+   '{
+     "00000006-0000-0000-0000-000000000301": ["Angela Rummans","Tyler Crispen","Ian Terry","Janelle Pierzina","Nicole Anthony","Memphis Garrett","Derek Xiao","Kaysar Ridha","Da''Vonne Rogers"],
+     "00000006-0000-0000-0000-000000000302": "Veto Competition"
+   }',
    false, now() - interval '1 hour');
 
--- Week 1 results-published survey: three logged-in + one anonymous
+-- Week 1 results-published survey: six responses (five logged-in / mock + one anonymous).
+-- Hand-tuned for variety so all three chart types show non-trivial aggregation.
 INSERT INTO survey_responses (survey_id, user_id, answers, is_anonymous, submitted_at) VALUES
   ('00000005-0000-0000-0000-000000000004', 'bbbbbbbb-0000-0000-0000-000000000002',
-   '{"1":"Janelle","2":"Love it"}',
+   '{
+     "00000006-0000-0000-0000-000000000101": "Janelle Pierzina",
+     "00000006-0000-0000-0000-000000000102": "Love it",
+     "00000006-0000-0000-0000-000000000103": ["Returning players","Strategy","Drama"],
+     "00000006-0000-0000-0000-000000000104": ["Janelle Pierzina","Ian Terry","Angela Rummans","Tyler Crispen","Nicole Anthony"]
+   }',
    false, now() - interval '16 days'),
 
   ('00000005-0000-0000-0000-000000000004', 'cccccccc-0000-0000-0000-000000000003',
-   '{"1":"Angela","2":"Love it"}',
+   '{
+     "00000006-0000-0000-0000-000000000101": "Angela Rummans",
+     "00000006-0000-0000-0000-000000000102": "Love it",
+     "00000006-0000-0000-0000-000000000103": ["Strategy","Comp threats"],
+     "00000006-0000-0000-0000-000000000104": ["Angela Rummans","Tyler Crispen","Ian Terry","Janelle Pierzina","Memphis Garrett"]
+   }',
    false, now() - interval '15 days'),
 
   ('00000005-0000-0000-0000-000000000004', 'dddddddd-0000-0000-0000-000000000004',
-   '{"1":"Janelle","2":"It''s okay"}',
+   '{
+     "00000006-0000-0000-0000-000000000101": "Janelle Pierzina",
+     "00000006-0000-0000-0000-000000000102": "It''s okay",
+     "00000006-0000-0000-0000-000000000103": ["Returning players","Drama"],
+     "00000006-0000-0000-0000-000000000104": ["Janelle Pierzina","Angela Rummans","Ian Terry","Tyler Crispen","Memphis Garrett"]
+   }',
    false, now() - interval '15 days'),
 
+  ('00000005-0000-0000-0000-000000000004', 'eeeeeeee-0000-0000-0000-000000000005',
+   '{
+     "00000006-0000-0000-0000-000000000101": "Tyler Crispen",
+     "00000006-0000-0000-0000-000000000102": "Love it",
+     "00000006-0000-0000-0000-000000000103": ["Underdogs","Comp threats","Drama"],
+     "00000006-0000-0000-0000-000000000104": ["Tyler Crispen","Janelle Pierzina","Ian Terry","Angela Rummans","Nicole Anthony"]
+   }',
+   false, now() - interval '14 days'),
+
+  ('00000005-0000-0000-0000-000000000004', 'aaaaaaaa-0000-0000-0000-000000000001',
+   '{
+     "00000006-0000-0000-0000-000000000101": "Ian Terry",
+     "00000006-0000-0000-0000-000000000102": "Love it",
+     "00000006-0000-0000-0000-000000000103": ["Strategy","Returning players"],
+     "00000006-0000-0000-0000-000000000104": ["Ian Terry","Janelle Pierzina","Angela Rummans","Memphis Garrett","Tyler Crispen"]
+   }',
+   false, now() - interval '13 days'),
+
   ('00000005-0000-0000-0000-000000000004', null,
-   '{"1":"Ian","2":"Love it"}',
+   '{
+     "00000006-0000-0000-0000-000000000101": "Ian Terry",
+     "00000006-0000-0000-0000-000000000102": "Love it",
+     "00000006-0000-0000-0000-000000000103": ["Strategy","Comp threats","Underdogs"],
+     "00000006-0000-0000-0000-000000000104": ["Ian Terry","Tyler Crispen","Angela Rummans","Janelle Pierzina","Kaysar Ridha"]
+   }',
    true, now() - interval '14 days');
 
 
