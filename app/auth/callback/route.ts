@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
+import { claimAnonymousSurveyResponse } from "@/lib/survey/claim";
 
 /** Handles OAuth and email confirmation redirects from Supabase. */
 export async function GET(request: NextRequest) {
@@ -35,6 +36,10 @@ export async function GET(request: NextRequest) {
   if (error) {
     return NextResponse.redirect(`${origin}/login?error=auth_failed`);
   }
+
+  // Carry over any anonymous survey submission to the newly authenticated user
+  // (#80). The action reads the cookie + auth session itself; we just invoke.
+  await claimAnonymousSurveyResponse();
 
   return NextResponse.redirect(`${origin}${next}`);
 }

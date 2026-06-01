@@ -9,14 +9,21 @@
 //   - submitAnonymousResponse: public-link user. Uses the service-role client
 //     (server-only) because there is no RLS INSERT policy for the anon role,
 //     and we validate the survey is `active` ourselves. user_id stays null
-//     and is_anonymous = true.
+//     and is_anonymous = true. On success, sets a signed cookie carrying the
+//     new response id so a subsequent signup can retroactively claim it (#80).
 //
 // Both write the `answers` jsonb as { [questionId]: answer } where answer is
 // a string (single_choice), string[] (multiple_choice), or string[] (ranking,
 // best-first). Names are stored — matching the seed and the design doc.
 
+import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { serviceClient } from "@/lib/supabase/service";
+import {
+  ANON_SURVEY_COOKIE,
+  ANON_SURVEY_COOKIE_MAX_AGE_SECONDS,
+  buildAnonSurveyCookieValue,
+} from "./anon-cookie";
 
 export type AnswerValue = string | string[];
 
@@ -80,12 +87,28 @@ export async function submitAnonymousResponse(
   if (survey.status !== "active") return { ok: false, error: "not-active" };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (serviceClient.from("survey_responses") as any).insert({
-    survey_id: surveyId,
-    user_id: null,
-    answers,
-    is_anonymous: true,
+  const { data: inserted, error } = await (serviceClient.from("survey_responses") as any)
+    .insert({
+      survey_id: surveyId,
+      user_id: null,
+      answers,
+      is_anonymous: true,
+    })
+    .select("id")
+    .single();
+  if (error || !inserted?.id) return { ok: false, error: "unknown" };
+
+  // Drop a signed cookie so a subsequent signup can claim this response
+  // (consumed in app/auth/callback/route.ts). Same-site=lax so the cookie
+  // survives OAuth round-trips; httpOnly so client JS can't read it.
+  const cookieStore = await cookies();
+  cookieStore.set(ANON_SURVEY_COOKIE, buildAnonSurveyCookieValue(inserted.id as string), {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: ANON_SURVEY_COOKIE_MAX_AGE_SECONDS,
   });
-  if (error) return { ok: false, error: "unknown" };
+
   return { ok: true };
 }
