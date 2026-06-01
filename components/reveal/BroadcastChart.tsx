@@ -22,6 +22,20 @@ type Props = {
   selectedWeekId: string;
   /** Stable color per contestant id (see colors.ts). */
   colorOf: (contestantId: string) => string;
+  // ---- Ephemeral interaction overrides (#78) ----
+  /** When set, overrides local hover so a remote sender can drive the highlight. */
+  forcedHoveredId?: string | null;
+  /** When set, a contestant id stays highlighted regardless of hover — the
+   *  click-to-focus state. */
+  focusedId?: string | null;
+  /** Fired when hover changes locally. Senders broadcast this. */
+  onHoverChange?: (contestantId: string | null) => void;
+  /** Fired when a contestant row is clicked. Senders use this to toggle focus. */
+  onContestantClick?: (contestantId: string) => void;
+  /** Fired when a week vertical is clicked. Senders broadcast a scrub. */
+  onWeekClick?: (weekId: string) => void;
+  /** Fired when a week vertical is hovered; null when no week is hovered. */
+  onWeekHover?: (weekId: string | null) => void;
 };
 
 // SVG viewBox geometry — ported verbatim from the original. The chart scales to
@@ -61,8 +75,29 @@ function movementFill(movement: number) {
   return "fill-slate-500";
 }
 
-export function BroadcastChart({ state, selectedWeekId, colorOf }: Props) {
-  const [hovered, setHovered] = useState<string | null>(null);
+export function BroadcastChart({
+  state,
+  selectedWeekId,
+  colorOf,
+  forcedHoveredId,
+  focusedId,
+  onHoverChange,
+  onContestantClick,
+  onWeekClick,
+  onWeekHover,
+}: Props) {
+  const [localHovered, setLocalHovered] = useState<string | null>(null);
+
+  // Effective highlight: forced > focused > local. forcedHoveredId !== undefined
+  // means a remote sender is driving us; null means "actively no hover" (clear
+  // the highlight). focusedId is sustained click-state.
+  const hovered =
+    forcedHoveredId !== undefined ? forcedHoveredId : (focusedId ?? localHovered);
+
+  const setHovered = (next: string | null) => {
+    setLocalHovered(next);
+    onHoverChange?.(next);
+  };
 
   const selectedWeek =
     state.weeks.find((week) => week.id === selectedWeekId) ?? state.weeks.at(-1);
@@ -137,6 +172,7 @@ export function BroadcastChart({ state, selectedWeekId, colorOf }: Props) {
                 role={isRevealed ? "button" : undefined}
                 onMouseEnter={() => isRevealed && setHovered(entry.contestantId)}
                 onMouseLeave={() => isRevealed && setHovered(null)}
+                onClick={() => isRevealed && onContestantClick?.(entry.contestantId)}
                 className={`grid grid-cols-[48px_56px_1fr_auto] items-center gap-3 rounded-xl border p-2.5 transition-opacity ${
                   isRevealed
                     ? "border-white/10 bg-white/[0.04]"
@@ -232,29 +268,46 @@ export function BroadcastChart({ state, selectedWeekId, colorOf }: Props) {
             })}
 
             {/* Week verticals + axis labels. */}
-            {geometry.map((week) => (
-              <g key={week.weekId}>
-                <line
-                  x1={week.x}
-                  x2={week.x}
-                  y1={chart.top}
-                  y2={chart.height - chart.bottom}
-                  stroke={week.weekNumber === selectedWeekNumber ? "#38bdf8" : "#1a2236"}
-                  strokeWidth={week.weekNumber === selectedWeekNumber ? 2.5 : 1}
-                  strokeDasharray="3 9"
-                />
-                <text
-                  x={week.x}
-                  y={chart.height - 26}
-                  textAnchor="middle"
-                  className={`text-[22px] font-black ${
-                    week.weekNumber === selectedWeekNumber ? "fill-sky-300" : "fill-slate-500"
-                  }`}
-                >
-                  WK {week.weekNumber}
-                </text>
-              </g>
-            ))}
+            {geometry.map((week) => {
+              const clickable = Boolean(onWeekClick);
+              return (
+                <g key={week.weekId}>
+                  <line
+                    x1={week.x}
+                    x2={week.x}
+                    y1={chart.top}
+                    y2={chart.height - chart.bottom}
+                    stroke={week.weekNumber === selectedWeekNumber ? "#38bdf8" : "#1a2236"}
+                    strokeWidth={week.weekNumber === selectedWeekNumber ? 2.5 : 1}
+                    strokeDasharray="3 9"
+                  />
+                  <text
+                    x={week.x}
+                    y={chart.height - 26}
+                    textAnchor="middle"
+                    className={`text-[22px] font-black ${
+                      week.weekNumber === selectedWeekNumber ? "fill-sky-300" : "fill-slate-500"
+                    }`}
+                  >
+                    WK {week.weekNumber}
+                  </text>
+                  {/* Generous click + hover target so scrubbing doesn't require pixel-precision. */}
+                  {(clickable || onWeekHover) && (
+                    <rect
+                      x={week.x - 40}
+                      y={chart.top}
+                      width={80}
+                      height={chart.height - chart.top - chart.bottom + 20}
+                      fill="transparent"
+                      style={{ cursor: clickable ? "pointer" : "default" }}
+                      onClick={() => onWeekClick?.(week.weekId)}
+                      onMouseEnter={() => onWeekHover?.(week.weekId)}
+                      onMouseLeave={() => onWeekHover?.(null)}
+                    />
+                  )}
+                </g>
+              );
+            })}
 
             {/* One trajectory line per contestant. Only REVEALED points are
                 drawn; an unrevealed live-week point hides that segment. A line
