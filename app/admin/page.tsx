@@ -14,6 +14,17 @@ export default function AdminHomePage() {
       <ul className="mt-6 space-y-3 text-sm">
         <li>
           <Link
+            href="/admin/seasons"
+            className="block rounded-lg border border-neutral-200 bg-white p-4 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-900"
+          >
+            <span className="block font-semibold">Seasons</span>
+            <span className="mt-1 block text-neutral-500">
+              Drive status transitions: setup → pre-season → active → ended → results published.
+            </span>
+          </Link>
+        </li>
+        <li>
+          <Link
             href="/admin/contestants"
             className="block rounded-lg border border-neutral-200 bg-white p-4 hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:bg-neutral-900"
           >
