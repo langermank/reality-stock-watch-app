@@ -65,6 +65,7 @@ See `docs/tech-stack.md` for full decisions and rationale.
 | `docs/design/conceptual-model.md` | All objects, relationships, states, vocabulary |
 | `docs/design/interaction-flow-*.md` | Breadboarded user flows |
 | `docs/dev-environment.md` | Environment setup, migration workflow, fake season |
+| `docs/local-dev.md` | The runbook for running the app locally — `supabase start` + `pnpm dev`, seed accounts, common commands |
 | `docs/migrations.md` | How schema changes ship (CLI `db push` only) + drift-recovery runbook — read before applying any migration |
 | `docs/admin-recipes.md` | Claude-orchestrated admin ops (bootstrap a new season from a URL, publish season results, etc.) — read when the user asks to "set up BB28" or similar |
 
