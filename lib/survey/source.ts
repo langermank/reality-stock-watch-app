@@ -114,9 +114,12 @@ async function pickRelevantSurvey(seasonId: string): Promise<SurveyRow | null> {
   return ((publishedRows as SurveyRow[] | null)?.[0]) ?? null;
 }
 
-async function loadActiveContestantNames(seasonId: string): Promise<string[]> {
-  const supabase = await createClient();
-  const { data } = await supabase
+async function loadActiveContestantNames(
+  seasonId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  client: any,
+): Promise<string[]> {
+  const { data } = await client
     .from("contestants")
     .select("name, status")
     .eq("season_id", seasonId)
@@ -150,7 +153,7 @@ export async function getSurveyPageState(userId: string): Promise<SurveyPageStat
   // we render from `answers` alone, treating it as opaque key/value.
   let questions: SurveyQuestion[] = [];
   if (survey.status === "active" || survey.status === "results_published") {
-    questions = await loadQuestions(survey.id, season.id);
+    questions = await loadQuestions(survey.id, season.id, supabase);
   }
 
   // Did this user submit?
@@ -195,13 +198,18 @@ export async function getSurveyPageState(userId: string): Promise<SurveyPageStat
   return { kind: "no-active" }; // draft — treat as none
 }
 
-/** Load + resolve questions for the survey (used by both logged-in & public routes). */
+/** Load + resolve questions for the survey. Caller passes the client so the
+ *  logged-in path can use the user-scoped client (RLS-checked) and the anon
+ *  public path can use the service client (the route's status check IS the
+ *  gate; RLS would otherwise block anon entirely). */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function loadQuestions(
   surveyId: string,
   seasonId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  client: any,
 ): Promise<SurveyQuestion[]> {
-  const supabase = await createClient();
-  const { data } = await supabase
+  const { data } = await client
     .from("survey_questions")
     .select("id, text, type, display_order, options, uses_contestants")
     .eq("survey_id", surveyId)
@@ -211,7 +219,7 @@ export async function loadQuestions(
 
   // Resolve contestant lists once if any question needs them.
   const needsContestants = rows.some((row) => row.uses_contestants);
-  const contestants = needsContestants ? await loadActiveContestantNames(seasonId) : [];
+  const contestants = needsContestants ? await loadActiveContestantNames(seasonId, client) : [];
 
   return rows.map((row) => ({
     id: row.id,
@@ -225,14 +233,18 @@ export async function loadQuestions(
 
 /** Public-link loader: the survey, its questions, and a closed/active flag.
  *  Surfaces the "closed/published" state separately so the public route can
- *  show "this survey is closed" without exposing user-only views. */
+ *  show "this survey is closed" without exposing user-only views.
+ *
+ *  Uses the service client because the anon role has no read policy on
+ *  surveys/survey_questions/contestants. The status check below IS the gate
+ *  (only `active` surveys expose questions to anonymous users). */
 export async function getPublicSurvey(surveyId: string): Promise<
   | { kind: "active"; survey: SurveyMeta; questions: SurveyQuestion[] }
   | { kind: "closed"; survey: SurveyMeta }
   | null
 > {
-  const supabase = await createClient();
-  const { data } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await (serviceClient as any)
     .from("surveys")
     .select("id, title, week_number, status, closes_at, season_id")
     .eq("id", surveyId)
@@ -249,7 +261,7 @@ export async function getPublicSurvey(surveyId: string): Promise<
   };
 
   if (row.status === "active") {
-    const questions = await loadQuestions(row.id, row.season_id);
+    const questions = await loadQuestions(row.id, row.season_id, serviceClient);
     return { kind: "active", survey: meta, questions };
   }
   // closed / results_published / draft → all "closed" from anon perspective
