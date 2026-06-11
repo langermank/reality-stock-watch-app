@@ -40,7 +40,7 @@
 ---
 
 ### Trade
-*A record of a single buy or sell transaction on a contestant's stock.*
+*A record of a single buy or sell transaction on a contestant.*
 
 | | |
 |---|---|
@@ -127,11 +127,9 @@
 
 | | |
 |---|---|
-| **Attributes** | text, type (TBD — ranking, multiple choice, etc.), display order |
+| **Attributes** | text, type (ranking, multiple choice, single choice), display order |
 | **Relationships** | belongs to one Survey |
 | **Actions** | (admin) Add · Edit · Reorder · Remove |
-
-> ⚠️ Question types TBD — to be resolved before building the survey builder.
 
 ---
 
@@ -270,8 +268,8 @@ Use these terms consistently — in the UI, in help text, in API names, in inter
 
 | Action | Chosen verb | Rejected | Applies to |
 |--------|------------|----------|------------|
-| Acquiring shares | **Buy** | Purchase, Invest, Acquire | Contestant stock |
-| Disposing of shares | **Sell** | Liquidate, Dump | Contestant stock |
+| Acquiring shares | **Buy** | Purchase, Invest, Acquire | Contestant shares |
+| Disposing of shares | **Sell** | Liquidate, Dump | Contestant shares |
 | Admin making season visible to players | **Publish** | Launch, Activate, Go live | Season (pre-season state), Survey, Survey results |
 | Admin opening trading | **Open** | Start, Activate, Launch | Season (active state) |
 | Admin closing season | **End** | Close, Finish, Wrap | Season |
@@ -286,3 +284,14 @@ Use these terms consistently — in the UI, in help text, in API names, in inter
 - [x] **Survey question types** — Ranking, Multiple choice, Single choice.
 - [ ] **Survey editing while active** — editing a Draft vs. an Active survey are different operations. Design as separate interactions to avoid corrupting in-flight responses.
 - [ ] **Results visibility** — survey results visible to logged-in users only after admin publishes. Confirm whether any results are ever public.
+
+---
+
+## Strategy Audit — 2026-06-11
+
+The provisional product strategy centers on helping users act on changing reads, trust the market result, and compare socially. The current model supports that loop without new first-class objects, but these model decisions should be kept visible:
+
+- [ ] **Trade as receipt** — a Trade currently records type, dollar amount, shares, price at execution, fee, state, and timestamp. If users need a shareable "good read" receipt, first test whether these attributes are enough before adding a new object such as Highlight, Receipt, or Notable Trade.
+- [ ] **Rank movement and price movement** — treat these as derived views for now, not first-class objects. Promote only if flows require persistent history independent of existing Trade, Portfolio, Leaderboard, and Contestant data.
+- [ ] **Anonymous survey handoff** — resolve whether an anonymous Survey Response can later attach to a User after signup. Current docs disagree; this is a conceptual relationship decision before it is an implementation detail.
+- [ ] **Badge and Season Result as social proof** — the current objects support end-of-season proof, but not mid-season "good read" proof. Keep that distinction explicit when designing sharing or public profile flows.

@@ -6,7 +6,7 @@
 
 ## Job story
 
-When I want to act on my read of the BB game, I want to buy or sell contestant stock quickly so I can put my reads on the line and get back to watching.
+When I want to act on my read of the BB game, I want to buy or sell contestant shares quickly so I can put my reads on the line and get back to watching.
 
 ---
 
@@ -45,7 +45,7 @@ Market — Active
 - tap Trade on contestant row → Trade overlay — Entry (buy default)
 [ live list: contestant name, current price, 24h change, your holding per contestant ]
 [ cash balance ]
-[ prices tick every 2–3s — subtle update animation ]
+[ prices update when trades change contestant supply — subtle update animation ]
 
 ---
 
@@ -63,7 +63,7 @@ Contestant — Active
 [ photo, name, status badge ]
 [ visual flags: HoH / Nominated / Veto / Evicted — display only ]
 [ live price + price movement ]
-[ your holding: shares held, avg purchase price, liquidation value, unrealised P&L ]
+[ your holding: shares held, avg purchase price, liquidation value, gain/loss in plain language ]
 [ empty holding state: "You don't own any shares in [name]" ]
 
 ---
@@ -156,7 +156,7 @@ graph LR
 - [ ] **Partial sells** — user can sell any dollar amount up to their full holding's liquidation value. Max input in sell mode = current liquidation value. ⚠️ Confirm this is the intended behavior before building.
 - [ ] **Global Trade button** — generic overlay can be triggered from anywhere. Consider a persistent FAB or nav action so users can trade without navigating to a specific contestant first. Surface decision.
 - [ ] **Contestant selector UX** — inside the overlay, how does the user pick/change a contestant? Dropdown, search, scrollable list? Surface decision.
-- [ ] **Price tick animation** — prices update every 2–3s. Subtle flash/fade on update. Style TBD at surface layer.
+- [ ] **Price update animation** — prices update when Realtime contestant supply changes. Subtle flash/fade on update. Style TBD at surface layer.
 - [ ] **Trade button placement on list row** — single "Trade" button. Where on the row? Rightmost affordance recommended but surface decision.
 - [ ] **Price shift threshold** — show "Executed at / Preview was" message only if delta exceeds X%. Avoids noise on tiny movements. Threshold TBD.
 
