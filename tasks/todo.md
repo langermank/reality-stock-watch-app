@@ -10,7 +10,7 @@
 - [x] Audit conceptual model for strategy-driven gaps.
 - [x] Audit interaction structure and surface implications.
 - [x] Review docs for consistency.
-- [ ] Commit and push the documentation chunk.
+- [x] Commit and push the documentation chunk.
 
 ## Review
 
