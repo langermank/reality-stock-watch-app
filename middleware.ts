@@ -32,12 +32,16 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // Protected: authenticated routes
-  const isAppRoute = pathname.startsWith("/(app)") ||
-    pathname === "/market" ||
-    pathname === "/portfolio" ||
-    pathname === "/survey" ||
-    pathname === "/leaderboard";
+  // Protected: authenticated routes. Prefix-matched so nested routes like
+  // /market/[id] are covered — but /survey/[id]/public stays open (the
+  // anonymous share link). Route groups like (app) never appear in URLs.
+  const isPublicSurveyRoute =
+    pathname.startsWith("/survey/") && pathname.endsWith("/public");
+  const isAppRoute =
+    !isPublicSurveyRoute &&
+    ["/market", "/portfolio", "/survey", "/leaderboard"].some(
+      (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+    );
 
   // Protected: admin only
   const isAdminRoute = pathname.startsWith("/admin");

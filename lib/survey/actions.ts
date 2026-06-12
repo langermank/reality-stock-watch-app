@@ -23,6 +23,7 @@ import {
   ANON_SURVEY_COOKIE,
   ANON_SURVEY_COOKIE_MAX_AGE_SECONDS,
   buildAnonSurveyCookieValue,
+  readAnonSurveyCookieValue,
 } from "./anon-cookie";
 
 export type AnswerValue = string | string[];
@@ -48,12 +49,11 @@ export async function submitResponse(
     .select("status")
     .eq("id", surveyId)
     .maybeSingle();
-  const survey = surveyRow as { status: string } | null;
+  const survey = surveyRow;
   if (!survey) return { ok: false, error: "no-survey" };
   if (survey.status !== "active") return { ok: false, error: "not-active" };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("survey_responses") as any).insert({
+  const { error } = await supabase.from("survey_responses").insert({
     survey_id: surveyId,
     user_id: user.id,
     answers,
@@ -76,18 +76,34 @@ export async function submitAnonymousResponse(
   // Validate the survey is active. Use the service client so this works even
   // before any auth check, but we still gate the WRITE on status === 'active'
   // here in code (anon users can't see closed/draft surveys).
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: row } = await (serviceClient as any)
+  const { data: row } = await serviceClient
     .from("surveys")
     .select("status")
     .eq("id", surveyId)
     .maybeSingle();
-  const survey = row as { status: string } | null;
+  const survey = row;
   if (!survey) return { ok: false, error: "no-survey" };
   if (survey.status !== "active") return { ok: false, error: "not-active" };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: inserted, error } = await (serviceClient.from("survey_responses") as any)
+  // Double-submit guard: anonymous responses have no unique index (user_id is
+  // null), so the signed cookie from a prior submit is the dedup signal. It
+  // only stops casual resubmits (reload + send again) — clearing cookies
+  // defeats it — but that matches the per-user index's intent for anon users.
+  const cookieStore = await cookies();
+  const priorResponseId = readAnonSurveyCookieValue(
+    cookieStore.get(ANON_SURVEY_COOKIE)?.value,
+  );
+  if (priorResponseId) {
+    const { data: prior } = await serviceClient.from("survey_responses")
+      .select("survey_id")
+      .eq("id", priorResponseId)
+      .maybeSingle();
+    if (prior?.survey_id === surveyId) {
+      return { ok: false, error: "already-submitted" };
+    }
+  }
+
+  const { data: inserted, error } = await serviceClient.from("survey_responses")
     .insert({
       survey_id: surveyId,
       user_id: null,
@@ -101,8 +117,7 @@ export async function submitAnonymousResponse(
   // Drop a signed cookie so a subsequent signup can claim this response
   // (consumed in app/auth/callback/route.ts). Same-site=lax so the cookie
   // survives OAuth round-trips; httpOnly so client JS can't read it.
-  const cookieStore = await cookies();
-  cookieStore.set(ANON_SURVEY_COOKIE, buildAnonSurveyCookieValue(inserted.id as string), {
+  cookieStore.set(ANON_SURVEY_COOKIE, buildAnonSurveyCookieValue(inserted.id), {
     httpOnly: true,
     sameSite: "lax",
     path: "/",

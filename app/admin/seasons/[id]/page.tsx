@@ -6,34 +6,21 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SeasonDetail, type AdminSeason } from "@/components/admin/SeasonDetail";
-import type { SeasonStatus } from "@/lib/admin/season-types";
 
 export const dynamic = "force-dynamic";
-
-type SeasonRow = {
-  id: string;
-  name: string;
-  status: SeasonStatus;
-  start_date: string | null;
-  end_date: string | null;
-  starting_balance: string;
-  k_constant: string;
-  base_price: string;
-};
 
 type PageProps = { params: Promise<{ id: string }> };
 
 export default async function AdminSeasonDetailPage({ params }: PageProps) {
   const { id } = await params;
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data: row } = await supabase
     .from("seasons")
     .select(
       "id, name, status, start_date, end_date, starting_balance, k_constant, base_price",
     )
     .eq("id", id)
     .maybeSingle();
-  const row = data as SeasonRow | null;
   if (!row) notFound();
 
   const season: AdminSeason = {
@@ -42,9 +29,9 @@ export default async function AdminSeasonDetailPage({ params }: PageProps) {
     status: row.status,
     startDate: row.start_date,
     endDate: row.end_date,
-    startingBalance: parseFloat(row.starting_balance),
-    kConstant: parseFloat(row.k_constant),
-    basePrice: parseFloat(row.base_price),
+    startingBalance: row.starting_balance,
+    kConstant: row.k_constant,
+    basePrice: row.base_price,
   };
 
   return (

@@ -15,7 +15,7 @@ type PriceEntry = {
 /** Minimal supply shape the hook needs to seed/derive prices. */
 export type SupplySnapshot = {
   id: string;
-  total_shares_outstanding: string;
+  total_shares_outstanding: number;
 };
 
 type UseContestantPricesResult = {
@@ -40,7 +40,7 @@ function computePrices(
 }
 
 function mapFromSnapshot(snapshot: SupplySnapshot[]): Map<string, number> {
-  return new Map(snapshot.map((c) => [c.id, parseFloat(c.total_shares_outstanding)]));
+  return new Map(snapshot.map((c) => [c.id, c.total_shares_outstanding]));
 }
 
 /**
@@ -84,8 +84,9 @@ export function useContestantPrices(
     initialSupply ? mapFromSnapshot(initialSupply) : new Map()
   );
 
+  // Computed from the snapshot (not the ref) — refs must not be read in render.
   const [prices, setPrices] = useState<Map<string, PriceEntry>>(() =>
-    initialSupply ? computePrices(sharesMapRef.current, pricingParams) : new Map()
+    initialSupply ? computePrices(mapFromSnapshot(initialSupply), pricingParams) : new Map()
   );
   const [isLoading, setIsLoading] = useState(!initialSupply);
 
@@ -114,8 +115,8 @@ export function useContestantPrices(
       if (cancelled || error || !data) return;
 
       const map = new Map<string, number>();
-      for (const row of data as Pick<ContestantRow, "id" | "total_shares_outstanding">[]) {
-        map.set(row.id, parseFloat(row.total_shares_outstanding));
+      for (const row of data) {
+        map.set(row.id, row.total_shares_outstanding);
       }
       sharesMapRef.current = map;
       setPrices(computePrices(map, pricingParams));
@@ -125,7 +126,7 @@ export function useContestantPrices(
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [seasonId, initialSig, pricingParams]);
 
   // Realtime subscription layers live updates onto the seeded supply.
@@ -146,7 +147,9 @@ export function useContestantPrices(
         (payload) => {
           const row = payload.new as Pick<ContestantRow, "id" | "total_shares_outstanding">;
           if (!row?.id) return;
-          sharesMapRef.current.set(row.id, parseFloat(row.total_shares_outstanding));
+          // Number(...) because Realtime payloads may serialize numeric columns
+          // as strings, unlike PostgREST reads which deliver JSON numbers.
+          sharesMapRef.current.set(row.id, Number(row.total_shares_outstanding));
           setPrices(computePrices(sharesMapRef.current, pricingParams));
         }
       )

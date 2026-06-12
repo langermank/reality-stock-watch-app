@@ -8,8 +8,8 @@ import { useContestantPrices } from "@/hooks/useContestantPrices";
 
 type SeasonInfo = {
   id: string;
-  base_price: string;
-  k_constant: string;
+  base_price: number;
+  k_constant: number;
 };
 
 type PortfolioContestant = {
@@ -17,23 +17,23 @@ type PortfolioContestant = {
   name: string;
   photo_url: string | null;
   status: string;
-  total_shares_outstanding: string;
+  total_shares_outstanding: number;
 };
 
 type HoldingRow = {
   contestant_id: string;
-  shares_held: string;
-  average_purchase_price: string;
+  shares_held: number;
+  average_purchase_price: number;
 };
 
 type TradeRow = {
   id: string;
   contestant_id: string;
   type: "buy" | "sell";
-  dollar_amount: string;
-  shares: string;
-  price_at_execution: string;
-  fee_amount: string;
+  dollar_amount: number;
+  shares: number;
+  price_at_execution: number;
+  fee_amount: number;
   created_at: string;
 };
 
@@ -115,8 +115,8 @@ export function PortfolioClient({
 
   const params = useMemo<PricingParams>(
     () => ({
-      basePrice: parseFloat(data.season.base_price),
-      kConstant: parseFloat(data.season.k_constant),
+      basePrice: data.season.base_price,
+      kConstant: data.season.k_constant,
       // Matches the leaderboard cron + place_trade RPC so net worth is consistent.
       minSupplyFloor: 1,
     }),
@@ -131,7 +131,7 @@ export function PortfolioClient({
   const initialSupply = useMemo(
     () =>
       new Map(
-        data.contestants.map((c) => [c.id, parseFloat(c.total_shares_outstanding)])
+        data.contestants.map((c) => [c.id, c.total_shares_outstanding])
       ),
     [data.contestants]
   );
@@ -139,9 +139,13 @@ export function PortfolioClient({
   const { prices } = useContestantPrices(data.season.id, params);
 
   // Live supply per contestant + season total (server data as fallback).
-  const supply = prices.size > 0
-    ? new Map(Array.from(prices, ([id, v]) => [id, v.sharesOutstanding]))
-    : initialSupply;
+  const supply = useMemo(
+    () =>
+      prices.size > 0
+        ? new Map(Array.from(prices, ([id, v]) => [id, v.sharesOutstanding]))
+        : initialSupply,
+    [prices, initialSupply]
+  );
   const totalAllShares = useMemo(() => {
     let t = 0;
     for (const v of supply.values()) t += v;
@@ -152,8 +156,8 @@ export function PortfolioClient({
   const holdings = useMemo(() => {
     return data.holdings
       .map((h) => {
-        const shares = parseFloat(h.shares_held);
-        const avg = parseFloat(h.average_purchase_price);
+        const shares = h.shares_held;
+        const avg = h.average_purchase_price;
         const S = supply.get(h.contestant_id) ?? initialSupply.get(h.contestant_id) ?? 0;
         const liquidation =
           shares > 0 ? sellProceeds(shares, S, totalAllShares, params).proceeds : 0;
@@ -373,9 +377,8 @@ function HistoryTab({
         .range(trades.length, trades.length + PAGE_SIZE - 1);
 
       if (!error && data) {
-        const next = data as unknown as TradeRow[];
-        setTrades((prev) => [...prev, ...next]);
-        setHasMore(next.length === PAGE_SIZE);
+        setTrades((prev) => [...prev, ...data]);
+        setHasMore(data.length === PAGE_SIZE);
       }
     } finally {
       setLoading(false);
@@ -419,14 +422,14 @@ function HistoryTab({
                   {contestant?.name ?? "Contestant"}
                 </span>
                 <span className="mt-0.5 block text-xs text-neutral-500">
-                  {parseFloat(t.shares).toFixed(4)} shares @{" "}
-                  {sharePrice.format(parseFloat(t.price_at_execution))}
+                  {t.shares.toFixed(4)} shares @{" "}
+                  {sharePrice.format(t.price_at_execution)}
                 </span>
               </span>
               <span className="text-right">
                 <span className="block text-sm font-semibold text-neutral-100">
                   {isBuy ? "−" : "+"}
-                  {currency.format(parseFloat(t.dollar_amount))}
+                  {currency.format(t.dollar_amount)}
                 </span>
                 <span className="mt-0.5 block text-xs text-neutral-500">
                   {dateFmt.format(new Date(t.created_at))}

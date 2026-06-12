@@ -1,6 +1,11 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { LeaderboardClient, type LeaderboardEntry, type SeasonOption } from "./LeaderboardClient";
+import {
+  LeaderboardClient,
+  type LeaderboardEntry,
+  type LeaderboardRow,
+  type SeasonOption,
+} from "./LeaderboardClient";
 
 const PAGE_SIZE = 25;
 
@@ -27,25 +32,21 @@ export default async function LeaderboardPage() {
     .in("status", ["ended", "results_published"])
     .order("created_at", { ascending: false });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const active = activeSeason as any | null;
-  const completedSeasons = (completed ?? []) as SeasonOption[];
+  const completedSeasons: SeasonOption[] = completed ?? [];
 
   let initialEntries: LeaderboardEntry[] = [];
-  if (active) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (supabase as any).rpc("get_leaderboard", {
-      p_season_id: active.id,
+  if (activeSeason) {
+    const { data } = await supabase.rpc("get_leaderboard", {
+      p_season_id: activeSeason.id,
       p_limit: PAGE_SIZE,
       p_offset: 0,
-      p_search: null,
     });
     initialEntries = normalizeEntries(data);
   }
 
   return (
     <LeaderboardClient
-      activeSeason={active ? { id: active.id, name: active.name } : null}
+      activeSeason={activeSeason ?? null}
       completedSeasons={completedSeasons}
       initialEntries={initialEntries}
       pageSize={PAGE_SIZE}
@@ -53,17 +54,15 @@ export default async function LeaderboardPage() {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function normalizeEntries(rows: any): LeaderboardEntry[] {
-  if (!Array.isArray(rows)) return [];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return rows.map((r: any) => ({
+function normalizeEntries(rows: LeaderboardRow[] | null): LeaderboardEntry[] {
+  return (rows ?? []).map((r) => ({
     rank: Number(r.rank),
     userId: r.user_id,
     username: r.username,
     avatarUrl: r.avatar_url ?? null,
     netWorth: Number(r.net_worth),
     isSelf: Boolean(r.is_self),
-    badges: Array.isArray(r.badges) ? r.badges : [],
+    // badges is jsonb in the RPC — the shape is guaranteed by leaderboard_badges().
+    badges: Array.isArray(r.badges) ? (r.badges as LeaderboardEntry["badges"]) : [],
   }));
 }

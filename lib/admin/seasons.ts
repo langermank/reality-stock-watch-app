@@ -17,6 +17,7 @@
 // gets a `check_violation` from Postgres.
 
 import { revalidatePath } from "next/cache";
+import { assertAdmin } from "@/lib/admin";
 import { createClient } from "@/lib/supabase/server";
 import { nextSeasonStatus, type SeasonStatus } from "./season-types";
 
@@ -36,7 +37,7 @@ async function loadSeason(id: string): Promise<SeasonRow | null> {
     .select("id, status")
     .eq("id", id)
     .maybeSingle();
-  return data as SeasonRow | null;
+  return data;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -59,10 +60,10 @@ export async function updateSeasonMeta(
     base_price?: number;
   },
 ): Promise<ActionResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   if (Object.keys(fields).length === 0) return { ok: true };
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("seasons") as any).update(fields).eq("id", id);
+  const { error } = await supabase.from("seasons").update(fields).eq("id", id);
   if (error) {
     // Surface the trigger's hint when present.
     return {
@@ -87,6 +88,7 @@ export async function updateSeasonMeta(
  * through `publishSeasonResults` instead, since it has side effects.
  */
 export async function advanceSeasonStatus(id: string): Promise<ActionResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const season = await loadSeason(id);
   if (!season) return { ok: false, error: "not-found" };
   const next = nextSeasonStatus(season.status);
@@ -96,8 +98,7 @@ export async function advanceSeasonStatus(id: string): Promise<ActionResult> {
   }
 
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("seasons") as any)
+  const { error } = await supabase.from("seasons")
     .update({ status: next })
     .eq("id", id);
   if (error) return { ok: false, error: error.message };
@@ -112,9 +113,9 @@ export async function advanceSeasonStatus(id: string): Promise<ActionResult> {
  * snapshot + badges + status flip in one transaction.
  */
 export async function publishSeasonResults(id: string): Promise<ActionResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase as any).rpc("publish_season_results", {
+  const { error } = await supabase.rpc("publish_season_results", {
     p_season_id: id,
   });
   if (error) return { ok: false, error: error.message };

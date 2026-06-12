@@ -11,21 +11,8 @@ import {
   ContestantTable,
   type AdminContestant,
 } from "@/components/admin/ContestantTable";
-import type { ContestantStatus } from "@/lib/admin/contestants";
 
 export const dynamic = "force-dynamic";
-
-type ContestantRow = {
-  id: string;
-  name: string;
-  photo_url: string | null;
-  bio: string | null;
-  status: ContestantStatus;
-  is_hoh: boolean;
-  is_nominated: boolean;
-  has_veto: boolean;
-  total_shares_outstanding: string;
-};
 
 export default async function AdminContestantsPage() {
   const supabase = await createClient();
@@ -36,7 +23,7 @@ export default async function AdminContestantsPage() {
     .select("id, name")
     .eq("status", "active")
     .maybeSingle();
-  const season = seasonRow as { id: string; name: string } | null;
+  const season = seasonRow;
 
   if (!season) {
     return (
@@ -55,7 +42,7 @@ export default async function AdminContestantsPage() {
     )
     .eq("season_id", season.id)
     .order("name");
-  const rows = (data as ContestantRow[] | null) ?? [];
+  const rows = data ?? [];
 
   const contestants: AdminContestant[] = rows.map((row) => ({
     id: row.id,
@@ -66,7 +53,7 @@ export default async function AdminContestantsPage() {
     isHoh: row.is_hoh,
     isNominated: row.is_nominated,
     hasVeto: row.has_veto,
-    totalSharesOutstanding: parseFloat(row.total_shares_outstanding),
+    totalSharesOutstanding: row.total_shares_outstanding,
   }));
 
   return (

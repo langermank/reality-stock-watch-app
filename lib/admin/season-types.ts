@@ -2,12 +2,9 @@
 // lib/admin/seasons.ts because that file is `"use server"` and can only
 // export async server actions.
 
-export type SeasonStatus =
-  | "setup"
-  | "pre_season"
-  | "active"
-  | "ended"
-  | "results_published";
+import type { SeasonStatus } from "@/lib/supabase/types";
+
+export type { SeasonStatus };
 
 const NEXT_STATUS: Record<SeasonStatus, SeasonStatus | null> = {
   setup: "pre_season",

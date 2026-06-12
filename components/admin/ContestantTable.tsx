@@ -12,7 +12,6 @@ import { useState, useTransition } from "react";
 import {
   setContestantFlag,
   updateContestant,
-  type ContestantFlag,
   type ContestantStatus,
 } from "@/lib/admin/contestants";
 
@@ -42,12 +41,6 @@ const STATUS_CLASSES: Record<ContestantStatus, string> = {
   evicted: "bg-rose-500/15 text-rose-300 border-rose-500/30",
   winner: "bg-amber-500/15 text-amber-300 border-amber-500/30",
   runner_up: "bg-sky-500/15 text-sky-300 border-sky-500/30",
-};
-
-const FLAG_LABELS: Record<ContestantFlag, string> = {
-  is_hoh: "HoH",
-  is_nominated: "Nominated",
-  has_veto: "Veto",
 };
 
 export function ContestantTable({ contestants }: Props) {

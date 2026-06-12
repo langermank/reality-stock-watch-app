@@ -58,7 +58,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 inset-x-0 z-40 border-t border-neutral-800 bg-neutral-950/95 backdrop-blur-sm"
+      className="fixed bottom-0 inset-x-0 z-40 border-t border-neutral-800 bg-neutral-950/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-sm"
       aria-label="Main navigation"
     >
       <ul className="flex h-16 items-stretch" role="list">

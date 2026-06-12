@@ -7,11 +7,13 @@
 // way the form always reflects the current cast (a contestant evicted between
 // survey-open and the user's load is simply absent).
 
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { serviceClient } from "@/lib/supabase/service";
+import type { Database, QuestionType, SurveyStatus } from "@/lib/supabase/types";
 import { aggregateResponses, type QuestionResults } from "./results";
 
-export type QuestionType = "ranking" | "multiple_choice" | "single_choice";
+export type { QuestionType };
 
 export type SurveyQuestion = {
   id: string;
@@ -29,7 +31,7 @@ export type SurveyMeta = {
   id: string;
   title: string;
   weekNumber: number;
-  status: "draft" | "active" | "closed" | "results_published";
+  status: SurveyStatus;
   closesAt: string | null;
 };
 
@@ -89,7 +91,7 @@ async function pickRelevantSurvey(seasonId: string): Promise<SurveyRow | null> {
     .eq("season_id", seasonId)
     .eq("status", "active")
     .maybeSingle();
-  if (activeRow) return activeRow as SurveyRow;
+  if (activeRow) return activeRow;
 
   // 2. Most recent closed (results pending publication).
   const { data: closedRows } = await supabase
@@ -99,7 +101,7 @@ async function pickRelevantSurvey(seasonId: string): Promise<SurveyRow | null> {
     .eq("status", "closed")
     .order("week_number", { ascending: false })
     .limit(1);
-  const closed = (closedRows as SurveyRow[] | null)?.[0];
+  const closed = closedRows?.[0];
   if (closed) return closed;
 
   // 3. Most recent results-published. (The "no active" state intentionally
@@ -111,13 +113,12 @@ async function pickRelevantSurvey(seasonId: string): Promise<SurveyRow | null> {
     .eq("status", "results_published")
     .order("week_number", { ascending: false })
     .limit(1);
-  return ((publishedRows as SurveyRow[] | null)?.[0]) ?? null;
+  return publishedRows?.[0] ?? null;
 }
 
 async function loadActiveContestantNames(
   seasonId: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  client: any,
+  client: SupabaseClient<Database>,
 ): Promise<string[]> {
   const { data } = await client
     .from("contestants")
@@ -125,7 +126,7 @@ async function loadActiveContestantNames(
     .eq("season_id", seasonId)
     .eq("status", "active")
     .order("name");
-  return ((data as { name: string }[] | null) ?? []).map((row) => row.name);
+  return (data ?? []).map((row) => row.name);
 }
 
 /** Compute the survey page state for a given user + active season. */
@@ -137,7 +138,7 @@ export async function getSurveyPageState(userId: string): Promise<SurveyPageStat
     .select("id")
     .eq("status", "active")
     .maybeSingle();
-  const season = seasonRow as { id: string } | null;
+  const season = seasonRow;
   if (!season) return { kind: "no-active" };
 
   const survey = await pickRelevantSurvey(season.id);
@@ -163,7 +164,8 @@ export async function getSurveyPageState(userId: string): Promise<SurveyPageStat
     .eq("survey_id", survey.id)
     .eq("user_id", userId)
     .maybeSingle();
-  const answers = (responseRow as { answers: Record<string, unknown> } | null)?.answers ?? null;
+  // answers is jsonb — narrow the Json type to the shape we write in actions.ts.
+  const answers = (responseRow?.answers as Record<string, unknown> | undefined) ?? null;
 
   const meta: SurveyMeta = {
     id: survey.id,
@@ -185,12 +187,11 @@ export async function getSurveyPageState(userId: string): Promise<SurveyPageStat
     // Aggregate every response (incl. anonymous) into per-question results.
     // Service client because survey_responses RLS limits each user to their
     // own row — but published results are a community view, by definition.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: allRows } = await (serviceClient.from("survey_responses") as any)
+    const { data: allRows } = await serviceClient.from("survey_responses")
       .select("answers")
       .eq("survey_id", survey.id);
-    const answersList = ((allRows as { answers: Record<string, unknown> }[] | null) ?? []).map(
-      (row) => row.answers,
+    const answersList = (allRows ?? []).map(
+      (row) => row.answers as Record<string, unknown>,
     );
     const results = aggregateResponses(questions, answersList);
     return { kind: "results-published", survey: meta, questions, answers, results };
@@ -202,12 +203,10 @@ export async function getSurveyPageState(userId: string): Promise<SurveyPageStat
  *  logged-in path can use the user-scoped client (RLS-checked) and the anon
  *  public path can use the service client (the route's status check IS the
  *  gate; RLS would otherwise block anon entirely). */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function loadQuestions(
   surveyId: string,
   seasonId: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  client: any,
+  client: SupabaseClient<Database>,
 ): Promise<SurveyQuestion[]> {
   const { data } = await client
     .from("survey_questions")
@@ -243,8 +242,7 @@ export async function getPublicSurvey(surveyId: string): Promise<
   | { kind: "closed"; survey: SurveyMeta }
   | null
 > {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data } = await (serviceClient as any)
+  const { data } = await serviceClient
     .from("surveys")
     .select("id, title, week_number, status, closes_at, season_id")
     .eq("id", surveyId)

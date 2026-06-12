@@ -8,13 +8,14 @@ import type { ChoiceBucket } from "@/lib/survey/results";
 
 type Props = {
   buckets: ChoiceBucket[];
-  /** Total responses, used to render the "N votes / X%" caption. */
+  /** Total responses. Not rendered yet — kept in the contract for the planned
+   *  "N votes / X%" caption (see the design-iteration note above). */
   responses: number;
   /** If true, treat each respondent as potentially selecting multiple → caption phrasing. */
   multi?: boolean;
 };
 
-export function BarChart({ buckets, responses, multi }: Props) {
+export function BarChart({ buckets, multi }: Props) {
   if (buckets.length === 0) {
     return (
       <p className="text-sm text-neutral-500">No responses yet.</p>

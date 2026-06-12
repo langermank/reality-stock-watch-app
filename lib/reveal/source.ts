@@ -9,15 +9,10 @@
 // tables are admin-only via RLS, so no public path exists. The view types
 // are the chart's presentational shapes (components/reveal/types); the seam
 // adapts raw rows into them so the chart is unchanged by the data source.
-//
-// NOTE: Supabase's generated `Database` types don't narrow the `.from().select()`
-// chains cleanly in this project (see lib/admin.ts), so query results are cast
-// to explicit row shapes — the established convention in the server reads.
 
 import { createClient } from "@/lib/supabase/server";
 import type {
   Contestant,
-  ContestantStatus,
   RankingEntry,
   Week,
   WeekRanking,
@@ -38,7 +33,7 @@ type RankingRow = {
   survey_id: string;
   contestant_id: string;
   rank: number;
-  score: string;
+  score: number;
 };
 
 /**
@@ -103,7 +98,7 @@ export async function getRevealData(): Promise<RevealData | null> {
     .eq("status", "active")
     .maybeSingle();
 
-  const season = seasonRow as { id: string; name: string } | null;
+  const season = seasonRow;
   if (!season) return null;
 
   const [{ data: cRows }, { data: sRows }, { data: rRow }] = await Promise.all([
@@ -116,14 +111,9 @@ export async function getRevealData(): Promise<RevealData | null> {
       .maybeSingle(),
   ]);
 
-  const contestantRows = (cRows ?? []) as Array<{
-    id: string;
-    name: string;
-    photo_url: string | null;
-    status: string;
-  }>;
-  const surveys = (sRows ?? []) as Array<{ id: string; week_number: number; title: string }>;
-  const revealRow = rRow as { selected_survey_id: string | null; reveal_count: number } | null;
+  const contestantRows = cRows ?? [];
+  const surveys = sRows ?? [];
+  const revealRow = rRow;
 
   const surveyIds = surveys.map((survey) => survey.id);
   if (surveyIds.length === 0) return null;
@@ -140,7 +130,7 @@ export async function getRevealData(): Promise<RevealData | null> {
     title: survey.title,
   }));
 
-  const rankings = buildWeekRankings((rkRows ?? []) as RankingRow[], allWeeks);
+  const rankings = buildWeekRankings(rkRows ?? [], allWeeks);
   if (rankings.length === 0) return null;
 
   // Keep only weeks that have rankings, ordered for the X-axis.
@@ -154,7 +144,7 @@ export async function getRevealData(): Promise<RevealData | null> {
     seasonId: season.id,
     name: row.name,
     photoUrl: row.photo_url,
-    status: row.status as ContestantStatus,
+    status: row.status,
   }));
 
   const selectedWeekId =

@@ -1,9 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geist = Geist({
-  variable: "--font-geist",
+// Variable names must match the @theme mappings in globals.css
+// (--font-sans/--font-mono read --font-geist-sans/--font-geist-mono).
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -19,9 +26,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  // Matches the app surface (bg-neutral-950) so the PWA chrome blends in.
+  themeColor: "#0a0a0a",
   width: "device-width",
   initialScale: 1,
+  // Required for env(safe-area-inset-*) to be non-zero in standalone mode.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -30,7 +40,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geist.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
       <body className="h-full bg-neutral-950 text-neutral-50">{children}</body>
     </html>
   );

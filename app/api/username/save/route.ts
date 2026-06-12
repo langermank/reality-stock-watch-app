@@ -15,8 +15,7 @@ export async function POST(req: NextRequest) {
   const format = validateUsernameFormat(username ?? "");
   if (!format.ok) return NextResponse.json({ error: format.error }, { status: 400 });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase as any)
+  const { error } = await supabase
     .from("profiles")
     .update({ username })
     .eq("id", user.id);

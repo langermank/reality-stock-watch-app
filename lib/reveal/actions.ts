@@ -8,12 +8,11 @@
 // producer's embedded preview AND the broadcast view in the OBS-captured
 // window — so the producer's clicks animate everywhere live.
 //
-// Authorization is the same chain as every other admin write: middleware
-// requires a session for /admin/*; AdminLayout calls requireAdmin() for the
-// is_admin gate; the table's RLS enforces it again at the DB. We don't
-// duplicate the gate here — but we do error out if the write returns nothing,
-// which would indicate RLS rejection in the unlikely case any of those failed.
+// Authorization: server actions are directly invocable POST endpoints, so the
+// middleware/AdminLayout chain doesn't gate them — every action checks
+// assertAdmin() itself, with the table's admin-only RLS as the DB backstop.
 
+import { assertAdmin } from "@/lib/admin";
 import { createClient } from "@/lib/supabase/server";
 
 const SEASON_STATUS_ACTIVE = "active" as const;
@@ -30,7 +29,7 @@ async function getActiveSeasonId(): Promise<string | null> {
     .select("id")
     .eq("status", SEASON_STATUS_ACTIVE)
     .maybeSingle();
-  return (data as { id: string } | null)?.id ?? null;
+  return data?.id ?? null;
 }
 
 /**
@@ -38,12 +37,12 @@ async function getActiveSeasonId(): Promise<string | null> {
  * mid-stream should never accidentally reveal entries from the new survey.
  */
 export async function setSelectedSurvey(surveyId: string): Promise<void> {
+  if (!(await assertAdmin())) return;
   const seasonId = await getActiveSeasonId();
   if (!seasonId) return;
 
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (supabase as any)
+  await supabase
     .from("survey_reveal_state")
     .upsert(
       {
@@ -61,6 +60,7 @@ export async function setSelectedSurvey(surveyId: string): Promise<void> {
  * producer can't tick past the end. No-op if no survey is selected.
  */
 export async function revealNext(): Promise<void> {
+  if (!(await assertAdmin())) return;
   const seasonId = await getActiveSeasonId();
   if (!seasonId) return;
 
@@ -84,8 +84,7 @@ export async function revealNext(): Promise<void> {
   const next = Math.min(current.reveal_count + 1, entries);
   if (next === current.reveal_count) return;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (supabase as any)
+  await supabase
     .from("survey_reveal_state")
     .update({ reveal_count: next, updated_at: new Date().toISOString() })
     .eq("season_id", seasonId);
@@ -96,12 +95,12 @@ export async function revealNext(): Promise<void> {
  * unchanged — Reset is for re-running a reveal, not for clearing the picker.
  */
 export async function reset(): Promise<void> {
+  if (!(await assertAdmin())) return;
   const seasonId = await getActiveSeasonId();
   if (!seasonId) return;
 
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (supabase as any)
+  await supabase
     .from("survey_reveal_state")
     .update({ reveal_count: 0, updated_at: new Date().toISOString() })
     .eq("season_id", seasonId);

@@ -11,9 +11,9 @@ export type MarketSeason = {
   name: string;
   status: Extract<SeasonStatus, "pre_season" | "active">;
   start_date: string | null;
-  starting_balance: string;
-  k_constant: string;
-  base_price: string;
+  starting_balance: number;
+  k_constant: number;
+  base_price: number;
 };
 
 export type MarketContestant = {
@@ -26,7 +26,7 @@ export type MarketContestant = {
   is_hoh: boolean;
   is_nominated: boolean;
   has_veto: boolean;
-  total_shares_outstanding: string;
+  total_shares_outstanding: number;
 };
 
 type PriceSnapshot = {
@@ -52,7 +52,7 @@ function buildInitialPrices(
   const shares = new Map(
     contestants.map((contestant) => [
       contestant.id,
-      Number.parseFloat(contestant.total_shares_outstanding),
+      contestant.total_shares_outstanding,
     ])
   );
   const totalShares = Array.from(shares.values()).reduce((sum, value) => sum + value, 0);
@@ -129,11 +129,11 @@ export function MarketClient({
   season: MarketSeason;
   contestants: MarketContestant[];
 }) {
-  const basePrice = Number.parseFloat(season.base_price);
+  const basePrice = season.base_price;
   const pricingParams = useMemo(
     () => ({
       basePrice,
-      kConstant: Number.parseFloat(season.k_constant),
+      kConstant: season.k_constant,
       minSupplyFloor: Math.max(contestants.length, 1),
     }),
     [basePrice, contestants.length, season.k_constant]
@@ -183,7 +183,7 @@ export function MarketClient({
               {isPreSeason ? formatStartDate(season.start_date) : "Prices update live"}
             </p>
             <p className="mt-1 text-xs text-neutral-500">
-              Starting cash {currency.format(Number.parseFloat(season.starting_balance))}
+              Starting cash {currency.format(season.starting_balance)}
             </p>
           </div>
           <div className="text-right">
@@ -215,7 +215,7 @@ export function MarketClient({
               const price = isPreSeason ? basePrice : priceMap.get(contestant.id)?.price ?? basePrice;
               const sharesOutstanding =
                 priceMap.get(contestant.id)?.sharesOutstanding ??
-                Number.parseFloat(contestant.total_shares_outstanding);
+                contestant.total_shares_outstanding;
               const flags = contestantFlags(contestant);
 
               return (

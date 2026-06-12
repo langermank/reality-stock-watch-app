@@ -21,16 +21,36 @@ export async function requireAdmin() {
 
   if (!user) redirect("/login");
 
-  // Cast mirrors the profiles read in app/(app)/layout.tsx — generated
-  // types don't narrow the dynamic .from("profiles") chain cleanly.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = (await (supabase as any)
+  const { data: profile } = await supabase
     .from("profiles")
     .select("is_admin")
     .eq("id", user.id)
-    .single()) as { data: { is_admin: boolean } | null };
+    .single();
 
   if (!profile?.is_admin) redirect("/");
 
   return { supabase, user };
+}
+
+/**
+ * Non-redirecting admin check for server actions. Server actions are directly
+ * invocable POST endpoints — the layout's requireAdmin() does NOT gate them —
+ * so every admin action must verify the caller itself rather than relying on
+ * RLS alone (an RLS-filtered update affects 0 rows and reports no error, so
+ * actions would otherwise return success after doing nothing).
+ */
+export async function assertAdmin(): Promise<boolean> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return false;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("is_admin")
+    .eq("id", user.id)
+    .single();
+
+  return Boolean(profile?.is_admin);
 }

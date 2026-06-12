@@ -34,13 +34,10 @@ export function UsernameForm() {
 
   const isValid = formatOk && checkState === "available";
 
-  // Debounced availability check
+  // Debounced availability check. The idle/checking transitions happen in
+  // handleChange (event handler) — the effect only owns the debounced fetch.
   useEffect(() => {
-    if (!formatOk) {
-      setCheckState("idle");
-      return;
-    }
-    setCheckState("checking");
+    if (!formatOk) return;
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       const res = await fetch(`/api/username/check?username=${encodeURIComponent(value)}`);
@@ -55,7 +52,9 @@ export function UsernameForm() {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setTouched(true);
     setSubmitError("");
-    setValue(e.target.value);
+    const next = e.target.value;
+    setValue(next);
+    setCheckState(validateUsernameFormat(next).ok ? "checking" : "idle");
   }
 
   function handleSubmit(e: React.FormEvent) {

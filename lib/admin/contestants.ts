@@ -15,9 +15,12 @@
 // after a mutation without the client needing to refetch manually.
 
 import { revalidatePath } from "next/cache";
+import { assertAdmin } from "@/lib/admin";
 import { createClient } from "@/lib/supabase/server";
 
-export type ContestantStatus = "active" | "evicted" | "winner" | "runner_up";
+import type { ContestantStatus } from "@/lib/supabase/types";
+
+export type { ContestantStatus };
 export type ContestantFlag = "is_hoh" | "is_nominated" | "has_veto";
 
 export type UpdateResult =
@@ -33,11 +36,11 @@ export async function updateContestant(
     status?: ContestantStatus;
   },
 ): Promise<UpdateResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   if (Object.keys(fields).length === 0) return { ok: true };
 
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("contestants") as any)
+  const { error } = await supabase.from("contestants")
     .update(fields)
     .eq("id", id);
   if (error) return { ok: false, error: error.message };
@@ -51,20 +54,19 @@ export async function setContestantFlag(
   flag: ContestantFlag,
   value: boolean,
 ): Promise<UpdateResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const supabase = await createClient();
 
   // HoH is the only flag with a single-occupant rule. When turning it ON,
   // clear it from every other contestant in the same season first.
   if (flag === "is_hoh" && value) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: seasonRow } = await (supabase.from("contestants") as any)
+    const { data: seasonRow } = await supabase.from("contestants")
       .select("season_id")
       .eq("id", id)
       .maybeSingle();
-    const seasonId = (seasonRow as { season_id: string } | null)?.season_id;
+    const seasonId = seasonRow?.season_id;
     if (seasonId) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error: clearError } = await (supabase.from("contestants") as any)
+      const { error: clearError } = await supabase.from("contestants")
         .update({ is_hoh: false })
         .eq("season_id", seasonId)
         .neq("id", id);
@@ -72,9 +74,9 @@ export async function setContestantFlag(
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("contestants") as any)
-    .update({ [flag]: value })
+  const fields: Partial<Record<ContestantFlag, boolean>> = { [flag]: value };
+  const { error } = await supabase.from("contestants")
+    .update(fields)
     .eq("id", id);
   if (error) return { ok: false, error: error.message };
 

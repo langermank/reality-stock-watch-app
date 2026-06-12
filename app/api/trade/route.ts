@@ -3,6 +3,16 @@ import { createClient } from "@/lib/supabase/server";
 
 type TradeType = "buy" | "sell";
 
+/** Shape of the jsonb the place_trade RPC returns (see 0008_rpc_auth_checks.sql). */
+type PlaceTradeResult = {
+  ok: boolean;
+  error?: string;
+  trade_id?: string;
+  shares?: number;
+  price_at_execution?: number;
+  fee_amount?: number;
+};
+
 /** Human-readable messages for the failure reasons the RPC can return. */
 const ERROR_MESSAGES: Record<string, string> = {
   invalid_dollar_amount: "Enter an amount greater than $0.",
@@ -45,8 +55,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase as any).rpc("place_trade", {
+  const { data, error } = await supabase.rpc("place_trade", {
     p_user_id: user.id,
     p_contestant_id: contestantId,
     p_type: type,
@@ -61,8 +70,9 @@ export async function POST(req: NextRequest) {
   }
 
   // The RPC returns jsonb: { ok, ... } on success or { ok: false, error } on a handled failure.
-  if (!data?.ok) {
-    const reason = data?.error as string | undefined;
+  const result = data as PlaceTradeResult | null;
+  if (!result?.ok) {
+    const reason = result?.error;
     return NextResponse.json(
       {
         ok: false,
@@ -75,9 +85,9 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({
     ok: true,
-    tradeId: data.trade_id,
-    shares: Number(data.shares),
-    priceAtExecution: Number(data.price_at_execution),
-    feeAmount: Number(data.fee_amount),
+    tradeId: result.trade_id,
+    shares: Number(result.shares),
+    priceAtExecution: Number(result.price_at_execution),
+    feeAmount: Number(result.fee_amount),
   });
 }

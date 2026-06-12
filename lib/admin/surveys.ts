@@ -18,11 +18,13 @@
 // a failed notification doesn't roll back the status change.
 
 import { revalidatePath } from "next/cache";
+import { assertAdmin } from "@/lib/admin";
 import { createClient } from "@/lib/supabase/server";
 import { sendToAll } from "@/lib/push";
 
-export type SurveyStatus = "draft" | "active" | "closed" | "results_published";
-export type QuestionType = "ranking" | "multiple_choice" | "single_choice";
+import type { QuestionType, SurveyStatus } from "@/lib/supabase/types";
+
+export type { QuestionType, SurveyStatus };
 
 export type ActionFailure = { ok: false; error: string };
 export type ActionResult<T = void> =
@@ -43,7 +45,7 @@ async function loadSurvey(id: string): Promise<SurveyRow | null> {
     .select("id, status, season_id, title")
     .eq("id", id)
     .maybeSingle();
-  return data as SurveyRow | null;
+  return data;
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -54,9 +56,9 @@ export async function createDraft(
   seasonId: string,
   weekNumber: number,
 ): Promise<ActionResult<{ id: string }>> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase.from("surveys") as any)
+  const { data, error } = await supabase.from("surveys")
     .insert({
       season_id: seasonId,
       week_number: weekNumber,
@@ -67,13 +69,14 @@ export async function createDraft(
     .single();
   if (error || !data?.id) return { ok: false, error: error?.message ?? "unknown" };
   revalidatePath("/admin/surveys");
-  return { ok: true, data: { id: data.id as string } };
+  return { ok: true, data: { id: data.id } };
 }
 
 export async function updateSurveyMeta(
   id: string,
   fields: { title?: string; week_number?: number; closes_at?: string | null },
 ): Promise<ActionResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const survey = await loadSurvey(id);
   if (!survey) return { ok: false, error: "not-found" };
   if (survey.status === "closed" || survey.status === "results_published") {
@@ -83,8 +86,7 @@ export async function updateSurveyMeta(
     return { ok: false, error: "week-locked-when-active" };
   }
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("surveys") as any).update(fields).eq("id", id);
+  const { error } = await supabase.from("surveys").update(fields).eq("id", id);
   if (error) return { ok: false, error: error.message };
   revalidatePath("/admin/surveys");
   revalidatePath(`/admin/surveys/${id}`);
@@ -109,6 +111,7 @@ export async function addQuestion(
     uses_contestants: boolean;
   },
 ): Promise<ActionResult<{ id: string }>> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const survey = await loadSurvey(surveyId);
   if (!survey) return { ok: false, error: "not-found" };
   const guard = assertDraft(survey);
@@ -116,14 +119,12 @@ export async function addQuestion(
 
   const supabase = await createClient();
   // Next display_order = current count.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { count } = await (supabase.from("survey_questions") as any)
+  const { count } = await supabase.from("survey_questions")
     .select("id", { count: "exact", head: true })
     .eq("survey_id", surveyId);
   const nextOrder = (count ?? 0) + 1;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase.from("survey_questions") as any)
+  const { data, error } = await supabase.from("survey_questions")
     .insert({
       survey_id: surveyId,
       text: input.text,
@@ -136,7 +137,7 @@ export async function addQuestion(
     .single();
   if (error || !data?.id) return { ok: false, error: error?.message ?? "unknown" };
   revalidatePath(`/admin/surveys/${surveyId}`);
-  return { ok: true, data: { id: data.id as string } };
+  return { ok: true, data: { id: data.id } };
 }
 
 export async function updateQuestion(
@@ -149,14 +150,14 @@ export async function updateQuestion(
     uses_contestants?: boolean;
   },
 ): Promise<ActionResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const survey = await loadSurvey(surveyId);
   if (!survey) return { ok: false, error: "not-found" };
   const guard = assertDraft(survey);
   if (guard) return guard;
 
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("survey_questions") as any)
+  const { error } = await supabase.from("survey_questions")
     .update(fields)
     .eq("id", questionId)
     .eq("survey_id", surveyId);
@@ -169,14 +170,14 @@ export async function removeQuestion(
   surveyId: string,
   questionId: string,
 ): Promise<ActionResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const survey = await loadSurvey(surveyId);
   if (!survey) return { ok: false, error: "not-found" };
   const guard = assertDraft(survey);
   if (guard) return guard;
 
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("survey_questions") as any)
+  const { error } = await supabase.from("survey_questions")
     .delete()
     .eq("id", questionId)
     .eq("survey_id", surveyId);
@@ -191,6 +192,7 @@ export async function reorderQuestions(
   surveyId: string,
   idsInOrder: string[],
 ): Promise<ActionResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const survey = await loadSurvey(surveyId);
   if (!survey) return { ok: false, error: "not-found" };
   const guard = assertDraft(survey);
@@ -199,8 +201,7 @@ export async function reorderQuestions(
   const supabase = await createClient();
   // Bulk update one at a time — small N (handful of questions), keeps it simple.
   for (let i = 0; i < idsInOrder.length; i += 1) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error } = await (supabase.from("survey_questions") as any)
+    const { error } = await supabase.from("survey_questions")
       .update({ display_order: i + 1 })
       .eq("id", idsInOrder[i])
       .eq("survey_id", surveyId);
@@ -212,16 +213,14 @@ export async function reorderQuestions(
 
 async function compactDisplayOrder(surveyId: string): Promise<void> {
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data } = await (supabase.from("survey_questions") as any)
+  const { data } = await supabase.from("survey_questions")
     .select("id, display_order")
     .eq("survey_id", surveyId)
     .order("display_order");
-  const rows = (data as { id: string; display_order: number }[] | null) ?? [];
+  const rows = data ?? [];
   for (let i = 0; i < rows.length; i += 1) {
     if (rows[i].display_order === i + 1) continue;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (supabase.from("survey_questions") as any)
+    await supabase.from("survey_questions")
       .update({ display_order: i + 1 })
       .eq("id", rows[i].id);
   }
@@ -232,6 +231,7 @@ async function compactDisplayOrder(surveyId: string): Promise<void> {
 // ─────────────────────────────────────────────────────────────────────────
 
 export async function publishSurvey(id: string): Promise<ActionResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const survey = await loadSurvey(id);
   if (!survey) return { ok: false, error: "not-found" };
   if (survey.status !== "draft") return { ok: false, error: "not-draft" };
@@ -239,8 +239,7 @@ export async function publishSurvey(id: string): Promise<ActionResult> {
   const supabase = await createClient();
 
   // Block if another survey is already active in this season.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { count: activeCount } = await (supabase.from("surveys") as any)
+  const { count: activeCount } = await supabase.from("surveys")
     .select("id", { count: "exact", head: true })
     .eq("season_id", survey.season_id)
     .eq("status", "active");
@@ -249,16 +248,14 @@ export async function publishSurvey(id: string): Promise<ActionResult> {
   }
 
   // Require ≥1 question.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { count: questionCount } = await (supabase.from("survey_questions") as any)
+  const { count: questionCount } = await supabase.from("survey_questions")
     .select("id", { count: "exact", head: true })
     .eq("survey_id", id);
   if ((questionCount ?? 0) === 0) {
     return { ok: false, error: "no-questions" };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("surveys") as any)
+  const { error } = await supabase.from("surveys")
     .update({ status: "active", published_at: new Date().toISOString() })
     .eq("id", id);
   if (error) return { ok: false, error: error.message };
@@ -276,13 +273,13 @@ export async function publishSurvey(id: string): Promise<ActionResult> {
 }
 
 export async function closeSurvey(id: string): Promise<ActionResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const survey = await loadSurvey(id);
   if (!survey) return { ok: false, error: "not-found" };
   if (survey.status !== "active") return { ok: false, error: "not-active" };
 
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("surveys") as any)
+  const { error } = await supabase.from("surveys")
     .update({ status: "closed" })
     .eq("id", id);
   if (error) return { ok: false, error: error.message };
@@ -293,13 +290,13 @@ export async function closeSurvey(id: string): Promise<ActionResult> {
 }
 
 export async function publishResults(id: string): Promise<ActionResult> {
+  if (!(await assertAdmin())) return { ok: false, error: "not-authorized" };
   const survey = await loadSurvey(id);
   if (!survey) return { ok: false, error: "not-found" };
   if (survey.status !== "closed") return { ok: false, error: "not-closed" };
 
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("surveys") as any)
+  const { error } = await supabase.from("surveys")
     .update({
       status: "results_published",
       results_published_at: new Date().toISOString(),

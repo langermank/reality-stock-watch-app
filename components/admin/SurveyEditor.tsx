@@ -11,7 +11,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { QuestionEditor, type DraftQuestion } from "./QuestionEditor";
+import { QuestionEditor } from "./QuestionEditor";
 import {
   addQuestion,
   closeSurvey,
