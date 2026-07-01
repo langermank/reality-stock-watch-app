@@ -24,6 +24,17 @@ Read [docs/tech-stack.md](docs/tech-stack.md) before changing framework, hosting
 - For local setup, use [docs/local-dev.md](docs/local-dev.md).
 - For admin operations such as setting up a season, use [docs/admin-recipes.md](docs/admin-recipes.md).
 
+## Project Areas
+
+- Core app screens live under `app/(app)/`: Market, Contestant detail, Portfolio, Leaderboard, and Survey.
+- Auth and onboarding live under `app/(auth)/`; protected app shell behavior lives in `app/(app)/layout.tsx` and `middleware.ts`.
+- Admin screens live under `app/admin/`, with authorization helpers in `lib/admin.ts`.
+- Trading logic lives in `app/api/trade/route.ts`, `lib/pricing.ts`, and `supabase/migrations/0002_place_trade.sql`.
+- Contestant price subscriptions live in `hooks/useContestantPrices.ts`; clients derive display prices from Realtime supply updates.
+- Survey behavior lives in `components/survey/`, `lib/survey/`, and `docs/design/interaction-flow-survey.md`.
+- Livestream reveal behavior lives in `app/admin/stream/`, `app/admin/reveal/`, `components/reveal/`, `lib/reveal/`, `hooks/useRevealState.ts`, and `docs/livestream-reveal-plan.md`.
+- Database schema lives in `supabase/migrations/`; generated Supabase types live in `lib/supabase/types.ts`.
+
 ## Commands
 
 ```bash
