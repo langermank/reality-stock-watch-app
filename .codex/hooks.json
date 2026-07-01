@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "prompt=$(jq -r '.tool_input.prompt // \"\"'); echo \"$prompt\" | grep -qiE 'build|implement|create|start|scaffold|work on|write|add|change|fix' && echo \"$prompt\" | grep -qiE 'component|page|ui|feature|overlay|modal|nav|layout|screen|frontend|design' && echo '{\"systemMessage\": \"Reminder: search Mobbin for design patterns before implementing this UI when Mobbin tooling is available. Use screen-level terms (e.g. trade confirmation, asset list, portfolio overview). Prioritize these apps: Base, Wise, Cash App, Origin, Coinbase, Coinbase Wallet, Monarch, Kraken.\"}' || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\": \"Before ending this session: run relevant verification, keep AGENTS.md as the canonical agent guide if instructions changed, and commit/push reviewable implementation chunks when appropriate.\"}'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
