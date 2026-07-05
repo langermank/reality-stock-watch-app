@@ -35,6 +35,17 @@ write migration → push to staging → verify → push to production
 
 2. **Test locally** (`supabase db reset` applies all migrations + seed cleanly).
 
+   Then **regenerate the TypeScript types** so `lib/supabase/types.ts` stays in
+   lockstep with the schema (it is generated — never hand-edit the `Database` type):
+
+   ```bash
+   supabase gen types typescript --local > lib/supabase/types.ts
+   ```
+
+   Restore the named enum aliases at the bottom of the file (the block after the
+   generated `Constants` export — easiest via `git diff` after regenerating), and
+   run `pnpm typecheck` to surface any code the schema change broke.
+
 3. **Push to staging:**
 
    ```bash

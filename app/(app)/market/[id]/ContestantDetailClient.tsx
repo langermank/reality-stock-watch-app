@@ -8,18 +8,18 @@ import { useTradeOverlay } from "@/components/trade/TradeProvider";
 import type { MarketContestant, MarketSeason } from "../MarketClient";
 
 type Holding = {
-  shares_held: string;
-  average_purchase_price: string;
+  shares_held: number;
+  average_purchase_price: number;
 } | null;
 
 type Trade = {
-  price_at_execution: string;
+  price_at_execution: number;
   created_at: string;
 };
 
 type SlimContestant = {
   id: string;
-  total_shares_outstanding: string;
+  total_shares_outstanding: number;
 };
 
 const currency = new Intl.NumberFormat("en-US", {
@@ -48,7 +48,7 @@ function PriceChart({ trades }: { trades: Trade[] }) {
     );
   }
 
-  const prices = trades.map((t) => parseFloat(t.price_at_execution));
+  const prices = trades.map((t) => t.price_at_execution);
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
   const range = maxPrice - minPrice || 0.01;
@@ -113,12 +113,12 @@ export default function ContestantDetailClient({
   allContestants: SlimContestant[];
 }) {
   const { openTrade } = useTradeOverlay();
-  const basePrice = parseFloat(season.base_price);
+  const basePrice = season.base_price;
 
   const pricingParams = useMemo<PricingParams>(
     () => ({
       basePrice,
-      kConstant: parseFloat(season.k_constant),
+      kConstant: season.k_constant,
       minSupplyFloor: Math.max(allContestants.length, 1),
     }),
     [basePrice, season.k_constant, allContestants.length]
@@ -126,7 +126,7 @@ export default function ContestantDetailClient({
 
   const initialPrices = useMemo(() => {
     const sharesMap = new Map(
-      allContestants.map((c) => [c.id, parseFloat(c.total_shares_outstanding)])
+      allContestants.map((c) => [c.id, c.total_shares_outstanding])
     );
     const totalAllShares = Array.from(sharesMap.values()).reduce((s, v) => s + v, 0);
     return new Map(
@@ -155,16 +155,16 @@ export default function ContestantDetailClient({
 
   const sharesOutstanding =
     priceMap.get(contestant.id)?.sharesOutstanding ??
-    parseFloat(contestant.total_shares_outstanding);
+    contestant.total_shares_outstanding;
 
   const totalAllShares = useMemo(
     () => Array.from(priceMap.values()).reduce((s, v) => s + v.sharesOutstanding, 0),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [priceMap]
   );
 
-  const sharesHeld = holding ? parseFloat(holding.shares_held) : 0;
-  const avgPurchasePrice = holding ? parseFloat(holding.average_purchase_price) : 0;
+  const sharesHeld = holding?.shares_held ?? 0;
+  const avgPurchasePrice = holding?.average_purchase_price ?? 0;
 
   const liquidationValue = useMemo(() => {
     if (sharesHeld <= 0) return 0;
@@ -213,7 +213,8 @@ export default function ContestantDetailClient({
       </div>
 
       {/* Scrollable content */}
-      <div className="mx-auto max-w-3xl px-4 pt-6 pb-32">
+      {/* pb = BottomNav (4rem) + CTA bar (~4rem) + safe-area inset */}
+      <div className="mx-auto max-w-3xl px-4 pt-6 pb-[calc(8rem+env(safe-area-inset-bottom))]">
 
         {/* Identity */}
         <div className="flex items-center gap-4">
@@ -327,9 +328,9 @@ export default function ContestantDetailClient({
         )}
       </div>
 
-      {/* Sticky CTAs */}
+      {/* Sticky CTAs — pinned directly above the BottomNav (h-16 + safe-area padding) */}
       {!isPreSeason && (
-        <div className="fixed bottom-16 inset-x-0 z-10 border-t border-neutral-800 bg-neutral-950/95 px-4 py-3 backdrop-blur-sm">
+        <div className="fixed bottom-[calc(4rem+env(safe-area-inset-bottom))] inset-x-0 z-10 border-t border-neutral-800 bg-neutral-950/95 px-4 py-3 backdrop-blur-sm">
           <div className="mx-auto flex max-w-3xl gap-3">
             <button
               type="button"

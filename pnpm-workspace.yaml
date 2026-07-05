@@ -1,5 +1,7 @@
 allowBuilds:
   sharp: false
+  # Native binding used by eslint-config-next's import resolver — its
+  # postinstall must run for `pnpm lint` to work.
+  unrs-resolver: true
 ignoredBuiltDependencies:
   - sharp
-  - unrs-resolver

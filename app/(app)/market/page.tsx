@@ -1,4 +1,4 @@
-import { MarketClient, type MarketContestant, type MarketSeason } from "./MarketClient";
+import { MarketClient, type MarketSeason } from "./MarketClient";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function MarketPage() {
@@ -42,7 +42,7 @@ export default async function MarketPage() {
   return (
     <MarketClient
       season={marketSeason}
-      contestants={(contestants ?? []) as MarketContestant[]}
+      contestants={contestants ?? []}
     />
   );
 }

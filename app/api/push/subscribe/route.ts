@@ -34,8 +34,7 @@ export async function POST(req: NextRequest) {
     auth_key: keys.auth,
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase.from("push_subscriptions") as any).upsert(
+  const { error } = await supabase.from("push_subscriptions").upsert(
     [record],
     { onConflict: "endpoint" }
   );

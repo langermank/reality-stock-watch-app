@@ -102,12 +102,11 @@ export default async function AdminSurveyDetailPage({ params }: PageProps) {
   let resultsBlock: React.ReactNode = null;
   if (survey.status === "results_published") {
     const resolvedQuestions = await loadQuestions(survey.id, survey.season_id, supabase);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: allRows } = await (serviceClient.from("survey_responses") as any)
+    const { data: allRows } = await serviceClient.from("survey_responses")
       .select("answers")
       .eq("survey_id", survey.id);
-    const answersList = ((allRows as { answers: Record<string, unknown> }[] | null) ?? []).map(
-      (row) => row.answers,
+    const answersList = (allRows ?? []).map(
+      (row) => row.answers as Record<string, unknown>,
     );
     const results = aggregateResponses(resolvedQuestions, answersList);
     resultsBlock = (

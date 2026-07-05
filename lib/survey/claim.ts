@@ -41,28 +41,22 @@ export async function claimAnonymousSurveyResponse(): Promise<void> {
 
   // Read the row via service client — the row is still anonymous so the
   // user-scoped read policy doesn't apply yet (owners only).
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: rowRaw } = await (serviceClient.from("survey_responses") as any)
+  const { data: row } = await serviceClient.from("survey_responses")
     .select("id, survey_id, user_id, is_anonymous")
     .eq("id", responseId)
     .maybeSingle();
-  const row = rowRaw as
-    | { id: string; survey_id: string; user_id: string | null; is_anonymous: boolean }
-    | null;
   if (!row || !row.is_anonymous || row.user_id) return;
 
   // Skip if the user already has a response for this survey — the per-user
   // unique index would block the update anyway. Their original submission
   // wins; the anonymous one stays anonymous.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { count } = await (serviceClient.from("survey_responses") as any)
+  const { count } = await serviceClient.from("survey_responses")
     .select("id", { count: "exact", head: true })
     .eq("survey_id", row.survey_id)
     .eq("user_id", user.id);
   if ((count ?? 0) > 0) return;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (serviceClient.from("survey_responses") as any)
+  await serviceClient.from("survey_responses")
     .update({ user_id: user.id, is_anonymous: false })
     .eq("id", row.id);
 }

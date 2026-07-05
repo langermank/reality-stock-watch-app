@@ -2,8 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import type { Database } from "@/lib/supabase/types";
 
 export type Badge = { type: "top_3" | "top_10"; season: string };
+
+/** Row shape returned by the get_leaderboard / get_user_rank RPCs. */
+export type LeaderboardRow =
+  Database["public"]["Functions"]["get_leaderboard"]["Returns"][number];
 
 export type LeaderboardEntry = {
   rank: number;
@@ -34,18 +39,16 @@ function initialsFor(name: string): string {
     .toUpperCase();
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function normalize(rows: any): LeaderboardEntry[] {
-  if (!Array.isArray(rows)) return [];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return rows.map((r: any) => ({
+function normalize(rows: LeaderboardRow[] | null): LeaderboardEntry[] {
+  return (rows ?? []).map((r) => ({
     rank: Number(r.rank),
     userId: r.user_id,
     username: r.username,
     avatarUrl: r.avatar_url ?? null,
     netWorth: Number(r.net_worth),
     isSelf: Boolean(r.is_self),
-    badges: Array.isArray(r.badges) ? r.badges : [],
+    // badges is jsonb in the RPC — the shape is guaranteed by leaderboard_badges().
+    badges: Array.isArray(r.badges) ? (r.badges as Badge[]) : [],
   }));
 }
 
@@ -148,31 +151,29 @@ function CurrentSeasonTab({
   useEffect(() => {
     const handle = setTimeout(async () => {
       const supabase = createClient();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data } = await (supabase as any).rpc("get_leaderboard", {
+      const { data } = await supabase.rpc("get_leaderboard", {
         p_season_id: season.id,
         p_limit: pageSize,
         p_offset: 0,
-        p_search: search.trim() || null,
+        p_search: search.trim() || undefined,
       });
       const rows = normalize(data);
       setEntries(rows);
       setHasMore(rows.length === pageSize);
     }, 250);
     return () => clearTimeout(handle);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [search, season.id, pageSize]);
 
   async function loadMore() {
     setLoading(true);
     try {
       const supabase = createClient();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data } = await (supabase as any).rpc("get_leaderboard", {
+      const { data } = await supabase.rpc("get_leaderboard", {
         p_season_id: season.id,
         p_limit: pageSize,
         p_offset: entries.length,
-        p_search: search.trim() || null,
+        p_search: search.trim() || undefined,
       });
       const rows = normalize(data);
       setEntries((prev) => [...prev, ...rows]);
@@ -191,8 +192,7 @@ function CurrentSeasonTab({
       return;
     }
     const supabase = createClient();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data } = await (supabase as any).rpc("get_user_rank", {
+    const { data } = await supabase.rpc("get_user_rank", {
       p_season_id: season.id,
     });
     const rows = normalize(data);
@@ -336,15 +336,16 @@ function Row({ entry, highlight }: { entry: LeaderboardEntry; highlight?: boolea
 function AllTimeTab({ completedSeasons }: { completedSeasons: SeasonOption[] }) {
   const [seasonId, setSeasonId] = useState<string>(completedSeasons[0]?.id ?? "");
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
-  const [loading, setLoading] = useState(false);
+  // Starts true when a season will load on mount; the select's onChange flips
+  // it back on for season switches — the effect itself only fetches.
+  const [loading, setLoading] = useState(completedSeasons.length > 0);
 
   useEffect(() => {
-    if (!seasonId) {
-      setEntries([]);
-      return;
-    }
+    // seasonId is always non-empty when completedSeasons exist (the select has
+    // no empty option); when there are no seasons the list never renders, so
+    // entries can keep their initial [] without an explicit reset here.
+    if (!seasonId) return;
     let cancelled = false;
-    setLoading(true);
     (async () => {
       const supabase = createClient();
       const { data } = await supabase
@@ -354,8 +355,7 @@ function AllTimeTab({ completedSeasons }: { completedSeasons: SeasonOption[] }) 
         .order("final_rank", { ascending: true });
 
       if (cancelled) return;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const rows = ((data ?? []) as any[]).map((r) => ({
+      const rows = (data ?? []).map((r) => ({
         rank: Number(r.final_rank),
         userId: r.user_id,
         username: r.profiles?.username ?? "Unknown",
@@ -392,7 +392,10 @@ function AllTimeTab({ completedSeasons }: { completedSeasons: SeasonOption[] }) 
         <select
           id="alltime-season"
           value={seasonId}
-          onChange={(e) => setSeasonId(e.target.value)}
+          onChange={(e) => {
+            setSeasonId(e.target.value);
+            setLoading(true);
+          }}
           className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 focus:border-neutral-600 focus:outline-none"
         >
           {completedSeasons.map((s) => (

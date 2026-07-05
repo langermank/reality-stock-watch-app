@@ -15,15 +15,15 @@ import { useContestantPrices } from "@/hooks/useContestantPrices";
 export type SheetSeason = {
   id: string;
   status: string;
-  base_price: string;
-  k_constant: string;
+  base_price: number;
+  k_constant: number;
 };
 
 export type SheetContestant = {
   id: string;
   name: string;
   photo_url: string | null;
-  total_shares_outstanding: string;
+  total_shares_outstanding: number;
 };
 
 type Side = "buy" | "sell";
@@ -106,8 +106,8 @@ export function TradeSheet({
 
   const params = useMemo<PricingParams>(
     () => ({
-      basePrice: parseFloat(season.base_price),
-      kConstant: parseFloat(season.k_constant),
+      basePrice: season.base_price,
+      kConstant: season.k_constant,
       // Matches the place_trade RPC's MIN_SUPPLY_FLOOR so preview == execution.
       minSupplyFloor: 1,
     }),
@@ -130,7 +130,7 @@ export function TradeSheet({
   // Initial supply snapshot from server data (fallback before realtime arrives).
   const initialSupply = useMemo(() => {
     const map = new Map(
-      contestants.map((c) => [c.id, parseFloat(c.total_shares_outstanding)])
+      contestants.map((c) => [c.id, c.total_shares_outstanding])
     );
     return map;
   }, [contestants]);

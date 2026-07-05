@@ -1,5 +1,9 @@
-/** Generated types for the Reality Stock Watch database.
- *  Run `supabase gen types typescript` to regenerate after schema changes.
+/** Database types generated from the live schema.
+ *
+ *  Regenerate after every migration (local stack must be running):
+ *    supabase gen types typescript --local > lib/supabase/types.ts
+ *  …then re-append the named enum aliases at the bottom of this file
+ *  (or just regenerate and restore them from git).
  */
 export type Json =
   | string
@@ -7,265 +11,857 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
-
-export type SeasonStatus = "setup" | "pre_season" | "active" | "ended" | "results_published";
-export type ContestantStatus = "active" | "evicted" | "winner" | "runner_up";
-export type TradeType = "buy" | "sell";
-export type TradeState = "pending" | "filled" | "failed";
-export type BadgeType = "top_3" | "top_10";
-export type SurveyStatus = "draft" | "active" | "closed" | "results_published";
-export type QuestionType = "ranking" | "multiple_choice" | "single_choice";
+  | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
-      profiles: {
-        Row: {
-          id: string;
-          username: string;
-          avatar_url: string | null;
-          is_admin: boolean;
-          created_at: string;
-        };
-        Insert: {
-          id: string;
-          username: string;
-          avatar_url?: string | null;
-          is_admin?: boolean;
-          created_at?: string;
-        };
-        Update: {
-          username?: string;
-          avatar_url?: string | null;
-        };
-      };
-      seasons: {
-        Row: {
-          id: string;
-          name: string;
-          status: SeasonStatus;
-          start_date: string | null;
-          end_date: string | null;
-          starting_balance: string;
-          k_constant: string;
-          base_price: string;
-          created_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["seasons"]["Row"], "id" | "created_at"> & {
-          id?: string;
-          created_at?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["seasons"]["Insert"]>;
-      };
-      contestants: {
-        Row: {
-          id: string;
-          season_id: string;
-          name: string;
-          photo_url: string | null;
-          bio: string | null;
-          status: ContestantStatus;
-          is_hoh: boolean;
-          is_nominated: boolean;
-          has_veto: boolean;
-          total_shares_outstanding: string;
-          created_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["contestants"]["Row"], "id" | "created_at"> & {
-          id?: string;
-          created_at?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["contestants"]["Insert"]>;
-      };
-      portfolios: {
-        Row: {
-          id: string;
-          user_id: string;
-          season_id: string;
-          cash_balance: string;
-          net_worth: string;
-          created_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["portfolios"]["Row"], "id" | "created_at"> & {
-          id?: string;
-          created_at?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["portfolios"]["Insert"]>;
-      };
-      holdings: {
-        Row: {
-          id: string;
-          portfolio_id: string;
-          user_id: string;
-          contestant_id: string;
-          shares_held: string;
-          average_purchase_price: string;
-          updated_at: string;
-          created_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["holdings"]["Row"], "id" | "created_at" | "updated_at"> & {
-          id?: string;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["holdings"]["Insert"]>;
-      };
-      trades: {
-        Row: {
-          id: string;
-          user_id: string;
-          contestant_id: string;
-          season_id: string;
-          type: TradeType;
-          dollar_amount: string;
-          shares: string;
-          price_at_execution: string;
-          fee_amount: string;
-          state: TradeState;
-          failed_reason: string | null;
-          created_at: string;
-          filled_at: string | null;
-        };
-        Insert: Omit<Database["public"]["Tables"]["trades"]["Row"], "id" | "created_at"> & {
-          id?: string;
-          created_at?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["trades"]["Insert"]>;
-      };
-      season_results: {
-        Row: {
-          id: string;
-          user_id: string;
-          season_id: string;
-          final_rank: number;
-          final_net_worth: string;
-          created_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["season_results"]["Row"], "id" | "created_at"> & {
-          id?: string;
-          created_at?: string;
-        };
-        Update: never;
-      };
       badges: {
         Row: {
-          id: string;
-          user_id: string;
-          season_id: string;
-          type: BadgeType;
-          awarded_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["badges"]["Row"], "id"> & {
-          id?: string;
-        };
-        Update: never;
-      };
-      surveys: {
+          awarded_at: string
+          id: string
+          season_id: string
+          type: Database["public"]["Enums"]["badge_type"]
+          user_id: string
+        }
+        Insert: {
+          awarded_at?: string
+          id?: string
+          season_id: string
+          type: Database["public"]["Enums"]["badge_type"]
+          user_id: string
+        }
+        Update: {
+          awarded_at?: string
+          id?: string
+          season_id?: string
+          type?: Database["public"]["Enums"]["badge_type"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "badges_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "badges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contestants: {
         Row: {
-          id: string;
-          season_id: string;
-          title: string;
-          week_number: number;
-          status: SurveyStatus;
-          closes_at: string | null;
-          published_at: string | null;
-          results_published_at: string | null;
-          created_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["surveys"]["Row"], "id" | "created_at"> & {
-          id?: string;
-          created_at?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["surveys"]["Insert"]>;
-      };
-      survey_questions: {
+          bio: string | null
+          created_at: string
+          has_veto: boolean
+          id: string
+          is_hoh: boolean
+          is_nominated: boolean
+          name: string
+          photo_url: string | null
+          season_id: string
+          status: Database["public"]["Enums"]["contestant_status"]
+          total_shares_outstanding: number
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          has_veto?: boolean
+          id?: string
+          is_hoh?: boolean
+          is_nominated?: boolean
+          name: string
+          photo_url?: string | null
+          season_id: string
+          status?: Database["public"]["Enums"]["contestant_status"]
+          total_shares_outstanding?: number
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          has_veto?: boolean
+          id?: string
+          is_hoh?: boolean
+          is_nominated?: boolean
+          name?: string
+          photo_url?: string | null
+          season_id?: string
+          status?: Database["public"]["Enums"]["contestant_status"]
+          total_shares_outstanding?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contestants_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      holdings: {
         Row: {
-          id: string;
-          survey_id: string;
-          text: string;
-          type: QuestionType;
-          display_order: number;
-          options: Json | null;
-          uses_contestants: boolean;
-          created_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["survey_questions"]["Row"], "id" | "created_at"> & {
-          id?: string;
-          created_at?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["survey_questions"]["Insert"]>;
-      };
-      survey_responses: {
+          average_purchase_price: number
+          contestant_id: string
+          created_at: string
+          id: string
+          portfolio_id: string
+          shares_held: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          average_purchase_price: number
+          contestant_id: string
+          created_at?: string
+          id?: string
+          portfolio_id: string
+          shares_held?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          average_purchase_price?: number
+          contestant_id?: string
+          created_at?: string
+          id?: string
+          portfolio_id?: string
+          shares_held?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "holdings_contestant_id_fkey"
+            columns: ["contestant_id"]
+            isOneToOne: false
+            referencedRelation: "contestants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "holdings_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "portfolios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "holdings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      portfolios: {
         Row: {
-          id: string;
-          survey_id: string;
-          user_id: string | null;
-          answers: Json;
-          is_anonymous: boolean;
-          submitted_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["survey_responses"]["Row"], "id" | "submitted_at"> & {
-          id?: string;
-          submitted_at?: string;
-        };
-        Update: never;
-      };
-      survey_aggregate_rankings: {
+          cash_balance: number
+          created_at: string
+          id: string
+          net_worth: number
+          season_id: string
+          user_id: string
+        }
+        Insert: {
+          cash_balance: number
+          created_at?: string
+          id?: string
+          net_worth: number
+          season_id: string
+          user_id: string
+        }
+        Update: {
+          cash_balance?: number
+          created_at?: string
+          id?: string
+          net_worth?: number
+          season_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolios_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "portfolios_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
         Row: {
-          survey_id: string;
-          contestant_id: string;
-          rank: number;
-          score: string;
-        };
-        Insert: Database["public"]["Tables"]["survey_aggregate_rankings"]["Row"];
-        Update: Partial<Database["public"]["Tables"]["survey_aggregate_rankings"]["Row"]>;
-      };
-      survey_reveal_state: {
-        Row: {
-          season_id: string;
-          selected_survey_id: string | null;
-          reveal_count: number;
-          updated_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["survey_reveal_state"]["Row"], "reveal_count" | "updated_at"> & {
-          reveal_count?: number;
-          updated_at?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["survey_reveal_state"]["Insert"]>;
-      };
+          avatar_url: string | null
+          created_at: string
+          id: string
+          is_admin: boolean
+          username: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id: string
+          is_admin?: boolean
+          username: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          is_admin?: boolean
+          username?: string
+        }
+        Relationships: []
+      }
       push_subscriptions: {
         Row: {
-          id: string;
-          user_id: string;
-          endpoint: string;
-          p256dh: string;
-          auth_key: string;
-          created_at: string;
-        };
-        Insert: Omit<Database["public"]["Tables"]["push_subscriptions"]["Row"], "id" | "created_at"> & {
-          id?: string;
-          created_at?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["push_subscriptions"]["Insert"]>;
-      };
-    };
+          auth_key: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          user_id: string
+        }
+        Insert: {
+          auth_key: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          user_id: string
+        }
+        Update: {
+          auth_key?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "push_subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      season_results: {
+        Row: {
+          created_at: string
+          final_net_worth: number
+          final_rank: number
+          id: string
+          season_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          final_net_worth: number
+          final_rank: number
+          id?: string
+          season_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          final_net_worth?: number
+          final_rank?: number
+          id?: string
+          season_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "season_results_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "season_results_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      seasons: {
+        Row: {
+          base_price: number
+          created_at: string
+          end_date: string | null
+          id: string
+          k_constant: number
+          name: string
+          start_date: string | null
+          starting_balance: number
+          status: Database["public"]["Enums"]["season_status"]
+        }
+        Insert: {
+          base_price: number
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          k_constant: number
+          name: string
+          start_date?: string | null
+          starting_balance: number
+          status?: Database["public"]["Enums"]["season_status"]
+        }
+        Update: {
+          base_price?: number
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          k_constant?: number
+          name?: string
+          start_date?: string | null
+          starting_balance?: number
+          status?: Database["public"]["Enums"]["season_status"]
+        }
+        Relationships: []
+      }
+      survey_aggregate_rankings: {
+        Row: {
+          contestant_id: string
+          rank: number
+          score: number
+          survey_id: string
+        }
+        Insert: {
+          contestant_id: string
+          rank: number
+          score: number
+          survey_id: string
+        }
+        Update: {
+          contestant_id?: string
+          rank?: number
+          score?: number
+          survey_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_aggregate_rankings_contestant_id_fkey"
+            columns: ["contestant_id"]
+            isOneToOne: false
+            referencedRelation: "contestants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_aggregate_rankings_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "surveys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      survey_questions: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          options: Json | null
+          survey_id: string
+          text: string
+          type: Database["public"]["Enums"]["question_type"]
+          uses_contestants: boolean
+        }
+        Insert: {
+          created_at?: string
+          display_order: number
+          id?: string
+          options?: Json | null
+          survey_id: string
+          text: string
+          type: Database["public"]["Enums"]["question_type"]
+          uses_contestants?: boolean
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          options?: Json | null
+          survey_id?: string
+          text?: string
+          type?: Database["public"]["Enums"]["question_type"]
+          uses_contestants?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_questions_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "surveys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      survey_responses: {
+        Row: {
+          answers: Json
+          id: string
+          is_anonymous: boolean
+          submitted_at: string
+          survey_id: string
+          user_id: string | null
+        }
+        Insert: {
+          answers: Json
+          id?: string
+          is_anonymous?: boolean
+          submitted_at?: string
+          survey_id: string
+          user_id?: string | null
+        }
+        Update: {
+          answers?: Json
+          id?: string
+          is_anonymous?: boolean
+          submitted_at?: string
+          survey_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_responses_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "surveys"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_responses_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      survey_reveal_state: {
+        Row: {
+          reveal_count: number
+          season_id: string
+          selected_survey_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          reveal_count?: number
+          season_id: string
+          selected_survey_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          reveal_count?: number
+          season_id?: string
+          selected_survey_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_reveal_state_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: true
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_reveal_state_selected_survey_id_fkey"
+            columns: ["selected_survey_id"]
+            isOneToOne: false
+            referencedRelation: "surveys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      surveys: {
+        Row: {
+          closes_at: string | null
+          created_at: string
+          id: string
+          published_at: string | null
+          results_published_at: string | null
+          season_id: string
+          status: Database["public"]["Enums"]["survey_status"]
+          title: string
+          week_number: number
+        }
+        Insert: {
+          closes_at?: string | null
+          created_at?: string
+          id?: string
+          published_at?: string | null
+          results_published_at?: string | null
+          season_id: string
+          status?: Database["public"]["Enums"]["survey_status"]
+          title: string
+          week_number: number
+        }
+        Update: {
+          closes_at?: string | null
+          created_at?: string
+          id?: string
+          published_at?: string | null
+          results_published_at?: string | null
+          season_id?: string
+          status?: Database["public"]["Enums"]["survey_status"]
+          title?: string
+          week_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "surveys_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trades: {
+        Row: {
+          contestant_id: string
+          created_at: string
+          dollar_amount: number
+          failed_reason: string | null
+          fee_amount: number
+          filled_at: string | null
+          id: string
+          price_at_execution: number
+          season_id: string
+          shares: number
+          state: Database["public"]["Enums"]["trade_state"]
+          type: Database["public"]["Enums"]["trade_type"]
+          user_id: string
+        }
+        Insert: {
+          contestant_id: string
+          created_at?: string
+          dollar_amount: number
+          failed_reason?: string | null
+          fee_amount?: number
+          filled_at?: string | null
+          id?: string
+          price_at_execution: number
+          season_id: string
+          shares: number
+          state?: Database["public"]["Enums"]["trade_state"]
+          type: Database["public"]["Enums"]["trade_type"]
+          user_id: string
+        }
+        Update: {
+          contestant_id?: string
+          created_at?: string
+          dollar_amount?: number
+          failed_reason?: string | null
+          fee_amount?: number
+          filled_at?: string | null
+          id?: string
+          price_at_execution?: number
+          season_id?: string
+          shares?: number
+          state?: Database["public"]["Enums"]["trade_state"]
+          type?: Database["public"]["Enums"]["trade_type"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trades_contestant_id_fkey"
+            columns: ["contestant_id"]
+            isOneToOne: false
+            referencedRelation: "contestants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trades_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trades_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
     Functions: {
+      compute_liquidation_value: {
+        Args: {
+          p_base_price: number
+          p_contestant_shares: number
+          p_k: number
+          p_shares_held: number
+          p_total_all_shares: number
+        }
+        Returns: number
+      }
+      get_leaderboard: {
+        Args: {
+          p_limit?: number
+          p_offset?: number
+          p_search?: string
+          p_season_id: string
+        }
+        Returns: {
+          avatar_url: string
+          badges: Json
+          is_self: boolean
+          net_worth: number
+          rank: number
+          user_id: string
+          username: string
+        }[]
+      }
+      get_user_rank: {
+        Args: { p_season_id: string }
+        Returns: {
+          avatar_url: string
+          badges: Json
+          is_self: boolean
+          net_worth: number
+          rank: number
+          user_id: string
+          username: string
+        }[]
+      }
+      leaderboard_badges: { Args: { p_user_id: string }; Returns: Json }
       place_trade: {
         Args: {
-          p_contestant_id: string;
-          p_type: TradeType;
-          p_dollar_amount: number;
-        };
-        Returns: {
-          trade_id: string;
-          state: TradeState;
-          shares: number;
-          price_at_execution: number;
-          fee_amount: number;
-          failed_reason: string | null;
-        };
-      };
-    };
-  };
-};
+          p_contestant_id: string
+          p_dollar_amount: number
+          p_type: Database["public"]["Enums"]["trade_type"]
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      publish_season_results: {
+        Args: { p_season_id: string }
+        Returns: undefined
+      }
+      refresh_net_worth: { Args: never; Returns: undefined }
+    }
+    Enums: {
+      badge_type: "top_3" | "top_10"
+      contestant_status: "active" | "evicted" | "winner" | "runner_up"
+      question_type: "ranking" | "multiple_choice" | "single_choice"
+      season_status:
+        | "setup"
+        | "pre_season"
+        | "active"
+        | "ended"
+        | "results_published"
+      survey_status: "draft" | "active" | "closed" | "results_published"
+      trade_state: "pending" | "filled" | "failed"
+      trade_type: "buy" | "sell"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
+  public: {
+    Enums: {
+      badge_type: ["top_3", "top_10"],
+      contestant_status: ["active", "evicted", "winner", "runner_up"],
+      question_type: ["ranking", "multiple_choice", "single_choice"],
+      season_status: [
+        "setup",
+        "pre_season",
+        "active",
+        "ended",
+        "results_published",
+      ],
+      survey_status: ["draft", "active", "closed", "results_published"],
+      trade_state: ["pending", "filled", "failed"],
+      trade_type: ["buy", "sell"],
+    },
+  },
+} as const
+
+
+// ─────────────────────────────────────────────────────────────────────────
+// Named enum aliases — the single source of truth for domain unions.
+// Import these instead of redeclaring string unions per module.
+// ─────────────────────────────────────────────────────────────────────────
+export type SeasonStatus = Database["public"]["Enums"]["season_status"];
+export type ContestantStatus = Database["public"]["Enums"]["contestant_status"];
+export type TradeType = Database["public"]["Enums"]["trade_type"];
+export type TradeState = Database["public"]["Enums"]["trade_state"];
+export type BadgeType = Database["public"]["Enums"]["badge_type"];
+export type SurveyStatus = Database["public"]["Enums"]["survey_status"];
+export type QuestionType = Database["public"]["Enums"]["question_type"];

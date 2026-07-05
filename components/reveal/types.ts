@@ -9,7 +9,10 @@
 // The data seam (`lib/reveal/source.ts`) emits these shapes; the chart, live
 // wrapper, and producer console consume them.
 
-export type ContestantStatus = "active" | "evicted" | "jury" | "winner";
+// Re-exported from the generated DB types — the original hand-written union
+// here had drifted ("jury" instead of "runner_up").
+export type { ContestantStatus } from "@/lib/supabase/types";
+import type { ContestantStatus } from "@/lib/supabase/types";
 
 /** A tradeable contestant, mirroring our `contestants` row (camelCased subset). */
 export type Contestant = {
