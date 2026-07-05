@@ -66,6 +66,17 @@ If a command cannot run because local services or secrets are missing, say that 
 - Before calling the work done, do an elegance pass: remove dead code, stale comments, unnecessary defensive branches, and mismatched naming.
 - Do not overwrite user changes. If the worktree has unrelated edits, leave them alone and commit only files touched for the task.
 
+## Issue Handoff
+
+Use GitHub Issues as the durable task ledger so context survives between agents, sessions, and machines.
+
+- Before implementation, look for an existing issue that matches the work. If none exists and the task is more than a tiny one-off, create one.
+- Keep the issue updated with the current plan, important decisions, scope changes, blockers, and verification results.
+- When pausing or handing off unfinished work, leave a comment with the branch name, latest status, next step, and any commands already run.
+- Link commits and PRs back to the issue. PR bodies should include `Closes #<issue-number>` only when merging the PR should close the issue.
+- Do not use issues for secrets, credentials, private user data, or raw environment values.
+- If work is intentionally not tracked in an issue, mention why in the final handoff.
+
 ## UI Work
 
 - Before implementing UI work involving a component, page, screen, overlay, modal, nav, layout, frontend feature, or visual design, search Mobbin for relevant screen-level patterns when Mobbin tooling is available.
