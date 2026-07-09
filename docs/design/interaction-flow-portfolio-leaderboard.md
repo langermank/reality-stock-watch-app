@@ -41,7 +41,7 @@ Portfolio
   Portfolio — Holdings tab
   - tap holding row → Contestant (active)
   [ list: contestant, shares held, avg purchase price, liquidation value, gain/loss on this holding ]
-  [ empty state: "No holdings yet — buy your first stock to get started" ]
+  [ empty state: "No holdings yet — buy your first Contestant shares to get started" ]
 
   Portfolio — History tab
   - load more → appends next page (explicit button, not infinite scroll)
